@@ -2,7 +2,7 @@
 <div class="drag-target"></div>
 
 <footer class="footer footer-static footer-light">
-  <p class="clearfix mb-0"><span class="float-left d-inline-block">2022 &copy; {{ env('APP_NAME') }} 1.0</span>
+  <p class="clearfix mb-0"><span class="float-left d-inline-block">2023 &copy; {{ env('APP_NAME') }} 1.0</span>
     {{-- <button class="btn btn-primary btn-icon scroll-top" type="button"><i class="bx bx-up-arrow-alt"></i></button> --}}
   </p>
 </footer>
