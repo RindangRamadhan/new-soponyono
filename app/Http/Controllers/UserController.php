@@ -8,7 +8,7 @@ use App\Interfaces\UserInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -157,15 +157,7 @@ class UserController extends Controller
             ],
         ];
 
-        $user = User::select('users.*', 'r.id AS role_id', 'r.name AS role_name')
-            ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
-            ->join('roles AS r', 'mhr.role_id', 'r.id')
-            ->leftJoin('sub_work_units AS swu', 'users.sub_work_unit_id', 'swu.id')
-            ->where('users.id', Auth::user()->id)
-            ->first();
-
-        $roles = Role::select('id', 'name as text')->get();
-        $types = Helper::UserType();
+        list($user, $roles, $types) = $this->userRepo->show($id);
 
         return view('pages.profile.index')->with(compact([
             'pageConfigs',
@@ -250,5 +242,78 @@ class UserController extends Controller
     {
         User::find($id)->delete();
         return response()->json(['status' => 200]);
+    }
+
+    // ? ------------------------------------------------ PROFILE ------------------------------------------------
+
+    public function editPass()
+    {
+        $pageConfigs = [
+            'pageHeader' => true,
+            'isBack' => true,
+            'isSave' => true,
+            'permission' => [
+                'create' => 'Pengguna-Pengguna Tambah',
+                'update' => 'Pengguna-Pengguna Edit',
+                'delete' => 'Pengguna-Pengguna Hapus',
+            ],
+        ];
+
+        $breadcrumbs = [
+            [
+                "link" => "/",
+                "name" => "Home",
+            ],
+            [
+                "name" => "Ubah Password",
+            ],
+        ];
+
+        $user = User::find(Auth::user()->id);
+
+        return view('pages.profile.change-password')->with(
+            compact([
+                'pageConfigs',
+                'breadcrumbs',
+                'user',
+            ])
+        );
+    }
+
+    public function updateProfile(Request $request, $id)
+    {
+        $this->validate($request, [
+            'user_name' => 'required|unique:users,user_name,' . $id,
+            'name' => 'required',
+        ]);
+
+        $user = User::find($id);
+        $user->update([
+            'name' => $request->name,
+            'user_name' => $request->user_name,
+        ]);
+
+        return redirect("/users/$id/profile")->with(['status' => 200]);
+    }
+
+    public function updatePass(Request $request, $id)
+    {
+        $this->validate($request, [
+            'current_password' => 'required',
+            'password' => 'required|string|min:8',
+        ]);
+
+        if (!(Hash::check($request->current_password, Auth::user()->password))) {
+            return redirect()->back()->with(['status' => 500, "message" => "Kata Sandi saat ini tidak cocok dengan Kata Sandi yang Anda berikan."]);
+        }
+
+        if (strcmp($request->current_password, $request->password) == 0) {
+            return redirect()->back()->with(['status' => 500, "message" => "Kata Sandi Baru tidak boleh sama dengan Kata Sandi Anda saat ini."]);
+        }
+
+        $user = User::find($id);
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return redirect()->back()->with(["status" => 200, "message" => "Password Berhasil Diubah."]);
     }
 }

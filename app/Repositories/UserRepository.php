@@ -55,6 +55,29 @@ class UserRepository implements UserInterface
         $user->assignRole($role);
     }
 
+    public function show($id)
+    {
+        $user = User::select(
+            'users.*',
+            'uid.name AS uid_name',
+            'up3.name AS up3_name',
+            'ulp.name AS ulp_name',
+            'r.id AS role_id', 'r.name AS role_name'
+        )
+            ->join('uids AS uid', 'users.uid_id', 'uid.id')
+            ->join('up3s AS up3', 'users.up3_id', 'up3.id')
+            ->join('ulps AS ulp', 'users.ulp_id', 'ulp.id')
+            ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
+            ->join('roles AS r', 'mhr.role_id', 'r.id')
+            ->where('users.id', $id)
+            ->first();
+
+        $roles = Role::select('id', 'name as text')->get();
+        $types = Helper::UserType();
+
+        return [$user, $roles, $types];
+    }
+
     public function edit($id)
     {
         $user = User::select('users.*', 'r.id AS role_id')
