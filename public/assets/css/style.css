@@ -1,0 +1,240 @@
+/*================================================================================
+	Item Name: Frest HTML Admin Template
+	Version: 1.0
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+/* Tags */
+div.bootstrap-tagsinput {
+	padding: 15px 15px 10px;
+	border-color: #f2f2f2; }
+	div.bootstrap-tagsinput span.tag {
+	  background: #269bff;
+	  border: 0;
+	  color: #ffffff;
+	  padding: 6px 14px;
+	  font-size: 0.8125rem;
+	  font-family: inherit;
+	  line-height: 1; }
+	  div.bootstrap-tagsinput span.tag a {
+		color: #ffffff; }
+		
+
+.horizontal-timeline .time-frame {
+	border-bottom: 1px solid #f2f2f2;
+	padding-top: 20px; }
+	.horizontal-timeline .time-frame:last-child {
+		border-bottom: none; }
+	.horizontal-timeline .time-frame .section-time-frame {
+		margin-bottom: 30px; }
+	.horizontal-timeline .time-frame .event {
+		border-left: 1px solid #f2f2f2;
+		padding-left: 2rem;
+		padding-bottom: 30px;
+		position: relative; }
+		.horizontal-timeline .time-frame .event:last-child {
+		border-left: none; }
+		.horizontal-timeline .time-frame .event .event-text {
+		line-height: 1;
+		font-weight: 400;
+		margin-bottom: 0;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		max-width: 100%;
+		white-space: nowrap; }
+		.horizontal-timeline .time-frame .event .tumbnail-views {
+		display: inline-block; }
+		.horizontal-timeline .time-frame .event .tumbnail-views .thumbnail {
+			float: left;
+			margin-right: 16px;
+			margin-top: 1rem; }
+			.horizontal-timeline .time-frame .event .tumbnail-views .thumbnail img {
+			max-width: 100%;
+			border-radius: 4px; }
+		.horizontal-timeline .time-frame .event .event-alert {
+		margin-top: 1rem;
+		padding: 11px 25px;
+		background: #F9FBFB;
+		width: 80%;
+		font-family: "Muli", sans-serif;
+		font-size: 13px;
+		font-weight: 300;
+		border-radius: 4px; }
+		.horizontal-timeline .time-frame .event .event-info {
+		margin-top: 0.8rem;
+		font-family: "Muli", sans-serif;
+		font-size: 12px;
+		font-weight: 400;
+		color: #777777; }
+		.horizontal-timeline .time-frame .event:before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: -5px;
+		height: 10px;
+		width: 10px;
+		border-radius: 100%; }
+		.horizontal-timeline .time-frame .event:nth-child(3n+1):before {
+		background: #009c8a; }
+		.horizontal-timeline .time-frame .event:nth-child(3n+2):before {
+		background: #0cca8e; }
+		.horizontal-timeline .time-frame .event:nth-child(3n+3):before {
+		background: #269bff; }
+	
+	/* Timeline */
+	.vertical-timeline {
+	list-style: none;
+	padding: 0;
+	position: relative; }
+	.vertical-timeline:before {
+		top: 0;
+		bottom: 0;
+		position: absolute;
+		content: " ";
+		width: 3px;
+		background-color: #E3E8E8;
+		left: 50%;
+		margin-left: -1.5px; }
+	.vertical-timeline .timeline-wrapper {
+		display: block;
+		margin-bottom: 20px;
+		position: relative;
+		width: 100%;
+		padding-right: 90px; }
+		.vertical-timeline .timeline-wrapper:before {
+		content: " ";
+		display: table; }
+		.vertical-timeline .timeline-wrapper:after {
+		content: " ";
+		display: table;
+		clear: both; }
+		.vertical-timeline .timeline-wrapper .timeline-panel {
+		border-radius: 2px;
+		padding: 20px;
+		position: relative;
+		background: #ffffff;
+		border-radius: 6px;
+		box-shadow: 1px 2px 35px 0 rgba(1, 1, 1, 0.1);
+		width: 35%;
+		margin-left: 15%; }
+		.vertical-timeline .timeline-wrapper .timeline-panel:before {
+			position: absolute;
+			top: 0;
+			width: 100%;
+			height: 2px;
+			content: "";
+			left: 0;
+			right: 0; }
+		.vertical-timeline .timeline-wrapper .timeline-panel:after {
+			position: absolute;
+			top: 27px;
+			right: -14px;
+			display: inline-block;
+			border-top: 14px solid transparent;
+			border-left: 14px solid #ffffff;
+			border-right: 0 solid #ffffff;
+			border-bottom: 14px solid transparent;
+			content: " "; }
+		.vertical-timeline .timeline-wrapper .timeline-panel .timeline-title {
+			margin-top: 0;
+			color: #242329;
+			text-transform: uppercase; }
+		.vertical-timeline .timeline-wrapper .timeline-panel .timeline-body p {
+			margin-bottom: 0; }
+			.vertical-timeline .timeline-wrapper .timeline-panel .timeline-body p + p {
+			margin-top: 5px; }
+		.vertical-timeline .timeline-wrapper .timeline-panel .timeline-body ul {
+			margin-bottom: 0; }
+		.vertical-timeline .timeline-wrapper .timeline-panel .timeline-footer span {
+			font-size: 0.6875rem; }
+		.vertical-timeline .timeline-wrapper .timeline-panel .timeline-footer i {
+			font-size: 1.5rem; }
+		.vertical-timeline .timeline-wrapper .timeline-badge {
+		width: 14px;
+		height: 14px;
+		position: absolute;
+		top: 16px;
+		left: calc(50% - 7px);
+		z-index: 100;
+		border-top-right-radius: 50%;
+		border-top-left-radius: 50%;
+		border-bottom-right-radius: 50%;
+		border-bottom-left-radius: 50%;
+		border: 2px solid #ffffff; }
+		.vertical-timeline .timeline-wrapper .timeline-badge i {
+			color: #ffffff; }
+		.vertical-timeline .timeline-wrapper.timeline-inverted {
+		padding-right: 0;
+		padding-left: 90px; }
+		.vertical-timeline .timeline-wrapper.timeline-inverted .timeline-panel {
+			margin-left: auto;
+			margin-right: 15%; }
+			.vertical-timeline .timeline-wrapper.timeline-inverted .timeline-panel:after {
+			border-left-width: 0;
+			border-right-width: 14px;
+			left: -14px;
+			right: auto; }
+	
+	@media (max-width: 767px) {
+	.timeline .timeline-wrapper {
+		padding-right: 150px; }
+		.timeline .timeline-wrapper.timeline-inverted {
+		padding-left: 150px; }
+		.timeline .timeline-wrapper .timeline-panel {
+		width: 100%;
+		margin-left: 0;
+		margin-right: 0; } }
+	
+	.timeline-wrapper-primary .timeline-panel:before {
+	background: #269bff; }
+	
+	.timeline-wrapper-primary .timeline-badge {
+	background: #269bff; }
+	
+	.timeline-wrapper-secondary .timeline-panel:before {
+	background: #E3E8E8; }
+	
+	.timeline-wrapper-secondary .timeline-badge {
+	background: #E3E8E8; }
+	
+	.timeline-wrapper-success .timeline-panel:before {
+	background: #0cca8e; }
+	
+	.timeline-wrapper-success .timeline-badge {
+	background: #0cca8e; }
+	
+	.timeline-wrapper-info .timeline-panel:before {
+	background: #009c8a; }
+	
+	.timeline-wrapper-info .timeline-badge {
+	background: #009c8a; }
+	
+	.timeline-wrapper-warning .timeline-panel:before {
+	background: #FEBA47; }
+	
+	.timeline-wrapper-warning .timeline-badge {
+	background: #FEBA47; }
+	
+	.timeline-wrapper-danger .timeline-panel:before {
+	background: #F1635F; }
+	
+	.timeline-wrapper-danger .timeline-badge {
+	background: #F1635F; }
+	
+	.timeline-wrapper-light .timeline-panel:before {
+	background: #F9FBFB; }
+	
+	.timeline-wrapper-light .timeline-badge {
+	background: #F9FBFB; }
+	
+	.timeline-wrapper-dark .timeline-panel:before {
+	background: #242329; }
+	
+	.timeline-wrapper-dark .timeline-badge {
+	background: #242329; }

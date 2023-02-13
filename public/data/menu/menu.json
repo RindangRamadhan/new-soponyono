@@ -1,0 +1,54 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "i18n": "Dashboard",
+      "icon": "bar-chart",
+      "role": null
+    },
+    {
+      "navheader": "Master Data",
+      "role": "Master Data"
+    },
+    {
+      "url": "master-data/users",
+      "name": "Pengguna",
+      "i18n": "Pengguna",
+      "icon": "user",
+      "role": "Pengguna-Pengguna Lihat"
+    },
+    {
+      "url": "master-data/customers",
+      "name": "Pelanggan",
+      "i18n": "Pelanggan",
+      "icon": "users",
+      "role": "Pelanggan-Pelanggan Lihat"
+    },
+    {
+      "url": "master-data/roles",
+      "name": "Hak Akses",
+      "i18n": "Hak Akses",
+      "icon": "unlock",
+      "role": "Hak Akses-Hak Akses Lihat"
+    },
+    {
+      "navheader": "Monitoring",
+      "role": "Monitoring"
+    },
+    {
+      "url": "monitoring/locations",
+      "name": "Lokasi",
+      "i18n": "Lokasi",
+      "icon": "location-alt",
+      "role": "Lokasi-Lokasi Lihat"
+    },
+    {
+      "url": "monitoring/report",
+      "name": "Order",
+      "i18n": "Order",
+      "icon": "notebook",
+      "role": "Order-Order Lihat"
+    }
+  ]
+}
