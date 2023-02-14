@@ -370,7 +370,10 @@ class Helper
 
         foreach ($records as &$record) {
             $id = $record->id;
-
+            $name = $record->name;
+            if(!$name){
+                $name = $record->user_name;
+            }
             $buttonDownload = "<a href=" . url("$url/$id/download") . " class='btn btn-icon rounded-circle btn-primary btn-download-$id' data-id='$id'><i class='bx bx-download'></i></a>";
 
             $buttonPdfPreview = Auth::user()->can("$menu-$menu Lihat")
@@ -386,7 +389,7 @@ class Helper
             : "";
 
             $buttonDelete = Auth::user()->can("$menu-$menu Hapus")
-            ? "<button type='button' class='btn btn-icon rounded-circle btn-danger btn-delete' data-id=" . $id . "><i class='bx bx-trash'></i></button>"
+            ? "<button type='button' class='btn btn-icon rounded-circle btn-danger btn-delete' data-id=" . $id . " data-name=".$name."><i class='bx bx-trash'></i></button>"
             : "";
 
             $record->action = "";
@@ -507,12 +510,24 @@ class Helper
     {
         return [
             [
-                "id" => "Admin",
-                "text" => "Admin",
+                "id" => "UID",
+                "text" => "UID",
             ],
             [
-                "id" => "Petugas",
-                "text" => "Petugas",
+                "id" => "UP3",
+                "text" => "UP3",
+            ],
+            [
+                "id" => "UP2D",
+                "text" => "UP2D",
+            ],
+            [
+                "id" => "UP2K",
+                "text" => "UP2K",
+            ],
+            [
+                "id" => "ULP",
+                "text" => "ULP",
             ],
         ];
     }

@@ -161,8 +161,9 @@
   // Confirmation Delete
   $(document).on('click', '.btn-delete', function (e) {
     e.preventDefault();
-
+    console.log(this.dataset.name)
     const params = {
+      "name": this.dataset.name,
       "url": "{{ url('/master-data/users/') }}",
       "id": $(this).attr('data-id'),
       "tr": $(this).parent("td").parent('tr')

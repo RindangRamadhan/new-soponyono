@@ -117,10 +117,14 @@
   // Confirmaion Delete
   confirmDelete = (params) => {
     'use strict';
+    let name='';
+    if(params.name){
+      name=params.name
+    }
     
     Swal.fire({
       title: "Konfirmasi",
-      text: "Anda Ingin Menghapus ?",
+      text: `Anda Ingin Menghapus ${name} ?`,
       type: "warning",
       confirmButtonClass: 'btn btn-primary',
       buttonsStyling: false,

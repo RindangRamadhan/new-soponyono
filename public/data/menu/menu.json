@@ -33,6 +33,27 @@
       "role": "Hak Akses-Hak Akses Lihat"
     },
     {
+      "url": "master-data/uids",
+      "name": "UID",
+      "i18n": "UID",
+      "icon": "home",
+      "role": "Uid-Uid Lihat"
+    },
+    {
+      "url": "master-data/up3s",
+      "name": "UP3",
+      "i18n": "UP3",
+      "icon": "home",
+      "role": "Up3-Up3 Lihat"
+    },
+    {
+      "url": "master-data/ulps",
+      "name": "ULP",
+      "i18n": "ULP",
+      "icon": "home",
+      "role": "Ulp-Ulp Lihat"
+    },
+    {
       "navheader": "Monitoring",
       "role": "Monitoring"
     },

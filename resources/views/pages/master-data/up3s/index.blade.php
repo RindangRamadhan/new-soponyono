@@ -1,6 +1,6 @@
 @extends('layouts.app')
 {{-- page title --}}
-@section('title','Hak Akses')
+@section('title','Up3')
 
 {{-- vendor styles --}}
 @section('vendor-styles')
@@ -10,25 +10,43 @@
 {{-- page styles --}}
 @section('page-styles')
 <link rel="stylesheet" type="text/css" href="{{asset('css/plugins/extensions/toastr.css')}}">
+
+<style>
+  .DTFC_Cloned thead {
+    background: white;
+  }
+
+  .DTFC_Cloned tbody {
+    background: white;
+  }
+</style>
 @endsection
 
 @section('content')
-<!-- Hak Akses start -->
+<!-- Uid start -->
 <section id="basic-datatable">
   <div class="card">
     <div class="card-content">
       <div class="card-body card-dashboard">
+
+
         <div class="table-responsive">
-          <table class="table table-sm table-ssr">
+          <table class="table table-sm table-ssr nowrap">
             <tfoot style="display: table-row-group">
-              <th>Id</th>
-              <th>Nama</th>
+              <th>Kode</th>
+              <th>UID</th>
+              <th>Name</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
               <th>Action</th>
             </tfoot>
             <thead>
               <tr>
-                <th>Id</th>
-                <th>Nama</th>
+                <th>Kode</th>
+                <th>UID</th>
+                <th>Name</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -38,8 +56,9 @@
       </div>
     </div>
   </div>
+
 </section>
-<!-- Hak Akses ends -->
+<!-- Uid ends -->
 @endsection
 
 {{-- vendor scripts --}}
@@ -60,10 +79,13 @@
 
   $(document).ready(function () {
     const params = {
-      "url": "{{ url('/master-data/roles') }}",
+      "url": "{{ url('/master-data/up3s') }}",
       "columns": [
-        { "data": "id", "visible": false },
+        { "data": "id" },
+        { "data": "uid__name" },
         { "data": "name" },
+        { "data": "latitude" },
+        { "data": "longitude" },
         { "data": "action", "searchable": false, "orderable": false }
       ]
     }
@@ -74,14 +96,14 @@
   // Confirmation Delete
   $(document).on('click', '.btn-delete', function (e) {
     e.preventDefault();
-
+    
     const params = {
       "name": this.dataset.name,
-      "url": "{{ url('/master-data/roles/') }}",
+      "url": "{{ url('/master-data/up3s/') }}",
       "id": $(this).attr('data-id'),
       "tr": $(this).parent("td").parent('tr')
     }
-
+    
     confirmDelete(params)
   })
 
