@@ -7,6 +7,8 @@ use App\Http\Requests\Up3Request;
 use App\Interfaces\Up3Interface;
 use App\Models\Up3;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class Up3Controller extends Controller
 {
@@ -59,7 +61,7 @@ class Up3Controller extends Controller
             "/master-data/up3s",
             "Up3",
         );
-        
+
         $result = [
             "draw" => intval($request->draw),
             "recordsTotal" => intval($recordsTotal),
@@ -67,19 +69,30 @@ class Up3Controller extends Controller
             "data" => $records,
         ];
 
-        
+
 
         return json_encode($result);
     }
 
     public function listSelect(Request $request)
-   {
-       $data = Up3::select('id', 'name AS text')
-           ->where('uid_id', $request->uid_id)
-           ->get();
+    {
+        $rowuser = User::find(Auth::user()->id);
+        $tipe = $rowuser->type;
+        $data = [];
+        if ($tipe == 'UP3' || $tipe == 'ULP') {
+            $idup3 = $rowuser->up3_id;
+            $data = Up3::select('id', 'name AS text')
+                ->where('id', $idup3)
+                ->get();
+        } else {
+            $data = Up3::select('id', 'name AS text')
+                ->where('uid_id', $request->uid_id)
+                ->get();
+        }
 
-       return response()->json($data);
-   }
+
+        return response()->json($data);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -209,8 +222,8 @@ class Up3Controller extends Controller
             ],
         ];
 
-        list($rsdata,$uids) = $this->up3Repo->edit($id);
-        
+        list($rsdata, $uids) = $this->up3Repo->edit($id);
+
         return view('pages.master-data.up3s.edit')->with(
             compact([
                 'pageConfigs',

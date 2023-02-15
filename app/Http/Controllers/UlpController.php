@@ -7,6 +7,8 @@ use App\Http\Requests\UlpRequest;
 use App\Interfaces\UlpInterface;
 use App\Models\Ulp;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UlpController extends Controller
 {
@@ -60,7 +62,7 @@ class UlpController extends Controller
             "/master-data/ulps",
             "Ulp",
         );
-        
+
         $result = [
             "draw" => intval($request->draw),
             "recordsTotal" => intval($recordsTotal),
@@ -68,19 +70,30 @@ class UlpController extends Controller
             "data" => $records,
         ];
 
-        
+
 
         return json_encode($result);
     }
 
-   public function listSelect(Request $request)
-   {
-       $data = Ulp::select('id', 'name AS text')
-           ->where('up3_id', $request->up3_id)
-           ->get();
+    public function listSelect(Request $request)
+    {
 
-       return response()->json($data);
-   }
+        $rowuser = User::find(Auth::user()->id);
+        $tipe = $rowuser->type;
+        $data = [];
+        if ($tipe == 'ULP') {
+            $idulp = $rowuser->ulp_id;
+            $data = Ulp::select('id', 'name AS text')
+                ->where('id', $idulp)
+                ->get();
+        } else {
+            $data = Ulp::select('id', 'name AS text')
+                ->where('up3_id', $request->up3_id)
+                ->get();
+        }
+
+        return response()->json($data);
+    }
 
 
     /**
@@ -211,8 +224,8 @@ class UlpController extends Controller
             ],
         ];
 
-        list($rsdata,$up3s) = $this->ulpRepo->edit($id);
-        
+        list($rsdata, $up3s) = $this->ulpRepo->edit($id);
+
         return view('pages.master-data.ulps.edit')->with(
             compact([
                 'pageConfigs',
