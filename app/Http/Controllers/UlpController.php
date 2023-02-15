@@ -49,6 +49,7 @@ class UlpController extends Controller
         );
     }
 
+
     function list(Request $request)
     {
         $resources = $this->ulpRepo->list();
@@ -71,6 +72,16 @@ class UlpController extends Controller
 
         return json_encode($result);
     }
+
+   public function listSelect(Request $request)
+   {
+       $data = Ulp::select('id', 'name AS text')
+           ->where('up3_id', $request->up3_id)
+           ->get();
+
+       return response()->json($data);
+   }
+
 
     /**
      * Show the form for creating a new resource.

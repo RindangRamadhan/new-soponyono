@@ -72,6 +72,15 @@ class Up3Controller extends Controller
         return json_encode($result);
     }
 
+    public function listSelect(Request $request)
+   {
+       $data = Up3::select('id', 'name AS text')
+           ->where('uid_id', $request->uid_id)
+           ->get();
+
+       return response()->json($data);
+   }
+
     /**
      * Show the form for creating a new resource.
      *
