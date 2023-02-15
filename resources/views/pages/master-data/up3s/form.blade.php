@@ -63,18 +63,11 @@
     <div class="form-group">
       <label>Latitude</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="latitude" class="form-control  @error('latitude') is-invalid @enderror" placeholder="Latitude" required data-validation-required-message="This latitude field is required" value="{{isset($rsdata) ? $rsdata->latitude : old('latitude')}}">
+        <input type="text" name="latitude" class="form-control " placeholder="Latitude" value="{{isset($uid) ? $uid->latitude : old('latitude')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
-        <!-- Error Message -->
-        @error('latitude')
-        <div class="help-block">
-          <ul role="alert">
-            <li>{{ $message }}</li>
-          </ul>
-        </div>
-        @enderror
+        
       </div>
     </div>
   </div>
@@ -82,18 +75,11 @@
     <div class="form-group">
       <label>Longitude</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="longitude" class="form-control  @error('longitude') is-invalid @enderror" placeholder="Longitude" required data-validation-required-message="This longitude field is required" value="{{isset($rsdata) ? $rsdata->longitude : old('longitude')}}">
+        <input type="text" name="longitude" class="form-control " placeholder="Longitude"  value="{{isset($uid) ? $uid->longitude : old('longitude')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
-        <!-- Error Message -->
-        @error('longitude')
-        <div class="help-block">
-          <ul role="alert">
-            <li>{{ $message }}</li>
-          </ul>
-        </div>
-        @enderror
+       
       </div>
     </div>
   </div>

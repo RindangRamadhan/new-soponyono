@@ -6,23 +6,37 @@ use App\Helpers\Helper;
 use App\Http\Requests\UidRequest;
 use App\Interfaces\UidInterface;
 use App\Models\Uid;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UidRepository implements UidInterface
 {
-    function list() {
-        return Uid::select('id', 'name', 'phone_number','address','latitude','longitude');
+    function list()
+    {
+        $rowuser = User::find(Auth::user()->id);
+        $tipe = $rowuser->type;
+        $data = [];
+        if ($tipe == 'ALL') {
+            $data = Uid::select('id', 'name', 'phone_number', 'address', 'latitude', 'longitude');
+        } else {
+            $id_uid = $rowuser->uid_id;
+            $data = Uid::select('id', 'name', 'phone_number', 'address', 'latitude', 'longitude')->where([
+                ['id', $id_uid]
+            ]);
+        }
+        return $data;
     }
 
     public function create()
     {
-        
-        return ;
+
+        return;
     }
 
     public function store(UidRequest $request)
     {
-        
-       Uid::create([
+
+        Uid::create([
             'id' => $request->id,
             'name' => $request->name,
             'phone_number' => $request->phone_number,
@@ -30,7 +44,6 @@ class UidRepository implements UidInterface
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
         ]);
-
     }
 
     public function edit($id)
@@ -60,6 +73,5 @@ class UidRepository implements UidInterface
     {
         $role = Uid::find($id);
         $role->delete();
-        
     }
 }

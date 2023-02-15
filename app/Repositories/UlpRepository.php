@@ -17,15 +17,22 @@ class UlpRepository implements UlpInterface
         $rowuser = User::find(Auth::user()->id);
         $tipe = $rowuser->type;
         $data = [];
-        if ($tipe == 'UP3') {
-            $idup3 = $rowuser->up3_id;
+        if ($tipe == 'ALL') {
+            $data = Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name', 'ulps.latitude', 'ulps.longitude')->join('up3s AS up3', 'ulps.up3_id', 'up3.id');
+        } else if ($tipe == 'UP3') {
+            $id_up3 = $rowuser->up3_id;
             $data = Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name', 'ulps.latitude', 'ulps.longitude')
                 ->join('up3s AS up3', 'ulps.up3_id', 'up3.id')
-                ->where('ulps.up3_id', $idup3);
-        } else if ($tipe == 'UID' || $tipe == 'UP2D' || $tipe == 'UP2K') {
-            $data = Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name', 'ulps.latitude', 'ulps.longitude')->join('up3s AS up3', 'ulps.up3_id', 'up3.id');
-        }else{
-            $data = Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name', 'ulps.latitude', 'ulps.longitude')->join('up3s AS up3', 'ulps.up3_id', 'up3.id')->where('ulps.up3_id', 0);;
+                ->where('ulps.up3_id', $id_up3);
+        } else if ($tipe == 'ULP') {
+            $id_ulp = $rowuser->ulp_id;
+            $data = Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name', 'ulps.latitude', 'ulps.longitude')->join('up3s AS up3', 'ulps.up3_id', 'up3.id')->where('ulps.id', $id_ulp);
+        } else {
+            $id_uid = $rowuser->uid_id;
+            $data = Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name', 'ulps.latitude', 'ulps.longitude')
+                ->join('up3s AS up3', 'ulps.up3_id', 'up3.id')
+                ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
+                ->where('up3.uid_id', $id_uid);
         }
         return $data;
     }
@@ -35,13 +42,23 @@ class UlpRepository implements UlpInterface
         $rowuser = User::find(Auth::user()->id);
         $up3s = [];
         $tipe = $rowuser->type;
-        if ($tipe == 'UP3') {
-            $idup3 = $rowuser->up3_id;
+        if ($tipe == 'ALL') {
+            $up3s = Up3::select('id', 'name as text')->get();
+        } else if ($tipe == 'UP3') {
+            $id_up3 = $rowuser->up3_id;
             $up3s = Up3::select('id', 'name AS text')
-                ->where('id', $idup3)
+                ->where('id', $id_up3)
+                ->get();
+        } else if ($tipe == 'ULP') {
+            $id_up3 = 00;
+            $up3s = Up3::select('id', 'name AS text')
+                ->where('id', $id_up3)
                 ->get();
         } else {
-            $up3s = Up3::select('id', 'name as text')->get();
+            $id_uid = $rowuser->uid_id;
+            $up3s = Up3::select('id', 'name AS text')
+                ->where('uid_id', $id_uid)
+                ->get();
         }
 
         return [$up3s];
@@ -71,13 +88,23 @@ class UlpRepository implements UlpInterface
         $rowuser = User::find(Auth::user()->id);
         $up3s = [];
         $tipe = $rowuser->type;
-        if ($tipe == 'UP3') {
-            $idup3 = $rowuser->up3_id;
+        if ($tipe == 'ALL') {
+            $up3s = Up3::select('id', 'name as text')->get();
+        } else if ($tipe == 'UP3') {
+            $id_up3 = $rowuser->up3_id;
             $up3s = Up3::select('id', 'name AS text')
-                ->where('id', $idup3)
+                ->where('id', $id_up3)
+                ->get();
+        } else if ($tipe == 'ULP') {
+            $id_up3 = 00;
+            $up3s = Up3::select('id', 'name AS text')
+                ->where('id', $id_up3)
                 ->get();
         } else {
-            $up3s = Up3::select('id', 'name as text')->get();
+            $id_uid = $rowuser->uid_id;
+            $up3s = Up3::select('id', 'name AS text')
+                ->where('uid_id', $id_uid)
+                ->get();
         }
         return [$rsdata, $up3s];
     }

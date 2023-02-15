@@ -82,9 +82,9 @@ class UlpController extends Controller
         $tipe = $rowuser->type;
         $data = [];
         if ($tipe == 'ULP') {
-            $idulp = $rowuser->ulp_id;
+            $id_ulp = $rowuser->ulp_id;
             $data = Ulp::select('id', 'name AS text')
-                ->where('id', $idulp)
+                ->where('id', $id_ulp)
                 ->get();
         } else {
             $data = Ulp::select('id', 'name AS text')

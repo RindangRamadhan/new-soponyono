@@ -7,6 +7,8 @@ use App\Http\Requests\UidRequest;
 use App\Interfaces\UidInterface;
 use App\Models\Uid;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UidController extends Controller
 {
@@ -24,10 +26,17 @@ class UidController extends Controller
      */
     public function index()
     {
+        $rowuser = User::find(Auth::user()->id);
+        $tipe = $rowuser->type;
+
+        $isCreate = false;
+        if ($tipe == 'ALL') {
+            $isCreate = true;
+        }
         $pageConfigs = [
             'pageHeader' => true,
             'isReload' => true,
-            'isCreate' => true,
+            'isCreate' => $isCreate,
             'permission' => [
                 'create' => 'Uid-Uid Tambah',
                 'update' => 'Uid-Uid Edit',
@@ -51,7 +60,7 @@ class UidController extends Controller
 
     function list(Request $request)
     {
-        
+
         $resources = $this->uidRepo->list();
 
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
@@ -60,7 +69,7 @@ class UidController extends Controller
             "/master-data/uids",
             "Uid",
         );
-        
+
         $result = [
             "draw" => intval($request->draw),
             "recordsTotal" => intval($recordsTotal),

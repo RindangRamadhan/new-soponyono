@@ -526,7 +526,34 @@ class Helper
                     "text" => "ULP",
                 ],
             ];
-        } else {
+        } else if($tipe=='ALL'){
+            return [
+                [
+                    "id" => "ALL",
+                    "text" => "ALL",
+                ],
+                [
+                    "id" => "UID",
+                    "text" => "UID",
+                ],
+                [
+                    "id" => "UP3",
+                    "text" => "UP3",
+                ],
+                [
+                    "id" => "UP2D",
+                    "text" => "UP2D",
+                ],
+                [
+                    "id" => "UP2K",
+                    "text" => "UP2K",
+                ],
+                [
+                    "id" => "ULP",
+                    "text" => "ULP",
+                ],
+            ];
+        }else {
             return [
                 [
                     "id" => "UID",

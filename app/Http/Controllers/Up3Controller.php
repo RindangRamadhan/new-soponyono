@@ -80,9 +80,9 @@ class Up3Controller extends Controller
         $tipe = $rowuser->type;
         $data = [];
         if ($tipe == 'UP3' || $tipe == 'ULP') {
-            $idup3 = $rowuser->up3_id;
+            $id_up3 = $rowuser->up3_id;
             $data = Up3::select('id', 'name AS text')
-                ->where('id', $idup3)
+                ->where('id', $id_up3)
                 ->get();
         } else {
             $data = Up3::select('id', 'name AS text')
