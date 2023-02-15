@@ -26,6 +26,7 @@ class UlpController extends Controller
      */
     public function index()
     {
+        
         $pageConfigs = [
             'pageHeader' => true,
             'isReload' => true,
@@ -36,7 +37,6 @@ class UlpController extends Controller
                 'delete' => 'Ulp-Ulp Hapus',
             ],
         ];
-
         $breadcrumbs = [
             ["link" => "/", "name" => "Home"],
             ["link" => "#", "name" => "Master Data"],

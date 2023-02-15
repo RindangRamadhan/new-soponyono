@@ -7,17 +7,42 @@ use App\Http\Requests\UlpRequest;
 use App\Interfaces\UlpInterface;
 use App\Models\Up3;
 use App\Models\Ulp;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UlpRepository implements UlpInterface
 {
     function list()
     {
-        return Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name','ulps.latitude', 'ulps.longitude')->join('up3s AS up3', 'ulps.up3_id', 'up3.id');
+        $rowuser = User::find(Auth::user()->id);
+        $tipe = $rowuser->type;
+        $data = [];
+        if ($tipe == 'UP3') {
+            $idup3 = $rowuser->up3_id;
+            $data = Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name', 'ulps.latitude', 'ulps.longitude')
+                ->join('up3s AS up3', 'ulps.up3_id', 'up3.id')
+                ->where('ulps.up3_id', $idup3);
+        } else if ($tipe == 'UID' || $tipe == 'UP2D' || $tipe == 'UP2K') {
+            $data = Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name', 'ulps.latitude', 'ulps.longitude')->join('up3s AS up3', 'ulps.up3_id', 'up3.id');
+        }else{
+            $data = Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name', 'ulps.latitude', 'ulps.longitude')->join('up3s AS up3', 'ulps.up3_id', 'up3.id')->where('ulps.up3_id', 0);;
+        }
+        return $data;
     }
 
     public function create()
     {
-        $up3s = Up3::select('id', 'name as text')->get();
+        $rowuser = User::find(Auth::user()->id);
+        $up3s = [];
+        $tipe = $rowuser->type;
+        if ($tipe == 'UP3') {
+            $idup3 = $rowuser->up3_id;
+            $up3s = Up3::select('id', 'name AS text')
+                ->where('id', $idup3)
+                ->get();
+        } else {
+            $up3s = Up3::select('id', 'name as text')->get();
+        }
 
         return [$up3s];
     }
@@ -36,12 +61,24 @@ class UlpRepository implements UlpInterface
 
     public function edit($id)
     {
-        $rsdata = Ulp::select('ulps.*',
-        'up3.name AS up3_name')->join('up3s AS up3', 'ulps.up3_id', 'up3.id')
+        $rsdata = Ulp::select(
+            'ulps.*',
+            'up3.name AS up3_name'
+        )->join('up3s AS up3', 'ulps.up3_id', 'up3.id')
             ->where('ulps.id', $id)
             ->first();
 
-        $up3s = Up3::select('id', 'name as text')->get();
+        $rowuser = User::find(Auth::user()->id);
+        $up3s = [];
+        $tipe = $rowuser->type;
+        if ($tipe == 'UP3') {
+            $idup3 = $rowuser->up3_id;
+            $up3s = Up3::select('id', 'name AS text')
+                ->where('id', $idup3)
+                ->get();
+        } else {
+            $up3s = Up3::select('id', 'name as text')->get();
+        }
         return [$rsdata, $up3s];
     }
 
