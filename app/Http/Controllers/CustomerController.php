@@ -140,7 +140,7 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function detail($id)
     {
         $pageConfigs = [
             'pageHeader' => true,
@@ -153,20 +153,34 @@ class CustomerController extends Controller
             ],
         ];
 
+
         $breadcrumbs = [
             [
                 "link" => "/",
                 "name" => "Home",
             ],
             [
+                "link" => "#",
+                "name" => "Master Data",
+            ],
+            [
+                "link" => "master-data/customers",
                 "name" => "Pelanggan",
+            ],
+            [
+                "name" => "Detail",
             ],
         ];
 
-        return view('pages.master-data.customers.detail')->with(compact([
-            'pageConfigs',
-            'breadcrumbs',
-        ]));
+        list($customer) = $this->customerRepo->detail($id);
+
+        return view('pages.master-data.customers.detail')->with(
+            compact([
+                'pageConfigs',
+                'breadcrumbs',
+                'customer',
+            ])
+        );
     }
 
     /**

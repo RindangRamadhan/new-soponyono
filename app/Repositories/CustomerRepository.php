@@ -80,7 +80,7 @@ class CustomerRepository implements CustomerInterface
         ]);
     }
 
-    public function show($id)
+    public function detail($id)
     {
         $customer = Customer::select(
             'customers.*',
@@ -94,18 +94,9 @@ class CustomerRepository implements CustomerInterface
             ->where('customers.id', $id)
             ->first();
 
-        $rowuser = User::find(Auth::user()->id);
-        $tipe = $rowuser->type;
-        $id_uid = $rowuser->uid_id;
-        if ($tipe == 'ALL') {
-            $uids = Uid::select('id', 'name as text')->get();
-        } else {
-            $uids = Uid::select('id', 'name as text')->where([
-                ['id', $id_uid]
-            ])->get();
-        }
-        $statuss = Helper::CustomerStatus();
-        return [$customer,  $uids, $statuss];
+        
+        
+        return [$customer];
     }
 
     public function edit($id)
