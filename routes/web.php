@@ -53,6 +53,8 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::resource('/ulps', UlpController::class);
         Route::resource('/customers', CustomerController::class);
 
+        Route::get('/customers/{id}/detail', [CustomerController::class, 'detail']);
+
         // List Server Side
         Route::post('/users/list', [UserController::class, 'list']);
         Route::post('/roles/list', [RoleController::class, 'list']);
