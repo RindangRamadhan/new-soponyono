@@ -222,13 +222,13 @@ class Up3Controller extends Controller
             ],
         ];
 
-        list($rsdata, $uids) = $this->up3Repo->edit($id);
+        list($up3, $uids) = $this->up3Repo->edit($id);
 
         return view('pages.master-data.up3s.edit')->with(
             compact([
                 'pageConfigs',
                 'breadcrumbs',
-                'rsdata',
+                'up3',
                 'uids',
             ])
         );

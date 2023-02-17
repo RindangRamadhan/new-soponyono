@@ -78,7 +78,7 @@ class UlpRepository implements UlpInterface
 
     public function edit($id)
     {
-        $rsdata = Ulp::select(
+        $ulp = Ulp::select(
             'ulps.*',
             'up3.name AS up3_name'
         )->join('up3s AS up3', 'ulps.up3_id', 'up3.id')
@@ -106,7 +106,7 @@ class UlpRepository implements UlpInterface
                 ->where('uid_id', $id_uid)
                 ->get();
         }
-        return [$rsdata, $up3s];
+        return [$ulp, $up3s];
     }
 
     public function update(UlpRequest $request, $id)

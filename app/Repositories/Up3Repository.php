@@ -71,7 +71,7 @@ class Up3Repository implements Up3Interface
 
     public function edit($id)
     {
-        $rsdata = Up3::select('up3s.*', 'uid.name AS uid_name')->join('uids AS uid', 'up3s.uid_id', 'uid.id')
+        $up3 = Up3::select('up3s.*', 'uid.name AS uid_name')->join('uids AS uid', 'up3s.uid_id', 'uid.id')
             ->where('up3s.id', $id)
             ->first();
 
@@ -85,7 +85,7 @@ class Up3Repository implements Up3Interface
                 ['id', $id_uid]
             ])->get();
         }
-        return [$rsdata, $uids];
+        return [$up3, $uids];
     }
 
     public function update(Up3Request $request, $id)

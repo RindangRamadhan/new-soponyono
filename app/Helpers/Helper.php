@@ -381,7 +381,7 @@ class Helper
                 : "";
 
             $buttonDetail = Auth::user()->can("$menu-$menu Lihat")
-                ? "<a href=" . url("$url/$id") . " class='btn btn-icon rounded-circle btn-info'><i class='bx bx-list-ul'></i></a>"
+                ? "<a href=" . url("$url/$id/detail") . " class='btn btn-icon rounded-circle btn-info'><i class='bx bx-list-ul'></i></a>"
                 : "";
 
             $buttonEdit = Auth::user()->can("$menu-$menu Edit")
@@ -410,12 +410,15 @@ class Helper
                 }
             }
 
-            $record->action .= "$buttonEdit $buttonDelete";
+            $record->action .= "$buttonDetail $buttonEdit $buttonDelete";
 
             if (count($takeoutButton) > 0) {
                 foreach ($takeoutButton as $v) {
 
                     switch ($v) {
+                        case 'detail':
+                            $record->action = str_replace($buttonDetail, "", $record->action);
+                            break;
                         case 'edit':
                             $record->action = str_replace($buttonEdit, "", $record->action);
                             break;
@@ -577,5 +580,18 @@ class Helper
                 ],
             ];
         }
+    }
+    public static function CustomerStatus()
+    {
+        return [
+            [
+                "id" => "Menunggak",
+                "text" => "Menunggak",
+            ],
+            [
+                "id" => "Lunas",
+                "text" => "Lunas",
+            ],
+        ];
     }
 }

@@ -21,7 +21,7 @@
         </div>
         <div class="card-content">
           <div class="card-body">
-            <form class="form-horizontal form-submit" action="{{ route('up3s.update', $rsdata->id) }}" method="POST" novalidate>
+            <form class="form-horizontal form-submit" action="{{ route('up3s.update', $up3->id) }}" method="POST" novalidate>
               @csrf
               {{ method_field('PATCH') }}
               @include('pages.master-data.up3s.form')
@@ -56,7 +56,7 @@
       placeholder: 'Pilih UID'
     });
 
-    $('#uid_id').val(@php echo $rsdata->uid_id @endphp).change()
+    $('#uid_id').val(@php echo $up3->uid_id @endphp).change()
     
   });
 

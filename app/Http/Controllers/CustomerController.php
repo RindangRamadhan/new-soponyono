@@ -3,20 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
-use App\Http\Requests\UlpRequest;
-use App\Interfaces\UlpInterface;
-use App\Models\Ulp;
+use App\Http\Requests\CustomerRequest;
+use App\Interfaces\CustomerInterface;
+use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
-class UlpController extends Controller
+class CustomerController extends Controller
 {
-    protected $ulpRepo;
+    protected $customerRepo;
 
-    public function __construct(UlpInterface $ulpRepo)
+    public function __construct(CustomerInterface $customerRepo)
     {
-        $this->ulpRepo = $ulpRepo;
+        $this->customerRepo = $customerRepo;
     }
 
     /**
@@ -32,18 +30,19 @@ class UlpController extends Controller
             'isReload' => true,
             'isCreate' => true,
             'permission' => [
-                'create' => 'Ulp-Ulp Tambah',
-                'update' => 'Ulp-Ulp Edit',
-                'delete' => 'Ulp-Ulp Hapus',
+                'create' => 'Pelanggan-Pelanggan Tambah',
+                'detail' => 'Pelanggan-Pelanggan Lihat',
+                'update' => 'Pelanggan-Pelanggan Edit',
+                'delete' => 'Pelanggan-Pelanggan Hapus',
             ],
         ];
         $breadcrumbs = [
             ["link" => "/", "name" => "Home"],
             ["link" => "#", "name" => "Master Data"],
-            ["link" => "#", "name" => "Ulp"],
+            ["link" => "#", "name" => "Pelanggan"],
         ];
 
-        return view('pages.master-data.ulps.index')->with(
+        return view('pages.master-data.customers.index')->with(
             compact([
                 'pageConfigs',
                 'breadcrumbs',
@@ -54,13 +53,13 @@ class UlpController extends Controller
 
     function list(Request $request)
     {
-        $resources = $this->ulpRepo->list();
+        $resources = $this->customerRepo->list();
 
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
             $request,
             $resources,
-            "/master-data/ulps",
-            "Ulp",
+            "/master-data/customers",
+            "Pelanggan",
         );
 
         $result = [
@@ -73,26 +72,6 @@ class UlpController extends Controller
 
 
         return json_encode($result);
-    }
-
-    public function listSelect(Request $request)
-    {
-
-        $rowuser = User::find(Auth::user()->id);
-        $tipe = $rowuser->type;
-        $data = [];
-        if ($tipe == 'ULP') {
-            $id_ulp = $rowuser->ulp_id;
-            $data = Ulp::select('id', 'name AS text')
-                ->where('id', $id_ulp)
-                ->get();
-        } else {
-            $data = Ulp::select('id', 'name AS text')
-                ->where('up3_id', $request->up3_id)
-                ->get();
-        }
-
-        return response()->json($data);
     }
 
 
@@ -108,9 +87,10 @@ class UlpController extends Controller
             'isBack' => true,
             'isSave' => true,
             'permission' => [
-                'create' => 'Ulp-Ulp Tambah',
-                'update' => 'Ulp-Ulp Edit',
-                'delete' => 'Ulp-Ulp Hapus',
+                'create' => 'Pelanggan-Pelanggan Tambah',
+                'detail' => 'Pelanggan-Pelanggan Lihat',
+                'update' => 'Pelanggan-Pelanggan Edit',
+                'delete' => 'Pelanggan-Pelanggan Hapus',
             ],
         ];
 
@@ -124,19 +104,20 @@ class UlpController extends Controller
                 "name" => "Master Data",
             ],
             [
-                "link" => "master-data/ulps",
-                "name" => "Ulp",
+                "link" => "master-data/customers",
+                "name" => "Pelanggan",
             ],
             [
                 "name" => "Tambah",
             ],
         ];
-        list($up3s) = $this->ulpRepo->create();
-        return view('pages.master-data.ulps.create')->with(
+        list($uids,$statuss) = $this->customerRepo->create();
+        return view('pages.master-data.customers.create')->with(
             compact([
                 'pageConfigs',
                 'breadcrumbs',
-                'up3s',
+                'uids',
+                'statuss',
             ])
         );
     }
@@ -147,10 +128,10 @@ class UlpController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UlpRequest $request)
+    public function store(CustomerRequest $request)
     {
-        $this->ulpRepo->store($request);
-        return redirect('/master-data/ulps')->with(['status' => 200]);
+        $this->customerRepo->store($request);
+        return redirect('/master-data/customers')->with(['status' => 200]);
     }
 
     /**
@@ -165,9 +146,10 @@ class UlpController extends Controller
             'pageHeader' => true,
             'isBack' => true,
             'permission' => [
-                'create' => 'Ulp-Ulp Tambah',
-                'update' => 'Ulp-Ulp Edit',
-                'delete' => 'Ulp-Ulp Hapus',
+                'create' => 'Pelanggan-Pelanggan Tambah',
+                'detail' => 'Pelanggan-Pelanggan Lihat',
+                'update' => 'Pelanggan-Pelanggan Edit',
+                'delete' => 'Pelanggan-Pelanggan Hapus',
             ],
         ];
 
@@ -177,11 +159,11 @@ class UlpController extends Controller
                 "name" => "Home",
             ],
             [
-                "name" => "Ulp",
+                "name" => "Pelanggan",
             ],
         ];
 
-        return view('pages.profile.index')->with(compact([
+        return view('pages.master-data.customers.detail')->with(compact([
             'pageConfigs',
             'breadcrumbs',
         ]));
@@ -200,9 +182,10 @@ class UlpController extends Controller
             'isBack' => true,
             'isSave' => true,
             'permission' => [
-                'create' => 'Ulp-Ulp Tambah',
-                'update' => 'Ulp-Ulp Edit',
-                'delete' => 'Ulp-Ulp Hapus',
+                'create' => 'Pelanggan-Pelanggan Tambah',
+                'detail' => 'Pelanggan-Pelanggan Lihat',
+                'update' => 'Pelanggan-Pelanggan Edit',
+                'delete' => 'Pelanggan-Pelanggan Hapus',
             ],
         ];
 
@@ -216,22 +199,23 @@ class UlpController extends Controller
                 "name" => "Master Data",
             ],
             [
-                "link" => "master-data/ulps",
-                "name" => "Ulp",
+                "link" => "master-data/customers",
+                "name" => "Pelanggan",
             ],
             [
                 "name" => "Edit",
             ],
         ];
 
-        list($ulp, $up3s) = $this->ulpRepo->edit($id);
+        list($customer, $uids,$statuss) = $this->customerRepo->edit($id);
 
-        return view('pages.master-data.ulps.edit')->with(
+        return view('pages.master-data.customers.edit')->with(
             compact([
                 'pageConfigs',
                 'breadcrumbs',
-                'ulp',
-                'up3s',
+                'customer',
+                'uids',
+                'statuss',
             ])
         );
     }
@@ -243,10 +227,10 @@ class UlpController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UlpRequest $request, $id)
+    public function update(CustomerRequest $request, $id)
     {
-        $this->ulpRepo->update($request, $id);
-        return redirect('/master-data/ulps')->with(['status' => 200]);
+        $this->customerRepo->update($request, $id);
+        return redirect('/master-data/customers')->with(['status' => 200]);
     }
 
     /**
@@ -257,7 +241,7 @@ class UlpController extends Controller
      */
     public function destroy($id)
     {
-        Ulp::find($id)->delete();
+        Customer::find($id)->delete();
         return response()->json(['status' => 200]);
     }
 }

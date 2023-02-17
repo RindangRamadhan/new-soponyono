@@ -6,6 +6,7 @@ use App\Http\Controllers\UlpController;
 use App\Http\Controllers\Up3Controller;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UidController;
+use App\Http\Controllers\CustomerController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
@@ -50,6 +51,7 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::resource('/uids', UidController::class);
         Route::resource('/up3s', Up3Controller::class);
         Route::resource('/ulps', UlpController::class);
+        Route::resource('/customers', CustomerController::class);
 
         // List Server Side
         Route::post('/users/list', [UserController::class, 'list']);
@@ -57,6 +59,7 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::post('/uids/list', [UidController::class, 'list']);
         Route::post('/up3s/list', [Up3Controller::class, 'list']);
         Route::post('/ulps/list', [UlpController::class, 'list']);
+        Route::post('/customers/list', [CustomerController::class, 'list']);
 
         // List Select2
         Route::post('/up3/list-select', [Up3Controller::class, 'listSelect']);

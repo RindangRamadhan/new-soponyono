@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Interfaces\RoleInterface;
+use App\Interfaces\CustomerInterface;
 use App\Interfaces\UidInterface;
 use App\Interfaces\Up3Interface;
 use App\Interfaces\UlpInterface;
 use App\Interfaces\UserInterface;
 use App\Repositories\RoleRepository;
+use App\Repositories\CustomerRepository;
 use App\Repositories\UidRepository;
 use App\Repositories\Up3Repository;
 use App\Repositories\UlpRepository;
@@ -23,6 +25,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(CustomerInterface::class, CustomerRepository::class);
         $this->app->bind(UserInterface::class, UserRepository::class);
         $this->app->bind(RoleInterface::class, RoleRepository::class);
         $this->app->bind(UidInterface::class, UidRepository::class);
