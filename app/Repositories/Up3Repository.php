@@ -17,7 +17,6 @@ class Up3Repository implements Up3Interface
         $rowuser = User::find(Auth::user()->id);
         $tipe = $rowuser->type;
 
-        $data = [];
         if ($tipe == 'ALL') {
             $data = Up3::select('up3s.id', 'up3s.name', 'uid.name AS uid__name', 'up3s.latitude', 'up3s.longitude')->join('uids AS uid', 'up3s.uid_id', 'uid.id');
         } else if ($tipe == 'UP3') {

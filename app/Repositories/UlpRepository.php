@@ -16,7 +16,7 @@ class UlpRepository implements UlpInterface
     {
         $rowuser = User::find(Auth::user()->id);
         $tipe = $rowuser->type;
-        $data = [];
+       
         if ($tipe == 'ALL') {
             $data = Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name', 'ulps.latitude', 'ulps.longitude')->join('up3s AS up3', 'ulps.up3_id', 'up3.id');
         } else if ($tipe == 'UP3') {

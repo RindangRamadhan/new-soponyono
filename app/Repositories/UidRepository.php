@@ -15,7 +15,7 @@ class UidRepository implements UidInterface
     {
         $rowuser = User::find(Auth::user()->id);
         $tipe = $rowuser->type;
-        $data = [];
+        
         if ($tipe == 'ALL') {
             $data = Uid::select('id', 'name', 'phone_number', 'address', 'latitude', 'longitude');
         } else {

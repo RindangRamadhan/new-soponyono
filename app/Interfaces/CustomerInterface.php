@@ -6,7 +6,7 @@ use App\Http\Requests\CustomerRequest;
 
 interface CustomerInterface
 {
-    function list();
+    function list($id_up3, $id_ulp);
     function create();
     function store(CustomerRequest $request);
     function detail($id);
