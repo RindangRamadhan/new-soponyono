@@ -2,63 +2,45 @@
 
 namespace App\Repositories;
 
-use App\Helpers\Helper;
 use App\Http\Requests\CustomerRequest;
 use App\Interfaces\CustomerInterface;
 use App\Models\Uid;
 use App\Models\Customer;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class CustomerRepository implements CustomerInterface
 {
-    function list($id_up3, $id_ulp)
+    function list()
     {
-        // $rowuser = User::find(Auth::user()->id);
-        // $tipe = $rowuser->type;
-        
-        // if ($tipe == 'ALL') {
-        //     $data = Customer::select('customers.id', 'customers.id_pel', 'customers.name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.gardu',  'customers.status')
-        //         ->join('up3s AS up3', 'customers.up3_id', 'up3.id')
-        //         ->join('ulps AS ulp', 'customers.ulp_id', 'ulp.id');
-        // } else if ($tipe == 'UP3') {
-        //     $id_up3 = $rowuser->up3_id;
-        //     $data = Customer::select('customers.id', 'customers.id_pel', 'customers.name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.gardu',  'customers.status')
-        //         ->join('up3s AS up3', 'customers.up3_id', 'up3.id')
-        //         ->join('ulps AS ulp', 'customers.ulp_id', 'ulp.id')
-        //         ->where('customers.up3_id', $id_up3);
-        // } else if ($tipe == 'ULP') {
-        //     $id_ulp = $rowuser->ulp_id;
-        //     $data = Customer::select('customers.id', 'customers.id_pel', 'customers.name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.gardu',  'customers.status')
-        //         ->join('up3s AS up3', 'customers.up3_id', 'up3.id')
-        //         ->join('ulps AS ulp', 'customers.ulp_id', 'ulp.id')
-        //         ->where('customers.ulp_id', $id_ulp);
-        // } else {
-        //     $id_uid = $rowuser->uid_id;
-        //     $data = Customer::select('customers.id', 'customers.id_pel', 'customers.name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.gardu',  'customers.status')
-        //         ->join('ulps AS ulp', 'customers.ulp_id', 'ulp.id')
-        //         ->join('up3s AS up3', 'customers.up3_id', 'up3.id')
-        //         ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
-        //         ->where('up3.uid_id', $id_uid);
-        // }
+        $rowuser = Auth::user();
+        $tipe = $rowuser->type;
 
-        if($id_ulp){
-            $data = Customer::select('customers.id', 'customers.id_pel', 'customers.name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.gardu',  'customers.status')
-            ->join('up3s AS up3', 'customers.up3_id', 'up3.id')
-            ->join('ulps AS ulp', 'customers.ulp_id', 'ulp.id')
-            ->where('customers.ulp_id', $id_ulp);
-        }else{
-            $data = Customer::select('customers.id', 'customers.id_pel', 'customers.name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.gardu',  'customers.status')
-            ->join('up3s AS up3', 'customers.up3_id', 'up3.id')
-            ->join('ulps AS ulp', 'customers.ulp_id', 'ulp.id')
-            ->where('customers.up3_id', $id_up3);
+        $customer = Customer::select('customers.id', 'customers.id_pel', 'customers.name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.gardu')
+        ->join('up3s AS up3', 'customers.up3_id', 'up3.id')
+        ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
+        ->join('ulps AS ulp', 'customers.ulp_id', 'ulp.id');
+
+        switch ($tipe) {
+            case 'ALL':
+                $data = $customer;
+                break;
+            case 'UP3':
+                $data = $customer->where('customers.up3_id', $rowuser->up3_id);
+                break;
+            case 'ULP':
+                $data = $customer->where('customers.ulp_id', $rowuser->ulp_id);
+                break;
+            default:
+                $data = $customer->where('up3.uid_id', $rowuser->uid_id);
+                break;
         }
+
         return $data;
     }
 
     public function create()
     {
-        $rowuser = User::find(Auth::user()->id);
+        $rowuser = Auth::user();
         $tipe = $rowuser->type;
         $id_uid = $rowuser->uid_id;
         if ($tipe == 'ALL') {
@@ -68,8 +50,8 @@ class CustomerRepository implements CustomerInterface
                 ['id', $id_uid]
             ])->get();
         }
-        $statuss = Helper::CustomerStatus();
-        return [$uids, $statuss];
+        
+        return [$uids];
     }
 
     public function store(CustomerRequest $request)
@@ -88,7 +70,6 @@ class CustomerRepository implements CustomerInterface
             'kogol' => $request->kogol,
             'gardu' => $request->gardu,
             'address' => $request->address,
-            'status' => $request->status,
         ]);
     }
 
@@ -121,18 +102,16 @@ class CustomerRepository implements CustomerInterface
             ->where('customers.id', $id)
             ->first();
 
-        $rowuser = User::find(Auth::user()->id);
+        $rowuser = Auth::user();
         $tipe = $rowuser->type;
-        $id_uid = $rowuser->uid_id;
         if ($tipe == 'ALL') {
             $uids = Uid::select('id', 'name as text')->get();
         } else {
             $uids = Uid::select('id', 'name as text')->where([
-                ['id', $id_uid]
+                ['id', $rowuser->uid_id]
             ])->get();
         }
-        $statuss = Helper::CustomerStatus();
-        return [$customer, $uids, $statuss];
+        return [$customer, $uids];
     }
 
     public function update(CustomerRequest $request, $id)
@@ -151,7 +130,6 @@ class CustomerRepository implements CustomerInterface
             'kogol' => $request->kogol,
             'gardu' => $request->gardu,
             'address' => $request->address,
-            'status' => $request->status,
         ]);
     }
 

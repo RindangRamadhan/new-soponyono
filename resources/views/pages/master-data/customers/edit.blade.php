@@ -48,10 +48,7 @@
 
 <script>
   $(document).ready(function() {
-    $('#status').select2({
-      data: @php echo json_encode($statuss) @endphp,
-      placeholder: 'Pilih Status'
-    });
+
 
 
     $('#uid_id').select2({
@@ -67,7 +64,6 @@
       placeholder: 'Pilih ULP'
     });
 
-    $('#status').val("@php echo $customer->status @endphp").change()
     $('#uid_id').val(@php echo $customer->uid_id @endphp).change()
   });
 

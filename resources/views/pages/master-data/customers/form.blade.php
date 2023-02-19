@@ -198,27 +198,5 @@
     </div>
   </div>
 
-  <div class="col-sm-6">
-    <div class="form-group">
-      <label>Status</label>
-      <div class="controls form-label-group position-relative has-icon-left">
-        <select id="status" name="status" class="select2 form-control @error('status') is-invalid @enderror" required
-          data-validation-required-message="This work unit field is required">
-          <option></option>
-        </select>
-        <div class="form-control-position">
-          <i class="bx bx-edit-alt"></i>
-        </div>
-        <!-- Error Message -->
-        @error('status')
-        <div class="help-block">
-          <ul role="alert">
-            <li>{{ $message }}</li>
-          </ul>
-        </div>
-        @enderror
-      </div>
-    </div>
-  </div>
 
 </div>

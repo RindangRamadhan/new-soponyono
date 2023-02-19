@@ -2,26 +2,23 @@
 
 namespace App\Repositories;
 
-use App\Helpers\Helper;
 use App\Http\Requests\UidRequest;
 use App\Interfaces\UidInterface;
 use App\Models\Uid;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class UidRepository implements UidInterface
 {
     function list()
     {
-        $rowuser = User::find(Auth::user()->id);
+        $rowuser = Auth::user();
         $tipe = $rowuser->type;
         
         if ($tipe == 'ALL') {
             $data = Uid::select('id', 'name', 'phone_number', 'address', 'latitude', 'longitude');
         } else {
-            $id_uid = $rowuser->uid_id;
             $data = Uid::select('id', 'name', 'phone_number', 'address', 'latitude', 'longitude')->where([
-                ['id', $id_uid]
+                ['id', $rowuser->uid_id]
             ]);
         }
         return $data;

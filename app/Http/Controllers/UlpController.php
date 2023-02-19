@@ -78,7 +78,7 @@ class UlpController extends Controller
     public function listSelect(Request $request)
     {
 
-        $rowuser = User::find(Auth::user()->id);
+        $rowuser = Auth::user();
         $tipe = $rowuser->type;
         $data = [];
         if ($tipe == 'ULP') {

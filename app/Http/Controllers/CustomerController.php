@@ -7,9 +7,6 @@ use App\Http\Requests\CustomerRequest;
 use App\Interfaces\CustomerInterface;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Up3;
-use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
@@ -31,7 +28,7 @@ class CustomerController extends Controller
         $pageConfigs = [
             'pageHeader' => true,
             'isReload' => true,
-            'isCreate' => true,
+            'isCreate' => false,
             'permission' => [
                 'create' => 'Pelanggan-Pelanggan Tambah',
                 'detail' => 'Pelanggan-Pelanggan Lihat',
@@ -45,53 +42,26 @@ class CustomerController extends Controller
             ["link" => "#", "name" => "Pelanggan"],
         ];
 
-        $rowuser = User::find(Auth::user()->id);
-        $tipe = $rowuser->type;
-        $data = [];
-        if ($tipe == 'ALL') {
-            $up3s = Up3::select('id', 'name AS text')
-                ->get();
-        } else if ($tipe == 'UP3') {
-            $id_up3 = $rowuser->up3_id;
-            $up3s = Up3::select('id', 'name AS text')
-                ->where('id', $id_up3)
-                ->get();
-        } else if ($tipe == 'ULP') {
-            $id_ulp = $rowuser->ulp_id;
-            $id_up3 = $rowuser->up3_id;
-
-            $up3s = Up3::select('id', 'name AS text')
-                ->where('id', $id_up3)
-                ->get();
-        } else {
-            $id_uid = $rowuser->uid_id;
-
-            $up3s = Up3::select('id', 'name AS text')
-                ->where('uid_id', $id_uid)
-                ->get();
-        }
-
         return view('pages.master-data.customers.index')->with(
             compact([
                 'pageConfigs',
                 'breadcrumbs',
-                'up3s',
             ])
         );
     }
 
 
-    public function list(Request $request)
+    function list(Request $request)
     {
-        $id_up3 = $request->up3_id;
-        $id_ulp = $request->ulp_id;
-        $resources = $this->customerRepo->list($id_up3, $id_ulp);
+
+        $resources = $this->customerRepo->list();
 
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
             $request,
             $resources,
             "/master-data/customers",
             "Pelanggan",
+            ['detail'],
         );
 
         $result = [
@@ -141,13 +111,12 @@ class CustomerController extends Controller
                 "name" => "Tambah",
             ],
         ];
-        list($uids, $statuss) = $this->customerRepo->create();
+        list($uids,) = $this->customerRepo->create();
         return view('pages.master-data.customers.create')->with(
             compact([
                 'pageConfigs',
                 'breadcrumbs',
                 'uids',
-                'statuss',
             ])
         );
     }
@@ -251,7 +220,7 @@ class CustomerController extends Controller
             ],
         ];
 
-        list($customer, $uids, $statuss) = $this->customerRepo->edit($id);
+        list($customer, $uids) = $this->customerRepo->edit($id);
 
         return view('pages.master-data.customers.edit')->with(
             compact([
@@ -259,7 +228,6 @@ class CustomerController extends Controller
                 'breadcrumbs',
                 'customer',
                 'uids',
-                'statuss',
             ])
         );
     }
