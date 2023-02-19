@@ -8,54 +8,55 @@
       "role": null
     },
     {
-      "navheader": "Master Data",
-      "role": "Master Data"
+      "url": "#",
+      "name": "Master Data",
+      "i18n": "Master Data",
+      "icon": "servers",
+      "role": "Master Data",
+      "submenu": [
+        {
+          "url": "master-data/users",
+          "name": "Pengguna",
+          "i18n": "Pengguna",
+          "icon": "bx bx-radio-circle",
+          "role": null
+        },
+        {
+          "url": "master-data/customers",
+          "name": "Pelanggan",
+          "i18n": "Pelanggan",
+          "icon": "bx bx-radio-circle",
+          "role": null
+        },
+        {
+          "url": "master-data/uids",
+          "name": "UID",
+          "i18n": "UID",
+          "icon": "bx bx-radio-circle",
+          "role": "Uid-Uid Lihat"
+        },
+        {
+          "url": "master-data/up3s",
+          "name": "UP3",
+          "i18n": "UP3",
+          "icon": "bx bx-radio-circle",
+          "role": "Up3-Up3 Lihat"
+        },
+        {
+          "url": "master-data/ulps",
+          "name": "ULP",
+          "i18n": "ULP",
+          "icon": "bx bx-radio-circle",
+          "role": "Ulp-Ulp Lihat"
+        }
+      ]
     },
     {
-      "url": "master-data/users",
-      "name": "Pengguna",
-      "i18n": "Pengguna",
-      "icon": "user",
-      "role": "Pengguna-Pengguna Lihat"
-    },
-    {
-      "url": "master-data/customers",
-      "name": "Pelanggan",
-      "i18n": "Pelanggan",
-      "icon": "users",
-      "role": "Pelanggan-Pelanggan Lihat"
-    },
-    {
-      "url": "master-data/roles",
-      "name": "Hak Akses",
-      "i18n": "Hak Akses",
-      "icon": "unlock",
-      "role": "Hak Akses-Hak Akses Lihat"
-    },
-    {
-      "url": "master-data/uids",
-      "name": "UID",
-      "i18n": "UID",
-      "icon": "home",
-      "role": "Uid-Uid Lihat"
-    },
-    {
-      "url": "master-data/up3s",
-      "name": "UP3",
-      "i18n": "UP3",
-      "icon": "home",
-      "role": "Up3-Up3 Lihat"
-    },
-    {
-      "url": "master-data/ulps",
-      "name": "ULP",
-      "i18n": "ULP",
-      "icon": "home",
-      "role": "Ulp-Ulp Lihat"
-    },
-    {
-      "navheader": "Monitoring",
-      "role": "Monitoring"
+      "url": "monitoring/report",
+      "name": "Order",
+      "i18n": "Order",
+      "icon": "notebook",
+      "role": "Order-Order Lihat"
     },
     {
       "url": "monitoring/locations",
@@ -65,11 +66,11 @@
       "role": "Lokasi-Lokasi Lihat"
     },
     {
-      "url": "monitoring/report",
-      "name": "Order",
-      "i18n": "Order",
-      "icon": "notebook",
-      "role": "Order-Order Lihat"
+      "url": "master-data/roles",
+      "name": "Hak Akses",
+      "i18n": "Hak Akses",
+      "icon": "unlock",
+      "role": "Hak Akses-Hak Akses Lihat"
     }
   ]
 }
