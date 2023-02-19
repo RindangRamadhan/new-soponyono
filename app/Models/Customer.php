@@ -4,12 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Yajra\Auditable\AuditableTrait;
 
 class Customer extends Model
 {
-    use HasFactory, AuditableTrait, SoftDeletes;
+    use HasFactory, AuditableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +16,7 @@ class Customer extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'up3_id', 'ulp_id', 'id_pel', 'name', 'gardu','status',
+        'up3_id', 'ulp_id', 'id_pel', 'name', 'gardu',
     ];
 
 
