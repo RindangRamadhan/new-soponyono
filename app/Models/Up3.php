@@ -12,6 +12,6 @@ class Up3 extends Model
     use HasFactory, AuditableTrait, SoftDeletes;
 
     protected $fillable = [
-        'uid_id', 'name', 'phone_number', 'address', 'latitude', 'longitude',
+        'id', 'uid_id', 'name', 'phone_number', 'address', 'latitude', 'longitude',
     ];
 }

@@ -12,6 +12,6 @@ class Uid extends Model
     use HasFactory, AuditableTrait, SoftDeletes;
 
     protected $fillable = [
-        'name', 'phone_number', 'address', 'latitude', 'longitude',
+        'id', 'name', 'phone_number', 'address', 'latitude', 'longitude',
     ];
 }

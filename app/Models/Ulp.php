@@ -12,6 +12,6 @@ class Ulp extends Model
     use HasFactory, AuditableTrait, SoftDeletes;
 
     protected $fillable = [
-        'up3_id', 'name', 'phone_number', 'address', 'latitude', 'longitude',
+        'id', 'up3_id', 'name', 'phone_number', 'address', 'latitude', 'longitude',
     ];
 }
