@@ -48,7 +48,12 @@
 <script>
   $(document).ready(function() {
     
+  setInputFilter(document.getElementById("id"), function(value) {
+    return /^-?\d*[.,]?\d*$/.test(value); }, "Hanya Angka");
   });
+
+  
+
 
 </script>
 @endsection

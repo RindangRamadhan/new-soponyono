@@ -51,7 +51,8 @@
       data: @php echo json_encode($uids) @endphp,
       placeholder: 'Pilih UID'
     });
-    
+    setInputFilter(document.getElementById("id"), function(value) {
+    return /^-?\d*[.,]?\d*$/.test(value); }, "Hanya Angka");
   });
 
 </script>

@@ -3,7 +3,7 @@
     <div class="form-group">
       <label>Kode</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="id" class="form-control  @error('id') is-invalid @enderror" placeholder="Kode" required data-validation-required-message="This kode field is required" value="{{isset($ulp) ? $ulp->id : old('id')}}">
+        <input type="text" id="id" name="id" class="form-control  @error('id') is-invalid @enderror" placeholder="Kode" required data-validation-required-message="This kode field is required" value="{{isset($ulp) ? $ulp->id : old('id')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>

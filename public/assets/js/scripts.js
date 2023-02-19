@@ -199,83 +199,87 @@
     };
 
     confirmResetPassword = (params) => {
-      "use strict";
-      let name = "";
-      if (params.name) {
-          name = params.name;
-      }
+        "use strict";
+        let name = "";
+        if (params.name) {
+            name = params.name;
+        }
 
-      Swal.fire({
-          title: "Konfirmasi",
-          html: (`Anda Ingin Mereset Password ${name} ?
+        Swal.fire({
+            title: "Konfirmasi",
+            html: `Anda Ingin Mereset Password ${name} ?
           <br>jika ya password anda 12345678
-          `),
-          
-          type: "warning",
-          confirmButtonClass: "btn btn-primary",
-          buttonsStyling: false,
-          showCancelButton: true,
-          confirmButtonText: "Ya",
-          cancelButtonText: "Tidak",
-          showLoaderOnConfirm: true,
-          cancelButtonClass: "btn btn-danger ml-1",
-          buttonsStyling: false,
-          preConfirm: function () {
-              return fetch(params.url + "/" + params.id+ "/reset-password", {
-                  method: "GET",
-                  headers: {
-                      "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                          "content"
-                      ),
-                  },
-              })
-                  .then(function (response) {
-                      if (!response.ok) {
-                          console.log(response);
-                          throw new Error(response.statusText);
-                      }
+          `,
 
-                      return response.json();
-                  })
-                  .catch(function (error) {
-                      Swal.showValidationMessage(
-                          "Request failed:  " + error + ""
-                      );
-                  });
-          },
-          allowOutsideClick: function () {
-              !Swal.isLoading();
-          },
-      }).then(function (result) {
-          if (result.value) {
-              switch (result.value.status) {
-                  case 200:
-                      toastr.success("Data berhasil reset password !", "Sukses", {
-                          progressBar: true,
-                          showDuration: 500,
-                          closeButton: true,
-                      });
-                      setTimeout(() => {
-                          if (params.reload) {
-                              dataTable.ajax.reload();
-                              // window.location.reload()
-                          } 
-                      }, 500);
-                      break;
-                  case 500:
-                      toastr.error(
-                          "Data tidak bisa dihapus, karena sudah digunakan !",
-                          "Gagal",
-                          {
-                              progressBar: true,
-                              showDuration: 500,
-                              closeButton: true,
-                          }
-                      );
-                      break;
-              }
-          }
-      });
+            type: "warning",
+            confirmButtonClass: "btn btn-primary",
+            buttonsStyling: false,
+            showCancelButton: true,
+            confirmButtonText: "Ya",
+            cancelButtonText: "Tidak",
+            showLoaderOnConfirm: true,
+            cancelButtonClass: "btn btn-danger ml-1",
+            buttonsStyling: false,
+            preConfirm: function () {
+                return fetch(params.url + "/" + params.id + "/reset-password", {
+                    method: "GET",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            console.log(response);
+                            throw new Error(response.statusText);
+                        }
+
+                        return response.json();
+                    })
+                    .catch(function (error) {
+                        Swal.showValidationMessage(
+                            "Request failed:  " + error + ""
+                        );
+                    });
+            },
+            allowOutsideClick: function () {
+                !Swal.isLoading();
+            },
+        }).then(function (result) {
+            if (result.value) {
+                switch (result.value.status) {
+                    case 200:
+                        toastr.success(
+                            "Data berhasil reset password !",
+                            "Sukses",
+                            {
+                                progressBar: true,
+                                showDuration: 500,
+                                closeButton: true,
+                            }
+                        );
+                        setTimeout(() => {
+                            if (params.reload) {
+                                dataTable.ajax.reload();
+                                // window.location.reload()
+                            }
+                        }, 500);
+                        break;
+                    case 500:
+                        toastr.error(
+                            "Data tidak bisa dihapus, karena sudah digunakan !",
+                            "Gagal",
+                            {
+                                progressBar: true,
+                                showDuration: 500,
+                                closeButton: true,
+                            }
+                        );
+                        break;
+                }
+            }
+        });
     };
 
     removeDuplicates = (array, key) => {
@@ -283,6 +287,49 @@
             const removed = arr.filter((i) => i[key] !== item[key]);
             return [...removed, item];
         }, []);
+    };
+
+    setInputFilter = (textbox, inputFilter, errMsg) => {
+        [
+            "input",
+            "keydown",
+            "keyup",
+            "mousedown",
+            "mouseup",
+            "select",
+            "contextmenu",
+            "drop",
+            "focusout",
+        ].forEach(function (event) {
+            textbox.addEventListener(event, function (e) {
+                if (inputFilter(this.value)) {
+                    // Accepted value
+                    if (
+                        ["keydown", "mousedown", "focusout"].indexOf(e.type) >=
+                        0
+                    ) {
+                        this.classList.remove("input-error");
+                        this.setCustomValidity("");
+                    }
+                    this.oldValue = this.value;
+                    this.oldSelectionStart = this.selectionStart;
+                    this.oldSelectionEnd = this.selectionEnd;
+                } else if (this.hasOwnProperty("oldValue")) {
+                    // Rejected value - restore the previous one
+                    this.classList.add("input-error");
+                    this.setCustomValidity(errMsg);
+                    this.reportValidity();
+                    this.value = this.oldValue;
+                    this.setSelectionRange(
+                        this.oldSelectionStart,
+                        this.oldSelectionEnd
+                    );
+                } else {
+                    // Rejected value - nothing to restore
+                    this.value = "";
+                }
+            });
+        });
     };
 
     // Submit Form
