@@ -26,7 +26,6 @@ return new class extends Migration
             $table->string('kogol');
             $table->string('gardu');
             $table->text('address')->nullable();
-            $table->enum('status', ['Menunggak', 'Lunas']);
             $table->auditable();
             $table->softDeletes();
             $table->timestamps();
