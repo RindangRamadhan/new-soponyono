@@ -232,6 +232,17 @@ class UserRepository implements UserInterface
         $user->assignRole($role);
     }
 
+    public function reset_password($id)
+    {
+        $user = User::find($id);
+        
+        $user->update([
+            'password' => Hash::make("12345678"),
+        ]);
+
+
+    }
+
     public function upload(Request $request)
     {
         $request->validate([

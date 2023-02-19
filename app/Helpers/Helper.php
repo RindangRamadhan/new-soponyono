@@ -372,7 +372,7 @@ class Helper
             $id = $record->id;
             $name = $record->name;
             if (!$name) {
-                $name = '';
+                $name = $record->user_name;
             }
             $buttonDownload = "<a href=" . url("$url/$id/download") . " class='btn btn-icon rounded-circle btn-primary btn-download-$id' data-id='$id'><i class='bx bx-download'></i></a>";
 
@@ -392,6 +392,8 @@ class Helper
                 ? "<button type='button' class='btn btn-icon rounded-circle btn-danger btn-delete'  data-id=" . $id . " data-name='$name' ><i class='bx bx-trash'></i></button>"
                 : "";
 
+            $buttonResetPassword = "<button type='button' class='btn btn-icon rounded-circle btn-warning btn-reset-password'  title='Reset Password' data-id=" . $id . " data-name='$name' data-toggle='tooltip'><i class='bx bx-key'></i></button>";
+
             $record->action = "";
             if (count($customeButton) > 0) {
                 foreach ($customeButton as $v) {
@@ -399,6 +401,9 @@ class Helper
                     switch ($v) {
                         case 'download':
                             $record->action .= "$buttonDownload ";
+                            break;
+                        case 'reset-password':
+                            $record->action .= "$buttonResetPassword ";
                             break;
                         case 'detail':
                             $record->action .= "$buttonDetail ";
@@ -526,7 +531,7 @@ class Helper
                     "text" => "ULP",
                 ],
             ];
-        } else if($tipe=='ALL'){
+        } else if ($tipe == 'ALL') {
             return [
                 [
                     "id" => "ALL",
@@ -553,7 +558,7 @@ class Helper
                     "text" => "ULP",
                 ],
             ];
-        }else {
+        } else {
             return [
                 [
                     "id" => "UID",
@@ -578,5 +583,4 @@ class Helper
             ];
         }
     }
-    
 }

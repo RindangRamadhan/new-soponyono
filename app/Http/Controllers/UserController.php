@@ -57,11 +57,16 @@ class UserController extends Controller
         );
     }
 
-    function list(Request $request) {
+    function list(Request $request)
+    {
         $resources = $this->userRepo->list();
 
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
-            $request, $resources, "/master-data/users", "Pengguna",
+            $request,
+            $resources,
+            "/master-data/users",
+            "Pengguna",
+            ['reset-password'],
         );
 
         $result = [
@@ -236,6 +241,12 @@ class UserController extends Controller
     {
         $this->userRepo->update($request, $id);
         return redirect('/master-data/users')->with(['status' => 200]);
+    }
+
+    public function reset_password($id)
+    {
+        $this->userRepo->reset_password($id);
+        return response()->json(['status' => 200]);
     }
 
     /**

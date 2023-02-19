@@ -12,6 +12,7 @@ interface UserInterface
     function store(UserRequest $request);
     function show($id);
     function edit($id);
+    function reset_password($id);
     function update(UserRequest $request, $id);
     function upload(Request $request);
 }

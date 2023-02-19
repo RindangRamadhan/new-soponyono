@@ -44,6 +44,7 @@ Route::middleware('auth', 'verified')->group(function () {
             Route::get('/download-template', [UserController::class, 'download'])->name('users.download');
             Route::post('/upload-template', [UserController::class, 'upload'])->name('users.upload');
             Route::get('/export', [UserController::class, 'export'])->name('users.export');
+            Route::get('/{id}/reset-password', [UserController::class, 'reset_password']);
         });
 
         Route::resource('/users', UserController::class);
