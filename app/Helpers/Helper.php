@@ -372,7 +372,7 @@ class Helper
             $id = $record->id;
             $name = $record->name;
             if (!$name) {
-                $name = $record->user_name;
+                $name = '';
             }
             $buttonDownload = "<a href=" . url("$url/$id/download") . " class='btn btn-icon rounded-circle btn-primary btn-download-$id' data-id='$id'><i class='bx bx-download'></i></a>";
 
@@ -389,7 +389,7 @@ class Helper
                 : "";
 
             $buttonDelete = Auth::user()->can("$menu-$menu Hapus")
-                ? "<button type='button' class='btn btn-icon rounded-circle btn-danger btn-delete' data-id=" . $id . " data-name=" . $name . "><i class='bx bx-trash'></i></button>"
+                ? "<button type='button' class='btn btn-icon rounded-circle btn-danger btn-delete'  data-id=" . $id . " data-name='$name' ><i class='bx bx-trash'></i></button>"
                 : "";
 
             $record->action = "";
@@ -410,15 +410,12 @@ class Helper
                 }
             }
 
-            $record->action .= "$buttonDetail $buttonEdit $buttonDelete";
+            $record->action .= "$buttonEdit $buttonDelete";
 
             if (count($takeoutButton) > 0) {
                 foreach ($takeoutButton as $v) {
 
                     switch ($v) {
-                        case 'detail':
-                            $record->action = str_replace($buttonDetail, "", $record->action);
-                            break;
                         case 'edit':
                             $record->action = str_replace($buttonEdit, "", $record->action);
                             break;
@@ -581,17 +578,5 @@ class Helper
             ];
         }
     }
-    public static function CustomerStatus()
-    {
-        return [
-            [
-                "id" => "Menunggak",
-                "text" => "Menunggak",
-            ],
-            [
-                "id" => "Lunas",
-                "text" => "Lunas",
-            ],
-        ];
-    }
+    
 }

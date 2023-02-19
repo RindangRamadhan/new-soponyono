@@ -14,42 +14,39 @@ class Up3Repository implements Up3Interface
 {
     function list()
     {
-        $rowuser = User::find(Auth::user()->id);
+        $rowuser = Auth::user();
         $tipe = $rowuser->type;
 
-        if ($tipe == 'ALL') {
-            $data = Up3::select('up3s.id', 'up3s.name', 'uid.name AS uid__name', 'up3s.latitude', 'up3s.longitude')->join('uids AS uid', 'up3s.uid_id', 'uid.id');
-        } else if ($tipe == 'UP3') {
-            $id_up3 = $rowuser->up3_id;
-            $data = Up3::select('up3s.id', 'up3s.name', 'uid.name AS uid__name', 'up3s.latitude', 'up3s.longitude')->join('uids AS uid', 'up3s.uid_id', 'uid.id')->where([
-                ['up3s.id', $id_up3]
-            ]);
-        } else if ($tipe == 'ULP') {
-            $id_up3 = 00;
-            $data = Up3::select('up3s.id', 'up3s.name', 'uid.name AS uid__name', 'up3s.latitude', 'up3s.longitude')->join('uids AS uid', 'up3s.uid_id', 'uid.id')->where([
-                ['up3s.id', $id_up3]
-            ]);
-        } else {
-            $id_uid = $rowuser->uid_id;
-            $data = Up3::select('up3s.id', 'up3s.name', 'uid.name AS uid__name', 'up3s.latitude', 'up3s.longitude')->join('uids AS uid', 'up3s.uid_id', 'uid.id')
-            ->where([
-                ['up3s.uid_id', $id_uid]
-            ]);
+        $up3 = Up3::select('up3s.id', 'up3s.name', 'uid.name AS uid__name', 'up3s.latitude', 'up3s.longitude')->join('uids AS uid', 'up3s.uid_id', 'uid.id');
+
+        switch ($tipe) {
+            case 'ALL':
+                $data = $up3;
+                break;
+            case 'UP3':
+                $data = $up3->where('up3s.id', $rowuser->up3_id);
+                break;
+            case 'ULP':
+                $data = $up3->where('up3s.id', 00);
+                break;
+            default:
+                $data = $up3->where('up3s.uid_id', $rowuser->uid_id);
+                break;
         }
+
         return $data;
     }
 
     public function create()
     {
 
-        $rowuser = User::find(Auth::user()->id);
+        $rowuser = Auth::user();
         $tipe = $rowuser->type;
-        $id_uid = $rowuser->uid_id;
         if ($tipe == 'ALL') {
             $uids = Uid::select('id', 'name as text')->get();
         } else {
             $uids = Uid::select('id', 'name as text')->where([
-                ['id', $id_uid]
+                ['id', $rowuser->uid_id]
             ])->get();
         }
 
@@ -74,14 +71,13 @@ class Up3Repository implements Up3Interface
             ->where('up3s.id', $id)
             ->first();
 
-        $rowuser = User::find(Auth::user()->id);
+        $rowuser = Auth::user();
         $tipe = $rowuser->type;
-        $id_uid = $rowuser->uid_id;
         if ($tipe == 'ALL') {
             $uids = Uid::select('id', 'name as text')->get();
         } else {
             $uids = Uid::select('id', 'name as text')->where([
-                ['id', $id_uid]
+                ['id', $rowuser->uid_id]
             ])->get();
         }
         return [$up3, $uids];

@@ -156,17 +156,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-12">
-                <div class="form-group">
-                  <label>Status</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
-                    <input type="text" name="status" class="form-control " value="{{ $customer->status }}" readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              
 
             </div>
           </div>

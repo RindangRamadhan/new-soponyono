@@ -47,10 +47,7 @@
 
 <script>
   $(document).ready(function() {
-    $('#status').select2({
-      data: @php echo json_encode($statuss) @endphp,
-      placeholder: 'Pilih Status'
-    });
+
 
 
     $('#uid_id').select2({

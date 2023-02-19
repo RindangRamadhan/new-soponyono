@@ -76,7 +76,7 @@ class Up3Controller extends Controller
 
     public function listSelect(Request $request)
     {
-        $rowuser = User::find(Auth::user()->id);
+        $rowuser = Auth::user();
         $tipe = $rowuser->type;
         $data = [];
         if ($tipe == 'UP3' || $tipe == 'ULP') {
