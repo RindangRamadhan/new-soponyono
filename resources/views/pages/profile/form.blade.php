@@ -37,4 +37,34 @@
       </div>
     </div>
   </div>
+  <div class="col-sm-6">
+    <div class="form-group">
+      <label>No. Hp</label>
+      <div class="controls form-label-group position-relative has-icon-left">
+        <input type="number" name="phone" class="form-control  @error('phone') is-invalid @enderror" placeholder="No. Hp" value="{{isset($user) ? $user->phone : old('phone')}}">
+        <div class="form-control-position">
+          <i class="bx bx-edit-alt"></i>
+        </div>
+        <!-- Error Message -->
+        @error('phone')
+        <div class="help-block">
+          <ul role="alert">
+            <li>{{ $message }}</li>
+          </ul>
+        </div>
+        @enderror
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="form-group">
+      <label>Foto</label>
+      <div class="controls form-label-group position-relative has-icon-left">
+        <div class="custom-file">
+          <input type="file" name="photo" class="custom-file-input" accept=".png, .jpg, .jpeg">
+          <label class="custom-file-label" for="fileExcel">Unggah Foto</label>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

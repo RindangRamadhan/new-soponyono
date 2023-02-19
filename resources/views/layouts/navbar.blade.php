@@ -78,11 +78,11 @@ $year = \Request::session()->get('year') ?? date('Y');
                 <span class="user-status text-muted">Available</span>
               </div>
               <span>
-                {{-- @if (Auth::user()->photo)
-                <img class="round" src="{{ asset('/img/upload/'.Auth::user()->photo) }}" alt="avatar" height="40" width="40">
+                @if (Auth::user()->photo)
+                <img src="{{ asset('/images/upload/'.Auth::user()->photo) }}" alt="users view avatar" class="users-avatar-shadow round" height="40" width="40">
                 @else
-                @endif --}}
-                <img class="round" src="https://ui-avatars.com/api/?name={{Auth::user()->name}}" alt="avatar" height="40" width="40">
+                <img src="https://ui-avatars.com/api/?name={{Auth::user()->name}}" alt="users view avatar" class="users-avatar-shadow round" height="40" width="40">
+                @endif
               </span>
             </a>
             <div class="dropdown-menu dropdown-menu-right pb-0">

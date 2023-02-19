@@ -79,6 +79,44 @@
   </div>
   <div class="col-sm-6">
     <div class="form-group">
+      <label>No. Hp</label>
+      <div class="controls form-label-group position-relative has-icon-left">
+        <input type="text" name="phone" class="form-control  @error('phone') is-invalid @enderror" placeholder="No. Hp" value="{{isset($user) ? $user->phone : old('phone')}}">
+        <div class="form-control-position">
+          <i class="bx bx-edit-alt"></i>
+        </div>
+        <!-- Error Message -->
+        @error('phone')
+        <div class="help-block">
+          <ul role="alert">
+            <li>{{ $message }}</li>
+          </ul>
+        </div>
+        @enderror
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="form-group">
+      <label>Jabatan</label>
+      <div class="controls form-label-group position-relative has-icon-left">
+        <input type="text" name="position" class="form-control  @error('position') is-invalid @enderror" placeholder="Jabatan" value="{{isset($user) ? $user->position : old('position')}}">
+        <div class="form-control-position">
+          <i class="bx bx-edit-alt"></i>
+        </div>
+        <!-- Error Message -->
+        @error('position')
+        <div class="help-block">
+          <ul role="alert">
+            <li>{{ $message }}</li>
+          </ul>
+        </div>
+        @enderror
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="form-group">
       <label>UID</label>
       <div class="controls form-label-group position-relative has-icon-left">
         <select id="uid_id" name="uid_id" class="select2 form-control @error('uid_id') is-invalid @enderror" required data-validation-required-message="This main unit field is required">

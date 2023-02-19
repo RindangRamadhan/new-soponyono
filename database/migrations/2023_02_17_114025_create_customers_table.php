@@ -29,6 +29,7 @@ return new class extends Migration
             $table->auditable();
             $table->softDeletes();
             $table->timestamps();
+
             $table->foreign('uid_id')
                 ->references('id')
                 ->on('uids');

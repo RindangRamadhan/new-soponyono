@@ -7,9 +7,13 @@ use App\Helpers\Helper;
 use App\Http\Requests\UserRequest;
 use App\Interfaces\UserInterface;
 use App\Models\User;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Intervention\Image\ImageManagerStatic as Image;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -306,9 +310,41 @@ class UserController extends Controller
         ]);
 
         $user = User::find($id);
+
+        if ($request->hasFile('photo')) {
+            $photo = $request->file('photo');
+
+            if (is_array($photo) || is_object($photo)) {
+                // mengambil extension file
+                $extension = $photo->getClientOriginalExtension();
+                // membuat nama file random berikut extension
+                $filename = Str::random(40) . '.' . $extension;
+
+                $img = Image::make($photo->getRealPath());
+                $img->save(public_path('images/upload/' . $filename));
+                $img->resize(255, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+                if ($user->photo) {
+                    $filepath = public_path('images/upload/' . $user->photo);
+                    try {
+                        File::delete($filepath);
+                    } catch (FileNotFoundException $e) {
+                        // File sudah dihapus/tidak ada
+                    }
+                }
+
+                $user->photo = $filename;
+                // menyimpan field foto di table barangs  dengan filename yang baru dibuat
+                $user->save();
+            }
+        }
+
         $user->update([
             'name' => $request->name,
             'user_name' => $request->user_name,
+            'phone' => $request->phone,
         ]);
 
         return redirect("/users/$id/profile")->with(['status' => 200]);

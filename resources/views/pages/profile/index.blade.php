@@ -22,7 +22,11 @@
           <div class="col-sm-4">
             <div class="media mb-1 d-flex justify-content-center">
               <a class="mr-1" href="#">
+                @if ($user->photo)
+                <img src="{{ asset('/images/upload/'.$user->photo) }}" alt="users view avatar" class="users-avatar-shadow round" height="100" width="100">
+                @else
                 <img src="https://ui-avatars.com/api/?name={{$user->name}}" alt="users view avatar" class="users-avatar-shadow round" height="100" width="100">
+                @endif
               </a>
             </div>
 

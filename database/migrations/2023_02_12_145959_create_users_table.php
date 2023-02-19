@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('user_name')->unique();
             $table->string('rbm_code', 3)->unique();
             $table->string('name');
-            $table->enum('type', ['Admin', 'Petugas']);
+            $table->enum('type', ['ALL', 'UID', 'UP3', 'UP2D', 'UP2K', 'ULP']);
             $table->string('password');
             $table->rememberToken();
             $table->auditable();

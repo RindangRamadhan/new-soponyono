@@ -34,6 +34,28 @@
   </div>
   <div class="col-sm-6">
     <div class="form-group">
+      <label>No. Hp</label>
+      <div class="controls form-label-group position-relative has-icon-left">
+        <input type="text" name="phone" class="form-control" value="{{ $user->phone }}" readonly>
+        <div class="form-control-position">
+          <i class="bx bx-edit-alt"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="form-group">
+      <label>Jabatan</label>
+      <div class="controls form-label-group position-relative has-icon-left">
+        <input type="text" name="position" class="form-control" value="{{ $user->position }}" readonly>
+        <div class="form-control-position">
+          <i class="bx bx-edit-alt"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="form-group">
       <label>UID</label>
       <div class="controls form-label-group position-relative has-icon-left">
         <input type="text" name="uid_name" class="form-control" value="{{ $user->uid_name }}" readonly>
@@ -56,7 +78,7 @@
   </div>
   <div class="col-sm-6">
     <div class="form-group">
-      <label>Jabatan</label>
+      <label>ULP</label>
       <div class="controls form-label-group position-relative has-icon-left">
         <input type="text" name="ulp" class="form-control" value="{{ $user->ulp_name }}" readonly>
         <div class="form-control-position">
