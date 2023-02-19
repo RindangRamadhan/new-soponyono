@@ -4,18 +4,23 @@ namespace App\Repositories;
 
 use App\Helpers\Helper;
 use App\Http\Requests\UserRequest;
+use App\Imports\UserImport;
 use App\Interfaces\UserInterface;
 use App\Models\Uid;
+use App\Models\Ulp;
+use App\Models\Up3;
 use App\Models\User;
+use App\Models\UserUploadFailed;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Auth;
 
 class UserRepository implements UserInterface
 {
-    function list()
-    {
+    function list() {
         $rowuser = User::find(Auth::user()->id);
         $tipe = $rowuser->type;
 
@@ -41,11 +46,11 @@ class UserRepository implements UserInterface
                 ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
                 ->join('roles AS r', 'mhr.role_id', 'r.id')
                 ->where([
-                    ['users.up3_id', $id_up3]
+                    ['users.up3_id', $id_up3],
                 ])->where(function ($query) {
-                    $query->where('type', 'UP3')
-                        ->orWhere('type', 'ULP');
-                });
+                $query->where('type', 'UP3')
+                    ->orWhere('type', 'ULP');
+            });
         } else if ($tipe == 'ULP') {
             $id_ulp = $rowuser->ulp_id;
 
@@ -107,8 +112,8 @@ class UserRepository implements UserInterface
                 ->join('ulps AS ulp', 'users.ulp_id', 'ulp.id')
                 ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
                 ->join('roles AS r', 'mhr.role_id', 'r.id')->where([
-                    ['users.uid_id', $id_uid]
-                ]);
+                ['users.uid_id', $id_uid],
+            ]);
         }
 
         return $data;
@@ -123,7 +128,7 @@ class UserRepository implements UserInterface
             $uids = Uid::select('id', 'name as text')->get();
         } else {
             $uids = Uid::select('id', 'name as text')->where([
-                ['id', $id_uid]
+                ['id', $id_uid],
             ])->get();
         }
 
@@ -142,6 +147,8 @@ class UserRepository implements UserInterface
             'rbm_code' => $request->rbm_code,
             'name' => $request->name,
             'type' => $request->type,
+            'phone' => $request->phone,
+            'position' => $request->position,
             'password' => Hash::make($request->password),
         ]);
 
@@ -195,7 +202,7 @@ class UserRepository implements UserInterface
             $uids = Uid::select('id', 'name as text')->get();
         } else {
             $uids = Uid::select('id', 'name as text')->where([
-                ['id', $id_uid]
+                ['id', $id_uid],
             ])->get();
         }
 
@@ -223,5 +230,127 @@ class UserRepository implements UserInterface
         DB::table('model_has_roles')->where("model_id", $user->id)->delete();
 
         $user->assignRole($role);
+    }
+
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,xls,xlsx',
+        ]);
+
+        // Get file excel from requests
+        $file = $request->file('file');
+
+        // Convert Excel to Array
+        $excels = Excel::toArray(new UserImport, $file);
+
+        DB::beginTransaction();
+
+        try {
+            $upload_succeed = 0;
+            $upload_faileds = [];
+
+            foreach ($excels[0] as $k => $v) {
+                // Skip Header
+                if ($k == 0) {
+                    continue;
+                }
+
+                $upload_failed = [
+                    'user_name' => $v[0],
+                    'rbm_code' => $v[1],
+                    'name' => $v[2],
+                    'phone' => $v[3],
+                    'type' => $v[4],
+                    'position' => $v[5],
+                    'uid_id' => $v[6],
+                    'up3_id' => $v[7],
+                    'ulp_id' => $v[8],
+                    'role' => $v[9],
+                ];
+
+                if ($v[0]) {
+                    $upload_succeed++;
+                    $user_name = User::select('id')->where('user_name', $v[0])->count();
+                    if ($user_name > 0) {
+                        $upload_failed['reason'] = "User name sudah ada";
+                        $upload_faileds[] = $upload_failed;
+                        continue;
+                    }
+
+                    $uid = Uid::select('id')->where('id', $v[6]);
+                    if ($uid->count() == 0) {
+                        $upload_failed['reason'] = "UID tidak ditemukan";
+                        $upload_faileds[] = $upload_failed;
+                        continue;
+                    }
+
+                    $up3 = Up3::select('id')->where('id', $v[7]);
+                    if ($up3->count() == 0) {
+                        $upload_failed['reason'] = "UP3 tidak ditemukan";
+                        $upload_faileds[] = $upload_failed;
+                        continue;
+                    }
+
+                    $ulp = Ulp::select('id')->where('id', $v[8]);
+                    if ($ulp->count() == 0) {
+                        $upload_failed['reason'] = "ULP tidak ditemukan";
+                        $upload_faileds[] = $upload_failed;
+                        continue;
+                    }
+
+                    $role = $this->roleMap($v[9]);
+                    if ($role == 0) {
+                        $userFailed['reason'] = "Hak akses tidak ditemukan";
+                        $userFaileds[] = $userFailed;
+                        continue;
+                    }
+
+                    $user = User::create([
+                        'user_name' => $v[0],
+                        'rbm_code' => $v[1],
+                        'name' => $v[2],
+                        'phone' => $v[3],
+                        'type' => $v[4],
+                        'position' => $v[5],
+                        'uid_id' => $v[6],
+                        'up3_id' => $v[7],
+                        'ulp_id' => $v[8],
+                        'password' => Hash::make("12345678"),
+                    ]);
+
+                    $newRole = Role::find($role);
+                    $user->assignRole($newRole);
+                }
+            }
+
+            if (count($upload_faileds) > 0) {
+                UserUploadFailed::query()->delete();
+                UserUploadFailed::insert($upload_faileds);
+            }
+
+            DB::commit();
+        } catch (\Throwable$th) {
+            DB::rollBack();
+            throw $th;
+        }
+
+        return response()->json([
+            'status' => 200,
+            'user_upload' => $upload_succeed,
+            'user_failed' => count($upload_faileds),
+        ]);
+    }
+
+    public function roleMap($code)
+    {
+        $code = strtoupper($code);
+
+        $role = [
+            "U1" => 1, // Super Admin
+            "U2" => 2, // Pengguna
+        ];
+
+        return $role[$code] ?? 0;
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UidController;
 use App\Http\Controllers\UlpController;
 use App\Http\Controllers\Up3Controller;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\UidController;
-use App\Http\Controllers\CustomerController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;

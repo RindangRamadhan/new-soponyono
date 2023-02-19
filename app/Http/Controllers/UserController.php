@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UserUploadFailedExport;
 use App\Helpers\Helper;
 use App\Http\Requests\UserRequest;
 use App\Interfaces\UserInterface;
@@ -9,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -242,6 +244,22 @@ class UserController extends Controller
     {
         User::find($id)->delete();
         return response()->json(['status' => 200]);
+    }
+
+    public function download()
+    {
+        return response()->download(public_path('excel/Template Pengguna.xlsx'));
+    }
+
+    public function upload(Request $request)
+    {
+        return $this->userRepo->upload($request);
+    }
+
+    public function export()
+    {
+        $filename = "Daftar pengguna gagal upload.xlsx";
+        return Excel::download(new UserUploadFailedExport(), $filename);
     }
 
     // ? ------------------------------------------------ PROFILE ------------------------------------------------

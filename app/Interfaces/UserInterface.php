@@ -3,6 +3,7 @@
 namespace App\Interfaces;
 
 use App\Http\Requests\UserRequest;
+use Illuminate\Http\Request;
 
 interface UserInterface
 {
@@ -12,4 +13,5 @@ interface UserInterface
     function show($id);
     function edit($id);
     function update(UserRequest $request, $id);
+    function upload(Request $request);
 }
