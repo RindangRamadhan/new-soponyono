@@ -14,8 +14,6 @@ class MonitoringLocationController extends Controller
     {
         $pageConfigs = [
             'pageHeader' => true,
-            'isReload' => true,
-            'isCreate' => true,
             'permission' => [
                 'create' => 'Lokasi-Lokasi Tambah',
                 'update' => 'Lokasi-Lokasi Edit',
