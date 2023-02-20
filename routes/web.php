@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MonitoringLocationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UidController;
 use App\Http\Controllers\UlpController;
@@ -67,6 +68,11 @@ Route::middleware('auth', 'verified')->group(function () {
         // List Select2
         Route::post('/up3/list-select', [Up3Controller::class, 'listSelect']);
         Route::post('/ulp/list-select', [UlpController::class, 'listSelect']);
+    });
+
+    // Monitoring
+    Route::prefix('/monitoring')->group(function () {
+        Route::resource('/locations', MonitoringLocationController::class);
     });
 
     // Profile
