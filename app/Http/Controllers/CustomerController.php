@@ -62,6 +62,7 @@ class CustomerController extends Controller
             "/master-data/customers",
             "Pelanggan",
             ['detail'],
+            ['delete','edit'],
         );
 
         $result = [
@@ -139,7 +140,7 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function detail($id)
+    public function show($id)
     {
         $pageConfigs = [
             'pageHeader' => true,
@@ -171,7 +172,7 @@ class CustomerController extends Controller
             ],
         ];
 
-        list($customer) = $this->customerRepo->detail($id);
+        list($customer) = $this->customerRepo->show($id);
 
         return view('pages.master-data.customers.detail')->with(
             compact([

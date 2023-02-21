@@ -68,14 +68,14 @@
     <div class="form-group">
       <label>ID PEL</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="id_pel" class="form-control  @error('id_pel') is-invalid @enderror"
-          placeholder="ID PEL" required data-validation-required-message="This id_pel field is required"
-          value="{{isset($customer) ? $customer->id_pel : old('id_pel')}}">
+        <input type="text" name="id" class="form-control  @error('id') is-invalid @enderror"
+          placeholder="ID PEL" required data-validation-required-message="This id field is required"
+          value="{{isset($customer) ? $customer->id : old('id')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
         <!-- Error Message -->
-        @error('id_pel')
+        @error('id')
         <div class="help-block">
           <ul role="alert">
             <li>{{ $message }}</li>
@@ -146,8 +146,8 @@
     <div class="form-group">
       <label>Daya</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="daya" class="form-control " placeholder="Daya"
-          value="{{isset($customer) ? $customer->daya : old('daya')}}">
+        <input type="text" name="power" class="form-control " placeholder="Daya"
+          value="{{isset($customer) ? $customer->power : old('power')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
@@ -160,8 +160,8 @@
     <div class="form-group">
       <label>Kogol</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="kogol" class="form-control " placeholder="Kogol"
-          value="{{isset($customer) ? $customer->kogol : old('kogol')}}">
+        <input type="text" name="class" class="form-control " placeholder="Kogol"
+          value="{{isset($customer) ? $customer->class : old('class')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
@@ -174,8 +174,8 @@
     <div class="form-group">
       <label>Gardu</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="gardu" class="form-control " placeholder="Gardu"
-          value="{{isset($customer) ? $customer->gardu : old('gardu')}}">
+        <input type="text" name="substation" class="form-control " placeholder="Gardu"
+          value="{{isset($customer) ? $customer->substation : old('substation')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
@@ -188,7 +188,7 @@
       <label>Alamat</label>
       <div class="controls form-label-group position-relative has-icon-left">
         <textarea class="form-control editors" name="address" rows="10" cols="30"
-          placeholder="Alamat">{{isset($uid) ? $uid->address : old('address')}}</textarea>
+          placeholder="Alamat">{{isset($customer) ? $customer->address : old('address')}}</textarea>
 
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>

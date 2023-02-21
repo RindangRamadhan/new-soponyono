@@ -48,7 +48,8 @@
 <script>
   $(document).ready(function() {
 
-
+    setInputFilter(document.getElementById("id"), function(value) {
+    return /^-?\d*[.,]?\d*$/.test(value); }, "Hanya Angka");
 
     $('#uid_id').select2({
       data: @php echo json_encode($uids) @endphp,

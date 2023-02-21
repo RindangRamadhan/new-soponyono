@@ -32,10 +32,9 @@
         <div class="table-responsive">
           <table class="table table-sm table-ssr nowrap">
             <tfoot style="display: table-row-group">
-              <th>Id</th>
+              <th>ID PEL</th>
               <th>UP3</th>
               <th>ULP</th>
-              <th>ID PEL</th>
               <th>Name</th>
               <th>No Telp</th>
               <th>Gardu</th>
@@ -43,10 +42,9 @@
             </tfoot>
             <thead>
               <tr>
-                <th>Id</th>
+                <th>ID PEL</th>
                 <th>UP3</th>
                 <th>ULP</th>
-                <th>ID PEL</th>
                 <th>Name</th>
                 <th>No Telp</th>
                 <th>Gardu</th>
@@ -87,13 +85,12 @@
     const params = {
       "url": "{{ url('/master-data/customers') }}",
       "columns": [
-        { "data": "id", "visible": false },
+        { "data": "id" },
         { "data": "up3__name" },
         { "data": "ulp__name" },
-        { "data": "id_pel" },
         { "data": "name" },
         { "data": "phone_number" },
-        { "data": "gardu" },
+        { "data": "substation" },
         { "data": "action", "searchable": false, "orderable": false }
       ]
     }

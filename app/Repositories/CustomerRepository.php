@@ -15,7 +15,7 @@ class CustomerRepository implements CustomerInterface
         $rowuser = Auth::user();
         $tipe = $rowuser->type;
 
-        $customer = Customer::select('customers.id', 'customers.id_pel', 'customers.name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.gardu')
+        $customer = Customer::select('customers.id', 'customers.name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.substation')
         ->join('up3s AS up3', 'customers.up3_id', 'up3.id')
         ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
         ->join('ulps AS ulp', 'customers.ulp_id', 'ulp.id');
@@ -62,18 +62,17 @@ class CustomerRepository implements CustomerInterface
             'uid_id' => $request->uid_id,
             'up3_id' => $request->up3_id,
             'ulp_id' => $request->ulp_id,
-            'id_pel' => $request->id_pel,
             'name' => $request->name,
             'phone_number' => $request->phone_number,
             'tarif' => $request->tarif,
-            'daya' => $request->daya,
-            'kogol' => $request->kogol,
-            'gardu' => $request->gardu,
+            'power' => $request->power,
+            'class' => $request->class,
+            'substation' => $request->substation,
             'address' => $request->address,
         ]);
     }
 
-    public function detail($id)
+    public function show($id)
     {
         $customer = Customer::select(
             'customers.*',
@@ -122,13 +121,12 @@ class CustomerRepository implements CustomerInterface
             'uid_id' => $request->uid_id,
             'up3_id' => $request->up3_id,
             'ulp_id' => $request->ulp_id,
-            'id_pel' => $request->id_pel,
             'name' => $request->name,
             'phone_number' => $request->phone_number,
             'tarif' => $request->tarif,
-            'daya' => $request->daya,
-            'kogol' => $request->kogol,
-            'gardu' => $request->gardu,
+            'power' => $request->power,
+            'class' => $request->class,
+            'substation' => $request->substation,
             'address' => $request->address,
         ]);
     }

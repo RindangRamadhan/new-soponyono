@@ -25,134 +25,109 @@
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>UID</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
+                  <div class="controls form-label-group position-relative ">
                     <input type="text" name="uid_name" class="form-control" value="{{ $customer->uid_name }}" readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                  
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>UP3</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
+                  <div class="controls form-label-group position-relative ">
                     <input type="text" name="up3" class="form-control" value="{{ $customer->up3_name }}" readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                  
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>ULP</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
+                  <div class="controls form-label-group position-relative ">
                     <input type="text" name="ulp" class="form-control" value="{{ $customer->ulp_name }}" readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                  
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>ULP</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
+                  <div class="controls form-label-group position-relative ">
                     <input type="text" name="ulp" class="form-control" value="{{ $customer->ulp_name }}" readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                  
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>ID PEL</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
-                    <input type="text" name="id_pel" class="form-control " value="{{ $customer->id_pel }}" readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                  <div class="controls form-label-group position-relative ">
+                    <input type="text" name="id" class="form-control " value="{{ $customer->id }}" readonly>
+                  
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>Nama</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
-                    <input type="text" name="name" class="form-control " value="{{ $customer->name }}" readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                  <div class="controls form-label-group position-relative ">
+                    <input type="text" name="name" class="form-control " value="{{ $customer->name }}" readonly>                  
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>No Telp</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
+                  <div class="controls form-label-group position-relative ">
                     <input type="text" name="phone_number" class="form-control " value="{{ $customer->phone_number }}"
                       readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>Tarif</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
+                  <div class="controls form-label-group position-relative ">
                     <input type="text" name="tarif" class="form-control " value="{{ $customer->tarif }}" readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>Daya</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
-                    <input type="text" name="daya" class="form-control " value="{{ $customer->daya }}" readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                  <div class="controls form-label-group position-relative ">
+                    <input type="text" name="power" class="form-control " value="{{ $customer->power }}" readonly>
+                    
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>Kogol</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
-                    <input type="text" name="kogol" class="form-control " value="{{ $customer->kogol }}" readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                  <div class="controls form-label-group position-relative ">
+                    <input type="text" name="class" class="form-control " value="{{ $customer->class }}" readonly>
+                    
                   </div>
                 </div>
               </div>
               <div class="col-sm-12">
                 <div class="form-group">
                   <label>Gardu</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
-                    <input type="text" name="gardu" class="form-control " value="{{ $customer->gardu }}" readonly>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                  <div class="controls form-label-group position-relative ">
+                    <input type="text" name="substation" class="form-control " value="{{ $customer->substation }}" readonly>
+                    
                   </div>
                 </div>
               </div>
               <div class="col-sm-12">
                 <div class="form-group">
                   <label>Alamat</label>
-                  <div class="controls form-label-group position-relative has-icon-left">
+                  <div class="controls form-label-group position-relative ">
                     <textarea class="form-control editors" name="address" rows="10" cols="30"
                       readonly>{{ $customer->address }}</textarea>
-                    <div class="form-control-position">
-                      <i class="bx bx-edit-alt"></i>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
