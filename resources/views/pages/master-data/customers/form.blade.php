@@ -68,8 +68,8 @@
     <div class="form-group">
       <label>ID PEL</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="id" class="form-control  @error('id') is-invalid @enderror"
-          placeholder="ID PEL" required data-validation-required-message="This id field is required"
+        <input type="text" id="id" name="id" class="form-control  @error('id') is-invalid @enderror" placeholder="ID PEL"
+          required data-validation-required-message="This id field is required"
           value="{{isset($customer) ? $customer->id : old('id')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
@@ -110,14 +110,29 @@
     <div class="form-group">
       <label>No Telp</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="phone_number" class="form-control  @error('phone_number') is-invalid @enderror" placeholder="No Telp"
-          required data-validation-required-message="This No Telp field is required"
+        <input type="text" name="phone_number" class="form-control "
+          placeholder="No Telp" 
           value="{{isset($customer) ? $customer->phone_number : old('phone_number')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6">
+    <div class="form-group">
+      <label>Tarif</label>
+      <div class="controls form-label-group position-relative has-icon-left">
+        <input type="text" name="tarif" class="form-control  @error('tarif') is-invalid @enderror" placeholder="Tarif"
+          required data-validation-required-message="This tarif field is required"
+          value="{{isset($customer) ? $customer->tarif : old('tarif')}}">
+        <div class="form-control-position">
+          <i class="bx bx-edit-alt"></i>
+        </div>
         <!-- Error Message -->
-        @error('phone_number')
+        @error('tarif')
         <div class="help-block">
           <ul role="alert">
             <li>{{ $message }}</li>
@@ -127,61 +142,77 @@
       </div>
     </div>
   </div>
- 
-  <div class="col-sm-6">
-    <div class="form-group">
-      <label>Tarif</label>
-      <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="tarif" class="form-control " placeholder="Tarif"
-          value="{{isset($customer) ? $customer->tarif : old('tarif')}}">
-        <div class="form-control-position">
-          <i class="bx bx-edit-alt"></i>
-        </div>
 
-      </div>
-    </div>
-  </div>
+  
 
   <div class="col-sm-6">
     <div class="form-group">
       <label>Daya</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="power" class="form-control " placeholder="Daya"
+        <input type="text" name="power" class="form-control  @error('power') is-invalid @enderror" placeholder="Daya"
+          required data-validation-required-message="This power field is required"
           value="{{isset($customer) ? $customer->power : old('power')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
-
+        <!-- Error Message -->
+        @error('power')
+        <div class="help-block">
+          <ul role="alert">
+            <li>{{ $message }}</li>
+          </ul>
+        </div>
+        @enderror
       </div>
     </div>
   </div>
+
 
   <div class="col-sm-6">
     <div class="form-group">
       <label>Kogol</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="class" class="form-control " placeholder="Kogol"
+        <input type="text" name="class" class="form-control  @error('class') is-invalid @enderror" placeholder="Kogol"
+          required data-validation-required-message="This class field is required"
           value="{{isset($customer) ? $customer->class : old('class')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
-
+        <!-- Error Message -->
+        @error('class')
+        <div class="help-block">
+          <ul role="alert">
+            <li>{{ $message }}</li>
+          </ul>
+        </div>
+        @enderror
       </div>
     </div>
   </div>
+
 
   <div class="col-sm-6">
     <div class="form-group">
       <label>Gardu</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="substation" class="form-control " placeholder="Gardu"
+        <input type="text" name="substation" class="form-control  @error('substation') is-invalid @enderror" placeholder="Gardu"
+          required data-validation-required-message="This Gardu field is required"
           value="{{isset($customer) ? $customer->substation : old('substation')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
+        <!-- Error Message -->
+        @error('substation')
+        <div class="help-block">
+          <ul role="alert">
+            <li>{{ $message }}</li>
+          </ul>
+        </div>
+        @enderror
       </div>
     </div>
   </div>
+
 
   <div class="col-sm-12">
     <div class="form-group">

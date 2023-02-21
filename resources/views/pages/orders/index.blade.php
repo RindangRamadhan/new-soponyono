@@ -1,6 +1,6 @@
 @extends('layouts.app')
 {{-- page title --}}
-@section('title','Pengguna')
+@section('title','Order')
 
 {{-- vendor styles --}}
 @section('vendor-styles')
@@ -32,42 +32,39 @@
         <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false"
           id="onshowbtn" data-target="#modal">
           <i class="bx bx-upload"></i>
-          <span>Unggah Pengguna</span>
+          <span>Unggah Order</span>
         </button>
-        <a href="{{ url('/master-data/users/download-template') }}" id="btnDownload" class="btn btn-success">
+        <a href="{{ url('/monitoring/orders/download-template') }}" id="btnDownload" class="btn btn-success">
+          
           <i class="bx bx-download"></i>
           <span>Unduh Template</span>
         </a>
-        <a href="{{ url('/master-data/users/export') }}" class="btn btn-warning">
+        <a href="{{ url('/monitoring/orders/export') }}" class="btn btn-warning">
           <i class="bx bx-download"></i>
-          <span>Unduh Pengguna</span>
+          <span>Unduh Order</span>
         </a>
 
         <div class="table-responsive">
           <table class="table table-sm table-ssr nowrap">
             <tfoot style="display: table-row-group">
               <th>Id</th>
-              <th>Username</th>
-              <th>Kode RBM</th>
-              <th>Nama</th>
-              <th>Tipe</th>
-              <th>UID</th>
               <th>UP3</th>
               <th>ULP</th>
-              <th>Hak Akses</th>
+              <th>Petugas</th>
+              <th>Pelanggan</th>
+              <th>RP Tag</th>
+              <th>Status</th>
               <th>Action</th>
             </tfoot>
             <thead>
               <tr>
                 <th>Id</th>
-                <th>Username</th>
-                <th>Kode RBM</th>
-                <th>Nama</th>
-                <th>Tipe</th>
-                <th>UID</th>
                 <th>UP3</th>
                 <th>ULP</th>
-                <th>Hak Akses</th>
+                <th>Petugas</th>
+                <th>Pelanggan</th>
+                <th>RP Tag</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -83,7 +80,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header bg-primary">
-          <h5 class="modal-title white" id="myModalLabel160">Unggah Pengguna</h5>
+          <h5 class="modal-title white" id="myModalLabel160">Unggah Order</h5>
           <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
             <i class="bx bx-x"></i>
           </button>
@@ -114,7 +111,7 @@
             <i class="bx bx-x d-block d-sm-none"></i>
             <span class="d-none d-sm-block">Batal</span>
           </button>
-
+          
           <button class="btn btn-sm btn-primary ml-1" id="btnUpload" type="button">
             <span id="spanUpload">Unggah</span>
           </button>
@@ -144,17 +141,15 @@
 
   $(document).ready(function () {
     const params = {
-      "url": "{{ url('/master-data/users') }}",
+      "url": "{{ url('/monitoring/orders') }}",
       "columns": [
-        { "data": "users__id", "visible": false },
-        { "data": "user_name" },
-        { "data": "rbm_code" },
-        { "data": "users__name" },
-        { "data": "users__type" },
-        { "data": "uid__name" },
+        { "data": "id", "visible": false },
         { "data": "up3__name" },
         { "data": "ulp__name" },
-        { "data": "r__name" },
+        { "data": "officer_name" },
+        { "data": "customer_name" },
+        { "data": "bill" },
+        { "data": "status" },
         { "data": "action", "searchable": false, "orderable": false }
       ]
     }
@@ -167,7 +162,7 @@
     e.preventDefault();
     const params = {
       "name": this.dataset.name,
-      "url": "{{ url('/master-data/users/') }}",
+      "url": "{{ url('/monitoring/orders/') }}",
       "id": $(this).attr('data-id'),
       "tr": $(this).parent("td").parent('tr')
     }
@@ -175,18 +170,6 @@
     confirmDelete(params)
   })
 
-  // Confirmation Delete
-  $(document).on('click', '.btn-reset-password', function (e) {
-    e.preventDefault();
-    const params = {
-      "name": this.dataset.name,
-      "url": "{{ url('/master-data/users/') }}",
-      "id": $(this).attr('data-id'),
-      "tr": $(this).parent("td").parent('tr')
-    }
-
-    confirmResetPassword(params)
-  })
 
   // On Upload
   $('#btnUpload').on('click', function () {
@@ -227,7 +210,7 @@
 
           return xhr;
         },
-        url: "{{ route('users.upload') }}",
+        url: "{{ route('orders.upload') }}",
         type: 'POST',
         processData: false,
         contentType: false,
@@ -257,8 +240,8 @@
             $("#fileExcel").attr("disabled", false)
           }, 1000);
 
-          if (resp.user_failed > 0) {
-            const message = `${resp.user_upload - resp.user_failed} Pengguna berhasil diunggah. ${resp.user_failed} Pengguna gagal, silahkan unduh dokumen untuk informasi lebih detail.`
+          if (resp.order_failed > 0) {
+            const message = `${resp.order_upload - resp.order_failed} Pengguna berhasil diunggah. ${resp.order_failed} Pengguna gagal, silahkan unduh dokumen untuk informasi lebih detail.`
             toastr.warning(message, 'Sukses', { "progressBar": true, "showDuration": 3000, "closeButton": true })
           } else {
             toastr.success('Dokumen berhasil di unggah', 'Sukses', { "progressBar": true, "showDuration": 500, "closeButton": true })
@@ -304,5 +287,6 @@
       }
     }
   });
+
 </script>
 @endsection

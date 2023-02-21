@@ -28,19 +28,26 @@ class CustomerRequest extends FormRequest
         if ($this->isMethod('POST')) {
             $rules = [
                 'id' => 'required|unique:customers,id',
-                'id_pel' => 'required|unique:customers,id_pel',
                 'name' => 'required',
                 'uid_id' => 'required',
                 'up3_id' => 'required',
                 'ulp_id' => 'required',
+                'tarif' => 'required',
+                'power' => 'required',
+                'substation' => 'required',
+                'class' => 'required',
             ];
         } else {
             $rules = [
-                'id_pel' => 'required|unique:customers,id_pel,' . $this->route('customer'),
+                'id' => 'required|unique:customers,id,' . $this->route('customer'),
                 'name' => 'required',
                 'uid_id' => 'required',
                 'up3_id' => 'required',
                 'ulp_id' => 'required',
+                'tarif' => 'required',
+                'power' => 'required',
+                'substation' => 'required',
+                'class' => 'required',
             ];
         }
 

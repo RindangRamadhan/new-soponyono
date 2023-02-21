@@ -52,7 +52,7 @@
       ]
     },
     {
-      "url": "monitoring/report",
+      "url": "monitoring/orders",
       "name": "Order",
       "i18n": "Order",
       "icon": "notebook",

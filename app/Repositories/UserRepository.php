@@ -20,100 +20,46 @@ use Spatie\Permission\Models\Role;
 
 class UserRepository implements UserInterface
 {
-    function list() {
-        $rowuser = User::find(Auth::user()->id);
+    function list()
+    {
+        $rowuser = Auth::user();
         $tipe = $rowuser->type;
 
-        $data = [];
+        $user = User::select(
+            'users.id',
+            'users.id AS users__id',
+            'users.user_name',
+            'users.rbm_code',
+            'users.name AS users__name',
+            'users.type AS users__type',
+            'uid.name AS uid__name',
+            'up3.name AS up3__name',
+            'ulp.name AS ulp__name',
+            'r.name AS r__name',
+        )
+            ->join('uids AS uid', 'users.uid_id', 'uid.id')
+            ->join('up3s AS up3', 'users.up3_id', 'up3.id')
+            ->join('ulps AS ulp', 'users.ulp_id', 'ulp.id')
+            ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
+            ->join('roles AS r', 'mhr.role_id', 'r.id');;
         if ($tipe == 'UP3') {
-            $id_up3 = $rowuser->up3_id;
-
-            $data = User::select(
-                'users.id',
-                'users.id AS users__id',
-                'users.user_name',
-                'users.rbm_code',
-                'users.name AS users__name',
-                'users.type AS users__type',
-                'uid.name AS uid__name',
-                'up3.name AS up3__name',
-                'ulp.name AS ulp__name',
-                'r.name AS r__name',
-            )
-                ->join('uids AS uid', 'users.uid_id', 'uid.id')
-                ->join('up3s AS up3', 'users.up3_id', 'up3.id')
-                ->join('ulps AS ulp', 'users.ulp_id', 'ulp.id')
-                ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
-                ->join('roles AS r', 'mhr.role_id', 'r.id')
-                ->where([
-                    ['users.up3_id', $id_up3],
+            $data = $user->where([
+                    ['users.up3_id', $rowuser->up3_id],
                 ])->where(function ($query) {
-                $query->where('type', 'UP3')
-                    ->orWhere('type', 'ULP');
-            });
+                    $query->where('type', 'UP3')
+                        ->orWhere('type', 'ULP');
+                });
         } else if ($tipe == 'ULP') {
-            $id_ulp = $rowuser->ulp_id;
-
-            $data = User::select(
-                'users.id',
-                'users.id AS users__id',
-                'users.user_name',
-                'users.rbm_code',
-                'users.name AS users__name',
-                'users.type AS users__type',
-                'uid.name AS uid__name',
-                'up3.name AS up3__name',
-                'ulp.name AS ulp__name',
-                'r.name AS r__name',
-            )
-                ->join('uids AS uid', 'users.uid_id', 'uid.id')
-                ->join('up3s AS up3', 'users.up3_id', 'up3.id')
-                ->join('ulps AS ulp', 'users.ulp_id', 'ulp.id')
-                ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
-                ->join('roles AS r', 'mhr.role_id', 'r.id')
-                ->where([
-                    ['users.ulp_id', $id_ulp],
+            $data = $user->where([
+                    ['users.ulp_id', $rowuser->ulp_id],
                     ['type', '=', 'ULP'],
                 ]);
         } else if ($tipe == 'ALL') {
-            $data = User::select(
-                'users.id',
-                'users.id AS users__id',
-                'users.user_name',
-                'users.rbm_code',
-                'users.name AS users__name',
-                'users.type AS users__type',
-                'uid.name AS uid__name',
-                'up3.name AS up3__name',
-                'ulp.name AS ulp__name',
-                'r.name AS r__name',
-            )
-                ->join('uids AS uid', 'users.uid_id', 'uid.id')
-                ->join('up3s AS up3', 'users.up3_id', 'up3.id')
-                ->join('ulps AS ulp', 'users.ulp_id', 'ulp.id')
-                ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
-                ->join('roles AS r', 'mhr.role_id', 'r.id');
+            $data = $user;
         } else {
-            $id_uid = $rowuser->uid_id;
-            $data = User::select(
-                'users.id',
-                'users.id AS users__id',
-                'users.user_name',
-                'users.rbm_code',
-                'users.name AS users__name',
-                'users.type AS users__type',
-                'uid.name AS uid__name',
-                'up3.name AS up3__name',
-                'ulp.name AS ulp__name',
-                'r.name AS r__name',
-            )
-                ->join('uids AS uid', 'users.uid_id', 'uid.id')
-                ->join('up3s AS up3', 'users.up3_id', 'up3.id')
-                ->join('ulps AS ulp', 'users.ulp_id', 'ulp.id')
-                ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
-                ->join('roles AS r', 'mhr.role_id', 'r.id')->where([
-                ['users.uid_id', $id_uid],
-            ]);
+            $data = $user->where([
+                    ['users.uid_id', $rowuser->uid_id],
+                ]);
         }
 
         return $data;
@@ -121,14 +67,13 @@ class UserRepository implements UserInterface
 
     public function create()
     {
-        $rowuser = User::find(Auth::user()->id);
+        $rowuser = Auth::user();
         $tipe = $rowuser->type;
-        $id_uid = $rowuser->uid_id;
         if ($tipe == 'ALL') {
             $uids = Uid::select('id', 'name as text')->get();
         } else {
             $uids = Uid::select('id', 'name as text')->where([
-                ['id', $id_uid],
+                ['id', $rowuser->uid_id],
             ])->get();
         }
 
@@ -195,14 +140,13 @@ class UserRepository implements UserInterface
             ->where('users.id', $id)
             ->first();
 
-        $rowuser = User::find(Auth::user()->id);
+        $rowuser = Auth::user();
         $tipe = $rowuser->type;
-        $id_uid = $rowuser->uid_id;
         if ($tipe == 'ALL') {
             $uids = Uid::select('id', 'name as text')->get();
         } else {
             $uids = Uid::select('id', 'name as text')->where([
-                ['id', $id_uid],
+                ['id', $rowuser->uid_id],
             ])->get();
         }
 
@@ -235,12 +179,10 @@ class UserRepository implements UserInterface
     public function reset_password($id)
     {
         $user = User::find($id);
-        
+
         $user->update([
             'password' => Hash::make("12345678"),
         ]);
-
-
     }
 
     public function upload(Request $request)
@@ -341,7 +283,7 @@ class UserRepository implements UserInterface
             }
 
             DB::commit();
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }

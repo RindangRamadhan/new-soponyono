@@ -112,7 +112,7 @@ class CustomerController extends Controller
                 "name" => "Tambah",
             ],
         ];
-        list($uids,) = $this->customerRepo->create();
+        list($uids) = $this->customerRepo->create();
         return view('pages.master-data.customers.create')->with(
             compact([
                 'pageConfigs',

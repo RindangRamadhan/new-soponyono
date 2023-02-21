@@ -21,7 +21,8 @@
         </div>
         <div class="card-content">
           <div class="card-body">
-            <form class="form-horizontal form-submit" action="{{ url('/master-data/customers') }}" method="post" novalidate>
+            <form class="form-horizontal form-submit" action="{{ url('/master-data/customers') }}" method="post"
+              novalidate>
               @csrf
               @include('pages.master-data.customers.form')
             </form>
@@ -48,9 +49,7 @@
 <script>
   $(document).ready(function() {
 
-    setInputFilter(document.getElementById("id"), function(value) {
-    return /^-?\d*[.,]?\d*$/.test(value); }, "Hanya Angka");
-
+    
     $('#uid_id').select2({
       data: @php echo json_encode($uids) @endphp,
       placeholder: 'Pilih UID'
@@ -64,6 +63,17 @@
       placeholder: 'Pilih ULP'
     });
   });
+
+  $(document).ready(function() {
+
+  setInputFilter(document.getElementById("id"), function(value) {
+  return /^-?\d*[.,]?\d*$/.test(value); }, "Hanya Angka");
+
+  setInputFilter(document.getElementById("power"), function(value) {
+  return /^-?\d*[.,]?\d*$/.test(value); }, "Hanya Angka");
+
+
+});
 
   $(document).on('change', '#uid_id', function (e) {
     const data = $(this).select2('data')[0]

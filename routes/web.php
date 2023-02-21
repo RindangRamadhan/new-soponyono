@@ -8,6 +8,7 @@ use App\Http\Controllers\UidController;
 use App\Http\Controllers\UlpController;
 use App\Http\Controllers\Up3Controller;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
@@ -73,7 +74,17 @@ Route::middleware('auth', 'verified')->group(function () {
     // Monitoring
     Route::prefix('/monitoring')->group(function () {
         Route::resource('/locations', MonitoringLocationController::class);
+
+        Route::prefix('/orders')->group(function () {
+            Route::get('/download-template', [OrderController::class, 'download'])->name('orders.download');
+            Route::post('/upload-template', [OrderController::class, 'upload'])->name('orders.upload');
+            Route::get('/export', [OrderController::class, 'export'])->name('orders.export');
+        });
+        Route::resource('/orders', OrderController::class);
+        Route::post('/orders/list', [OrderController::class, 'list']);
     });
+
+    
 
     // Profile
     Route::prefix('/users')->group(function () {

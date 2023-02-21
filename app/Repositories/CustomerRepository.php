@@ -16,9 +16,9 @@ class CustomerRepository implements CustomerInterface
         $tipe = $rowuser->type;
 
         $customer = Customer::select('customers.id', 'customers.name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.substation')
-        ->join('up3s AS up3', 'customers.up3_id', 'up3.id')
-        ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
-        ->join('ulps AS ulp', 'customers.ulp_id', 'ulp.id');
+            ->join('up3s AS up3', 'customers.up3_id', 'up3.id')
+            ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
+            ->join('ulps AS ulp', 'customers.ulp_id', 'ulp.id');
 
         switch ($tipe) {
             case 'ALL':
@@ -42,15 +42,14 @@ class CustomerRepository implements CustomerInterface
     {
         $rowuser = Auth::user();
         $tipe = $rowuser->type;
-        $id_uid = $rowuser->uid_id;
         if ($tipe == 'ALL') {
             $uids = Uid::select('id', 'name as text')->get();
         } else {
             $uids = Uid::select('id', 'name as text')->where([
-                ['id', $id_uid]
+                ['id', $rowuser->uid_id]
             ])->get();
         }
-        
+
         return [$uids];
     }
 

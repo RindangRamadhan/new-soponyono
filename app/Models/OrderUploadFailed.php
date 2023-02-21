@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Yajra\Auditable\AuditableTrait;
 
-class Customer extends Model
+class Order extends Model
 {
     use HasFactory, AuditableTrait;
 
@@ -16,9 +16,19 @@ class Customer extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'id','uid_id', 'up3_id', 'ulp_id', 'name', 'phone_number', 'address', 'tarif','power','class','substation',
+        'customer_id','rbm_code','up3_id', 'ulp_id', 'phone_number', 'tarif', 'power','class','substation','bill','address','created_by','created_at','name','address','reason',
     ];
 
+
+    public function Customer()
+    {
+        return $this->hasOne('App\Models\Customer', 'id', 'customer_id');
+    }
+
+    public function UserCreate()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'created_by');
+    }
 
     public function Uid()
     {
