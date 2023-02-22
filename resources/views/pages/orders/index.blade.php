@@ -43,7 +43,25 @@
           <i class="bx bx-download"></i>
           <span>Unduh Order</span>
         </a>
-
+        <div class="row" style="padding-top: 10px;">
+          <div class="col-sm-2">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          id="onshowbtn" data-target="#modal">
+          <i class="bx bx-search"></i>
+          <span>Logs</span>
+        </button>
+          </div>
+          <div class="col-sm-6">
+            <input type="text" name="uuid" class="form-control " placeholder="Token" value="">
+          </div>
+          <button type="button" class="btn btn-danger" data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          id="onshowbtn" data-target="#modal">
+          <i class="bx bx-trash"></i>
+          <span>Hapus Order</span>
+        </button>
+        
+        
+        </div>
         <div class="table-responsive">
           <table class="table table-sm table-ssr nowrap">
             <tfoot style="display: table-row-group">
@@ -140,6 +158,10 @@
   @endif
 
   $(document).ready(function () {
+
+    const data = @php echo json_encode($logs) @endphp;
+    console.log(data)
+    
     const params = {
       "url": "{{ url('/monitoring/orders') }}",
       "columns": [

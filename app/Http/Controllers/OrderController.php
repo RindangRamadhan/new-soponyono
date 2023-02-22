@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\UserUploadFailedExport;
+use App\Exports\OrderUploadFailedExport;
 use App\Helpers\Helper;
 use App\Interfaces\OrderInterface;
 use App\Models\Order;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use App\Models\OrderUploadLog;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Intervention\Image\ImageManagerStatic as Image;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -46,11 +42,15 @@ class OrderController extends Controller
             ["link" => "/", "name" => "Home"],
             ["link" => "#", "name" => "Order"],
         ];
-
+        $id = Auth::user()->id;
+        $logs = OrderUploadLog::select('uuid','created_at')
+        ->where('created_by', $id)
+        ->get();
         return view('pages.orders.index')->with(
             compact([
                 'pageConfigs',
                 'breadcrumbs',
+                'logs',
             ])
         );
     }
@@ -84,38 +84,47 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+
+     public function show($id)
     {
         $pageConfigs = [
             'pageHeader' => true,
             'isBack' => true,
             'permission' => [
                 'create' => 'Order-Order Tambah',
+                'detail' => 'Order-Order Lihat',
                 'update' => 'Order-Order Edit',
                 'delete' => 'Order-Order Hapus',
             ],
         ];
+
 
         $breadcrumbs = [
             [
                 "link" => "/",
                 "name" => "Home",
             ],
+            
             [
+                "link" => "monitoring/orders",
                 "name" => "Order",
+            ],
+            [
+                "name" => "Detail",
             ],
         ];
 
-        list($user, $roles, $types) = $this->orderRepo->show($id);
+        list($order) = $this->orderRepo->show($id);
 
-        return view('pages.orders.detail')->with(compact([
-            'pageConfigs',
-            'breadcrumbs',
-            'user',
-            'roles',
-            'types',
-        ]));
+        return view('pages.orders.detail')->with(
+            compact([
+                'pageConfigs',
+                'breadcrumbs',
+                'order',
+            ])
+        );
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -141,8 +150,8 @@ class OrderController extends Controller
 
     public function export()
     {
-        $filename = "Daftar pengguna gagal upload.xlsx";
-        return Excel::download(new UserUploadFailedExport(), $filename);
+        $filename = "Daftar order gagal upload.xlsx";
+        return Excel::download(new OrderUploadFailedExport(), $filename);
     }
 
 }

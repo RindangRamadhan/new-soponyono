@@ -11,11 +11,13 @@ use App\Models\User;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderUploadFailed;
+use App\Models\OrderUploadLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 class OrderRepository implements OrderInterface
 {
@@ -29,7 +31,11 @@ class OrderRepository implements OrderInterface
             ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
             ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
             ->join('customers AS customer', 'orders.customer_id', 'customer.id')
-            ->join('users AS user', 'orders.user_id', 'user.id')->where('orders.status', 'Open');
+            ->join('users AS user', 'orders.user_id', 'user.id')->where('orders.status', 'Open')
+            ->where([
+                ['orders.created_by', $rowuser->id],
+                ['orders.status', 'Open']
+            ]);
 
         if ($tipe == 'UP3') {
             $data = $order->where([
@@ -55,32 +61,26 @@ class OrderRepository implements OrderInterface
 
     public function show($id)
     {
-        $user = Order::select(
-            'users.*',
+        $order = Order::select(
+            'orders.*',
             'uid.name AS uid_name',
             'up3.name AS up3_name',
             'ulp.name AS ulp_name',
-            'r.id AS role_id',
-            'r.name AS role_name'
+            'customer.name AS customer_name',
+            'customer.address AS customer_address',
+            'user.name AS officer_name',
+            'user.rbm_code AS rbm_code'
         )
-            ->join('uids AS uid', 'users.uid_id', 'uid.id')
-            ->join('up3s AS up3', 'users.up3_id', 'up3.id')
-            ->join('ulps AS ulp', 'users.ulp_id', 'ulp.id')
-            ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
-            ->join('roles AS r', 'mhr.role_id', 'r.id')
-            ->where('users.id', $id)
+            ->join('uids AS uid', 'orders.uid_id', 'uid.id')
+            ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
+            ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
+            ->join('customers AS customer', 'orders.customer_id', 'customer.id')
+            ->join('users AS user', 'orders.user_id', 'user.id')
+            ->where('orders.id', $id)
             ->first();
 
-        $roles = Role::select('id', 'name as text')->get();
-        $types = [];
 
-        $rowuser = User::find(Auth::user()->id);
-        if ($rowuser) {
-            $tipe = $rowuser->type;
-            $types = Helper::UserType($tipe);
-        }
-
-        return [$user, $roles, $types];
+        return [$order];
     }
 
     public function upload(Request $request)
@@ -91,6 +91,8 @@ class OrderRepository implements OrderInterface
         $rowuser = Auth::user();
         $id_uid = $rowuser->uid_id;
         $created_by = $rowuser->id;
+        $created_at = new \DateTime();
+        $uuid = Str::uuid()->toString();
         // Get file excel from requests
         $file = $request->file('file');
 
@@ -122,6 +124,8 @@ class OrderRepository implements OrderInterface
                     'substation' => $v[8],
                     'address' => $v[9],
                     'bill' => $v[10],
+                    'created_by' => $created_by,
+                    'created_at' => new \DateTime(),
                 ];
 
                 if ($v[0]) {
@@ -180,15 +184,13 @@ class OrderRepository implements OrderInterface
                         ]);
                     }
 
-
-                    $rowuser = User::select('id','rbm_code')->where('rbm_code', $rbm_code)->first();
+                    $rowuser = User::select('id', 'rbm_code')->where('rbm_code', $rbm_code);
                     if ($rowuser->count() == 0) {
-                        $user_id=0;
                         $upload_failed['reason'] = "Kode RBM tidak ditemukan";
                         $upload_faileds[] = $upload_failed;
                         continue;
-                    }else{
-                        $user_id=$rowuser->id;
+                    } else {
+                        $user_id = $rowuser->id;
                     }
 
                     Order::create([
@@ -206,7 +208,7 @@ class OrderRepository implements OrderInterface
                         'status' => 'Open',
                         'billing_status' => 'Unpaid',
                         'created_by' => $created_by,
-                        'uuid' => 'Unpaid',
+                        'uuid' => $uuid,
                     ]);
                 }
             }
@@ -214,6 +216,13 @@ class OrderRepository implements OrderInterface
             if (count($upload_faileds) > 0) {
                 OrderUploadFailed::query()->delete();
                 OrderUploadFailed::insert($upload_faileds);
+            }
+            if ($upload_succeed != 0) {
+                OrderUploadLog::create([
+                    'uuid' => $uuid,
+                    'created_by' => $created_by,
+                    'created_at' => new \DateTime(),
+                ]);
             }
 
             DB::commit();

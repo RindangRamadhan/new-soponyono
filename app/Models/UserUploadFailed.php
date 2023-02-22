@@ -10,6 +10,6 @@ class UserUploadFailed extends Model
     use HasFactory;
 
     protected $fillable = [
-        'uid_id', 'up3_id', 'ulp_id', 'user_name', 'rbm_code', 'name', 'phone', 'type', 'photo', 'position', 'role', 'reason',
+        'uid_id', 'up3_id', 'ulp_id', 'user_name', 'rbm_code', 'name', 'phone', 'type', 'photo', 'position', 'role', 'reason','created_by','created_at',
     ];
 }

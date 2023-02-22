@@ -191,6 +191,9 @@ class UserRepository implements UserInterface
             'file' => 'required|mimes:csv,xls,xlsx',
         ]);
 
+        $rowuser = Auth::user();
+        $created_by = $rowuser->id;
+
         // Get file excel from requests
         $file = $request->file('file');
 
@@ -220,16 +223,28 @@ class UserRepository implements UserInterface
                     'up3_id' => $v[7],
                     'ulp_id' => $v[8],
                     'role' => $v[9],
+                    'created_by' => $created_by,
+                    'created_at' => new \DateTime(),
                 ];
 
                 if ($v[0]) {
                     $upload_succeed++;
+
+                    $rbm_code = User::select('id')->where('rbm_code', $v[1])->count();
+                    if ($rbm_code > 0) {
+                        $upload_failed['reason'] = "Rbm Code sudah ada";
+                        $upload_faileds[] = $upload_failed;
+                        continue;
+                    }
+                    
                     $user_name = User::select('id')->where('user_name', $v[0])->count();
                     if ($user_name > 0) {
                         $upload_failed['reason'] = "User name sudah ada";
                         $upload_faileds[] = $upload_failed;
                         continue;
                     }
+
+                    
 
                     $uid = Uid::select('id')->where('id', $v[6]);
                     if ($uid->count() == 0) {

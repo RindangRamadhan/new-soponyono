@@ -1,6 +1,6 @@
 @extends('layouts.app')
 {{-- title --}}
-@section('title','Pelanggan')
+@section('title','Order')
 {{-- vendor scripts --}}
 @section('vendor-styles')
 <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/forms/select/select2.min.css')}}">
@@ -26,8 +26,7 @@
                 <div class="form-group">
                   <label>UID</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="uid_name" class="form-control" value="{{ $customer->uid_name }}" readonly>
-                  
+                    <input type="text" class="form-control" value="{{ $order->uid_name }}" readonly>
                   </div>
                 </div>
               </div>
@@ -35,7 +34,7 @@
                 <div class="form-group">
                   <label>UP3</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="up3" class="form-control" value="{{ $customer->up3_name }}" readonly>
+                    <input type="text" name="up3" class="form-control" value="{{ $order->up3_name }}" readonly>
                   
                   </div>
                 </div>
@@ -44,7 +43,7 @@
                 <div class="form-group">
                   <label>ULP</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="ulp" class="form-control" value="{{ $customer->ulp_name }}" readonly>
+                    <input type="text" name="ulp" class="form-control" value="{{ $order->ulp_name }}" readonly>
                   
                   </div>
                 </div>
@@ -53,7 +52,25 @@
                 <div class="form-group">
                   <label>ULP</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="ulp" class="form-control" value="{{ $customer->ulp_name }}" readonly>
+                    <input type="text" name="ulp" class="form-control" value="{{ $order->ulp_name }}" readonly>
+                  
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Nama Petugas</label>
+                  <div class="controls form-label-group position-relative ">
+                    <input type="text"  class="form-control " value="{{ $order->officer_name }}" readonly>
+                  
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>RBM</label>
+                  <div class="controls form-label-group position-relative ">
+                    <input type="text"  class="form-control " value="{{ $order->rbm_code }}" readonly>
                   
                   </div>
                 </div>
@@ -62,34 +79,26 @@
                 <div class="form-group">
                   <label>ID PEL</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="id" class="form-control " value="{{ $customer->id }}" readonly>
+                    <input type="text"  class="form-control " value="{{ $order->customer_id }}" readonly>
                   
                   </div>
                 </div>
               </div>
+              
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>Nama</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="name" class="form-control " value="{{ $customer->name }}" readonly>                  
+                    <input type="text" name="name" class="form-control " value="{{ $order->customer_name }}" readonly>                  
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>No Telp</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="phone_number" class="form-control " value="{{ $customer->phone_number }}"
-                      readonly>
-                    
-                  </div>
-                </div>
-              </div>
+
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>Tarif</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="tarif" class="form-control " value="{{ $customer->tarif }}" readonly>
+                    <input type="text" name="tarif" class="form-control " value="{{ $order->tarif }}" readonly>
                     
                   </div>
                 </div>
@@ -98,25 +107,17 @@
                 <div class="form-group">
                   <label>Daya</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="power" class="form-control " value="{{ $customer->power }}" readonly>
+                    <input type="text" name="power" class="form-control " value="{{ $order->power }}" readonly>
                     
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Kogol</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="class" class="form-control " value="{{ $customer->class }}" readonly>
-                    
-                  </div>
-                </div>
-              </div>
+              
               <div class="col-sm-12">
                 <div class="form-group">
                   <label>Gardu</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="substation" class="form-control " value="{{ $customer->substation }}" readonly>
+                    <input type="text" name="substation" class="form-control " value="{{ $order->substation }}" readonly>
                     
                   </div>
                 </div>
@@ -125,14 +126,30 @@
                 <div class="form-group">
                   <label>Alamat</label>
                   <div class="controls form-label-group position-relative ">
-                    <textarea class="form-control editors" name="address" rows="10" cols="30"
-                      readonly>{{ $customer->address }}</textarea>
+                    <textarea class="form-control editors" name="customer_address" rows="10" cols="30"
+                      readonly>{{ $order->customer_address }}</textarea>
                     
                   </div>
                 </div>
               </div>
-              
-
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Kogol</label>
+                  <div class="controls form-label-group position-relative ">
+                    <input type="text" name="class" class="form-control " value="{{ $order->class }}" readonly>
+                    
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>RP TAG</label>
+                  <div class="controls form-label-group position-relative ">
+                    <input type="text" name="bill" class="form-control " value="{{ $order->bill }}" readonly>
+                    
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -157,6 +174,7 @@
 <script>
 $(document).ready(function() {
     
+
   });
 
 </script>

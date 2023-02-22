@@ -82,6 +82,7 @@ Route::middleware('auth', 'verified')->group(function () {
         });
         Route::resource('/orders', OrderController::class);
         Route::post('/orders/list', [OrderController::class, 'list']);
+        Route::get('/orders/{id}/detail', [OrderController::class, 'show']);
     });
 
     

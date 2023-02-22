@@ -7,7 +7,6 @@ use App\Http\Requests\UlpRequest;
 use App\Interfaces\UlpInterface;
 use App\Models\Ulp;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class UlpController extends Controller

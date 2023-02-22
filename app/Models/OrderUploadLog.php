@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Yajra\Auditable\AuditableTrait;
 
-class Order extends Model
+class OrderUploadLog extends Model
 {
-    use HasFactory, AuditableTrait;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -16,18 +15,9 @@ class Order extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'uuid','created_by','created_at','updated_by','updated_at','log',
+        'uuid','created_by','created_at',
     ];
 
 
-    public function UserCreate()
-    {
-        return $this->hasOne('App\Models\User', 'id', 'created_by');
-    }
-
-    public function UserUpdate()
-    {
-        return $this->hasOne('App\Models\User', 'id', 'updated_by');
-    }
 
 }
