@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Illuminate\Support\Facades\Auth;
 
 class UserUploadFailedExport implements FromQuery, WithHeadings, WithMapping
 {
@@ -54,6 +55,11 @@ class UserUploadFailedExport implements FromQuery, WithHeadings, WithMapping
 
     public function query()
     {
-        return UserUploadFailed::query();
+        $id = Auth::user()->id;
+
+        return UserUploadFailed::select(
+            'user_upload_faileds.*'
+        )->where('user_upload_faileds.created_by', $id);
+
     }
 }

@@ -198,6 +198,82 @@
         });
     };
 
+    confirmDeleteLogs = (params) => {
+        "use strict";
+        let uuid =params.id;
+
+        Swal.fire({
+            title: "Konfirmasi",
+            text: `Anda Ingin Menghapus Order ${uuid} ?`,
+            type: "warning",
+            confirmButtonClass: "btn btn-primary",
+            buttonsStyling: false,
+            showCancelButton: true,
+            confirmButtonText: "Ya",
+            cancelButtonText: "Tidak",
+            showLoaderOnConfirm: true,
+            cancelButtonClass: "btn btn-danger ml-1",
+            buttonsStyling: false,
+            preConfirm: function () {
+                return fetch(params.url + "/" + uuid, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            console.log(response);
+                            throw new Error(response.statusText);
+                        }
+
+                        return response.json();
+                    })
+                    .catch(function (error) {
+                        Swal.showValidationMessage(
+                            "Request failed:  " + error + ""
+                        );
+                    });
+            },
+            allowOutsideClick: function () {
+                !Swal.isLoading();
+            },
+        }).then(function (result) {
+            if (result.value) {
+                switch (result.value.status) {
+                    case 200:
+                        toastr.success("Data berhasil dihapus !", "Sukses", {
+                            progressBar: true,
+                            showDuration: 500,
+                            closeButton: true,
+                        });
+                        setTimeout(() => {
+                            if (params.reload) {
+                                dataTable.ajax.reload();
+                                // window.location.reload()
+                            } else {
+                                params.tr.remove();
+                            }
+                        }, 500);
+                        break;
+                    case 500:
+                        toastr.error(
+                            "Data tidak bisa dihapus, karena sudah digunakan !",
+                            "Gagal",
+                            {
+                                progressBar: true,
+                                showDuration: 500,
+                                closeButton: true,
+                            }
+                        );
+                        break;
+                }
+            }
+        });
+    };
+
     confirmResetPassword = (params) => {
         "use strict";
         let name = "";

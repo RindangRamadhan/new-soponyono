@@ -35,7 +35,7 @@
           <span>Unggah Order</span>
         </button>
         <a href="{{ url('/monitoring/orders/download-template') }}" id="btnDownload" class="btn btn-success">
-          
+
           <i class="bx bx-download"></i>
           <span>Unduh Template</span>
         </a>
@@ -45,22 +45,22 @@
         </a>
         <div class="row" style="padding-top: 10px;">
           <div class="col-sm-2">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false"
-          id="onshowbtn" data-target="#modal">
-          <i class="bx bx-search"></i>
-          <span>Logs</span>
-        </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static"
+              data-keyboard="false" id="onshowbtnlogs" data-target="#modal-log">
+              <i class="bx bx-search"></i>
+              <span>Logs</span>
+            </button>
           </div>
           <div class="col-sm-6">
-            <input type="text" name="uuid" class="form-control " placeholder="Token" value="">
+            <input type="text" id="uuid" name="uuid" class="form-control " placeholder="UUID" value="">
           </div>
-          <button type="button" class="btn btn-danger" data-toggle="modal" data-backdrop="static" data-keyboard="false"
-          id="onshowbtn" data-target="#modal">
-          <i class="bx bx-trash"></i>
-          <span>Hapus Order</span>
-        </button>
-        
-        
+          <button type="button" class="btn btn-danger btn-hapus-logs" data-backdrop="static" data-keyboard="false"
+            id="btnHapusOrder">
+            <i class="bx bx-trash"></i>
+            <span>Hapus Order</span>
+          </button>
+
+
         </div>
         <div class="table-responsive">
           <table class="table table-sm table-ssr nowrap">
@@ -129,7 +129,7 @@
             <i class="bx bx-x d-block d-sm-none"></i>
             <span class="d-none d-sm-block">Batal</span>
           </button>
-          
+
           <button class="btn btn-sm btn-primary ml-1" id="btnUpload" type="button">
             <span id="spanUpload">Unggah</span>
           </button>
@@ -137,6 +137,46 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade text-left" id="modal-log" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title white" id="myModalLabel160">List Order</h5>
+          <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+            <i class="bx bx-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table id="table-logs" name="table-logs" class="table table-hover" style="width:100%">
+            <thead class="noselect">
+              <tr>
+                <th>UUID</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody class="row-format-per-unit">
+              <?php foreach($logs as $key): ?>
+              <tr>
+                <td>
+                  <?php echo $key->uuid; ?>
+                </td>
+                <td>
+                  <?php echo $key->created_at->format('d-m-Y H:i:s'); ?>
+                </td>
+              </tr>
+              <?php endforeach; ?>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </section>
 <!-- Pengguna ends -->
 @endsection
@@ -159,8 +199,6 @@
 
   $(document).ready(function () {
 
-    const data = @php echo json_encode($logs) @endphp;
-    console.log(data)
     
     const params = {
       "url": "{{ url('/monitoring/orders') }}",
@@ -180,15 +218,34 @@
   })
 
   // Confirmation Delete
-  $(document).on('click', '.btn-delete', function (e) {
+  $(document).on('click', '.btn-hapus-logs', function (e) {
     e.preventDefault();
-    const params = {
-      "name": this.dataset.name,
+    var uuid=$('[name="uuid"]');
+    if(uuid.val()){
+      const params = {
       "url": "{{ url('/monitoring/orders/') }}",
-      "id": $(this).attr('data-id'),
+      "id": uuid.val(),
       "tr": $(this).parent("td").parent('tr')
     }
 
+    confirmDeleteLogs(params)
+    }else{
+      Swal.fire('Info', 'UUID belum terisi', 'warning');
+    }
+    
+  })
+
+  // Confirmation Delete
+  $(document).on('click', '.btn-delete', function (e) {
+    e.preventDefault();
+    
+    const params = {
+      "name": this.dataset.name,
+      "url": "{{ url('/master-data/up3s/') }}",
+      "id": $(this).attr('data-id'),
+      "tr": $(this).parent("td").parent('tr')
+    }
+    
     confirmDelete(params)
   })
 
@@ -309,6 +366,26 @@
       }
     }
   });
+
+
+  // $('#btnHapusOrder').on('click', function (e) {
+  //   e.preventDefault();
+  //   var uuid=$('[name="uuid"]');
+  //   if(uuid.val()){
+  //     const params = {
+  //     "uuid":uuid,  
+  //     "url": "{{ url('/monitoring/orders/') }}",
+  //     "id": uuid,
+  //     "tr": $(this).parent("td").parent('tr')
+  //   }
+
+  //   confirmDeleteLogs(params)
+
+  //   }else{
+  //     Swal.fire('Info', 'UUID belum terisi', 'warning');
+  //   }
+  // });
+  
 
 </script>
 @endsection

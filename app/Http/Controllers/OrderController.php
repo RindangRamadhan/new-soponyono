@@ -43,7 +43,7 @@ class OrderController extends Controller
             ["link" => "#", "name" => "Order"],
         ];
         $id = Auth::user()->id;
-        $logs = OrderUploadLog::select('uuid','created_at')
+        $logs = OrderUploadLog::select('uuid','created_at', )
         ->where('created_by', $id)
         ->get();
         return view('pages.orders.index')->with(
@@ -134,6 +134,7 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
+
         Order::find($id)->delete();
         return response()->json(['status' => 200]);
     }

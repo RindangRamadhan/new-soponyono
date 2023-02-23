@@ -237,4 +237,10 @@ class OrderRepository implements OrderInterface
             'order_failed' => count($upload_faileds),
         ]);
     }
+
+    public function destroy($id)
+    {
+        $role = Order::find($id);
+        $role->delete();
+    }
 }

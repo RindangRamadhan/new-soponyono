@@ -9,4 +9,5 @@ interface OrderInterface
     function list();
     function show($id);
     function upload(Request $request);
+    function destroy($id);
 }
