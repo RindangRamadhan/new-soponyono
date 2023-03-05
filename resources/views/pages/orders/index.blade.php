@@ -23,7 +23,7 @@
 @endsection
 
 @section('content')
-<!-- Pengguna start -->
+<!-- Order start -->
 <section id="basic-datatable">
   <div class="card">
     <div class="card-content">
@@ -178,7 +178,7 @@
   </div>
 
 </section>
-<!-- Pengguna ends -->
+<!-- Order ends -->
 @endsection
 
 {{-- vendor scripts --}}
@@ -320,7 +320,7 @@
           }, 1000);
 
           if (resp.order_failed > 0) {
-            const message = `${resp.order_upload - resp.order_failed} Pengguna berhasil diunggah. ${resp.order_failed} Pengguna gagal, silahkan unduh dokumen untuk informasi lebih detail.`
+            const message = `${resp.order_upload - resp.order_failed} Order berhasil diunggah. ${resp.order_failed} Order gagal, silahkan unduh dokumen untuk informasi lebih detail.`
             toastr.warning(message, 'Sukses', { "progressBar": true, "showDuration": 3000, "closeButton": true })
           } else {
             toastr.success('Dokumen berhasil di unggah', 'Sukses', { "progressBar": true, "showDuration": 500, "closeButton": true })

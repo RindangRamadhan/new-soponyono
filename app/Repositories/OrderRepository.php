@@ -184,7 +184,7 @@ class OrderRepository implements OrderInterface
                         ]);
                     }
 
-                    $rowuser = User::select('id', 'rbm_code')->where('rbm_code', $rbm_code);
+                    $rowuser = User::select('id')->where('rbm_code', $rbm_code)->first();
                     if ($rowuser->count() == 0) {
                         $upload_failed['reason'] = "Kode RBM tidak ditemukan";
                         $upload_faileds[] = $upload_failed;
