@@ -64,6 +64,8 @@ class OrderController extends Controller
             'order_id' => 'required',
             'billing_status' => 'required|in:Paid,Debt,Unpaid',
             'due_date' => 'required_if:billing_status,Debt',
+            'latitude' => 'required',
+            'longitude' => 'required',
         ]);
 
         try {
@@ -110,6 +112,8 @@ class OrderController extends Controller
                     'due_date' => $request->due_date,
                     'phone_number' => $request->phone_number,
                     'billing_status' => $request->billing_status,
+                    'latitude' => $request->latitude,
+                    'longitude' => $request->longitude,
                     'updated_by' => Auth::user()->id,
                 ]);
 
