@@ -15,16 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 // Auth
 Route::prefix('/auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/logout', [AuthController::class, 'logout']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    // Logout
+    Route::get('/auth/logout', [AuthController::class, 'logout']);
+
+    // Orders
     Route::resource('/orders', OrderController::class);
 });
