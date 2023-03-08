@@ -105,7 +105,7 @@ class RoleAndPermissionSeeder extends Seeder
                 "guard_name" => "web",
             ],
             [
-                "name" => "Monitoring-Order",
+                "name" => "Order",
                 "guard_name" => "web",
             ],
             [
@@ -182,6 +182,22 @@ class RoleAndPermissionSeeder extends Seeder
             ],
             [
                 "name" => "Ulp-Ulp Hapus",
+                "guard_name" => "web",
+            ],
+            [
+                "name" => "Monitoring-Harian",
+                "guard_name" => "web",
+            ],
+            [
+                "name" => "Harian-Harian Lihat",
+                "guard_name" => "web",
+            ],
+            [
+                "name" => "Monitoring-Bulanan",
+                "guard_name" => "web",
+            ],
+            [
+                "name" => "Bulanan-Bulanan Lihat",
                 "guard_name" => "web",
             ],
 
