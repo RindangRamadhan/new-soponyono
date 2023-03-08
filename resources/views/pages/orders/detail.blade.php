@@ -50,15 +50,6 @@
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
-                  <label>ULP</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="ulp" class="form-control" value="{{ $order->ulp_name }}" readonly>
-                  
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
                   <label>Nama Petugas</label>
                   <div class="controls form-label-group position-relative ">
                     <input type="text"  class="form-control " value="{{ $order->officer_name }}" readonly>
@@ -113,7 +104,7 @@
                 </div>
               </div>
               
-              <div class="col-sm-12">
+              <div class="col-sm-6">
                 <div class="form-group">
                   <label>Gardu</label>
                   <div class="controls form-label-group position-relative ">

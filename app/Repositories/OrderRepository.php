@@ -58,6 +58,42 @@ class OrderRepository implements OrderInterface
         return $data;
     }
 
+    function list_harian($up3_id, $ulp_id)
+    {
+        
+        $order = Order::select(
+            'orders.id',
+            'orders.status',
+            'orders.bill',
+            'customer.name as customer_name',
+            'user.name as officer_name',
+            'up3.name AS up3__name',
+            'ulp.name AS ulp__name'
+        )
+            ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
+            ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
+            ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
+            ->join('customers AS customer', 'orders.customer_id', 'customer.id')
+            ->join('users AS user', 'orders.user_id', 'user.id')->where('orders.status', 'Open')->groupBy('orders.user_id');
+
+        if ($ulp_id) {
+            $data = $order
+                ->where([
+                    ['orders.ulp_id', $ulp_id]
+                ]);
+        } else if (!$ulp_id && $up3_id) {
+            $data = $order->where([
+                ['orders.up3_id', $up3_id],
+            ]);
+        } else {
+            $data = $order;
+            // $data = $order->where([
+            //     ['orders.up3_id', 00],
+            // ]);
+        }
+
+        return $data;
+    }
 
     public function show($id)
     {
@@ -81,6 +117,45 @@ class OrderRepository implements OrderInterface
 
 
         return [$order];
+    }
+
+    public function show_petugas($id)
+    {
+        $order = Order::select(
+            'orders.*',
+            'uid.name AS uid_name',
+            'up3.name AS up3_name',
+            'ulp.name AS ulp_name',
+            'user.name AS officer_name',
+            'user.rbm_code AS rbm_code'
+        )
+            ->join('uids AS uid', 'orders.uid_id', 'uid.id')
+            ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
+            ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
+            ->join('customers AS customer', 'orders.customer_id', 'customer.id')
+            ->join('users AS user', 'orders.user_id', 'user.id')
+            ->where('orders.id', $id)
+            ->first();
+
+            $list_order = Order::select(
+                'orders.*',
+                'uid.name AS uid_name',
+                'up3.name AS up3_name',
+                'ulp.name AS ulp_name',
+                'customer.name AS customer_name',
+                'customer.address AS customer_address',
+                'user.name AS officer_name',
+                'user.rbm_code AS rbm_code'
+            )
+                ->join('uids AS uid', 'orders.uid_id', 'uid.id')
+                ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
+                ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
+                ->join('customers AS customer', 'orders.customer_id', 'customer.id')
+                ->join('users AS user', 'orders.user_id', 'user.id')
+                ->where('orders.user_id', $order->user_id)->get();
+
+
+        return [$order,$list_order];
     }
 
     public function upload(Request $request)

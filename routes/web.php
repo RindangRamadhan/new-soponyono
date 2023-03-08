@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MonitoringLocationController;
+use App\Http\Controllers\MonitoringHarianController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UidController;
 use App\Http\Controllers\UlpController;
@@ -55,6 +56,7 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::resource('/up3s', Up3Controller::class);
         Route::resource('/ulps', UlpController::class);
         Route::resource('/customers', CustomerController::class);
+        
 
         Route::get('/customers/{id}/detail', [CustomerController::class, 'show']);
 
@@ -71,21 +73,25 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::post('/ulp/list-select', [UlpController::class, 'listSelect']);
     });
 
+    Route::prefix('/orders')->group(function () {
+        Route::get('/download-template', [OrderController::class, 'download'])->name('orders.download');
+        Route::post('/upload-template', [OrderController::class, 'upload'])->name('orders.upload');
+        Route::get('/export', [OrderController::class, 'export'])->name('orders.export');
+    });
+    Route::resource('/orders', OrderController::class);
+    Route::post('/orders/list', [OrderController::class, 'list']);
+    Route::get('/orders/{id}/detail', [OrderController::class, 'show']);
+    
     // Monitoring
     Route::prefix('/monitoring')->group(function () {
         Route::resource('/locations', MonitoringLocationController::class);
-
-        Route::prefix('/orders')->group(function () {
-            Route::get('/download-template', [OrderController::class, 'download'])->name('orders.download');
-            Route::post('/upload-template', [OrderController::class, 'upload'])->name('orders.upload');
-            Route::get('/export', [OrderController::class, 'export'])->name('orders.export');
-        });
-        Route::resource('/orders', OrderController::class);
-        Route::post('/orders/list', [OrderController::class, 'list']);
-        Route::get('/orders/{id}/detail', [OrderController::class, 'show']);
+        Route::resource('/harians', MonitoringHarianController::class);
+        Route::post('/harians/list', [MonitoringHarianController::class, 'list']);
+        Route::get('/harians/{id}/detail', [MonitoringHarianController::class, 'show']);
+        Route::get('/harians/{id}/location', [MonitoringHarianController::class, 'location']);
+        
     });
 
-    
 
     // Profile
     Route::prefix('/users')->group(function () {

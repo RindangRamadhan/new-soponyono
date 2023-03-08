@@ -176,48 +176,48 @@ class Helper
 
         // Searching by Column
         switch ($url) {
-            // case "/budgets":
-            //     $prefix = $year . '_';
-            //     switch ($request->attachment) {
-            //         case 'roren-attachment':
-            //             $tabel_name = 'budget_plans';
-            //             $tabel = $prefix . $tabel_name;
-            //             break;
-            //         case 'pi-attachment':
-            //             $tabel_name = 'budget_plan_pis';
-            //             $tabel = $prefix . $tabel_name;
-            //             break;
-            //         case 'wl-attachment':
-            //             $tabel_name = 'work_letters';
-            //             $tabel = $prefix . $tabel_name;
-            //             $fullTextSerch = '9';
-            //             break;
-            //     }
-            //     break;
-            // case "/master-data/assignments":
-            //     $prefix = $year . '_';
-            //     $tabel = $prefix . 'assignments';
-            //     break;
-            // case "/master-data/team-works":
-            //     $prefix = $year . '_';
-            //     $tabel = $prefix . 'team_works';
-            //     break;
-            // case "/master-data/organizational-structure":
-            //     $prefix = $year . '_';
-            //     $tabel = $prefix . 'work_units';
-            //     break;
-            // case "/master-data/users":
-            //     $prefix = $year . '_';
-            //     $tabel = $prefix . 'users';
-            //     break;
-            // case "/master-data/research-guidelines":
-            //     $prefix = $year . '_';
-            //     $tabel = $prefix . 'research_guidelines';
-            //     break;
-            // case "/master-data/requirement-documents":
-            //     $prefix = null;
-            //     $tabel = 'requirements_documents';
-            //     break;
+                // case "/budgets":
+                //     $prefix = $year . '_';
+                //     switch ($request->attachment) {
+                //         case 'roren-attachment':
+                //             $tabel_name = 'budget_plans';
+                //             $tabel = $prefix . $tabel_name;
+                //             break;
+                //         case 'pi-attachment':
+                //             $tabel_name = 'budget_plan_pis';
+                //             $tabel = $prefix . $tabel_name;
+                //             break;
+                //         case 'wl-attachment':
+                //             $tabel_name = 'work_letters';
+                //             $tabel = $prefix . $tabel_name;
+                //             $fullTextSerch = '9';
+                //             break;
+                //     }
+                //     break;
+                // case "/master-data/assignments":
+                //     $prefix = $year . '_';
+                //     $tabel = $prefix . 'assignments';
+                //     break;
+                // case "/master-data/team-works":
+                //     $prefix = $year . '_';
+                //     $tabel = $prefix . 'team_works';
+                //     break;
+                // case "/master-data/organizational-structure":
+                //     $prefix = $year . '_';
+                //     $tabel = $prefix . 'work_units';
+                //     break;
+                // case "/master-data/users":
+                //     $prefix = $year . '_';
+                //     $tabel = $prefix . 'users';
+                //     break;
+                // case "/master-data/research-guidelines":
+                //     $prefix = $year . '_';
+                //     $tabel = $prefix . 'research_guidelines';
+                //     break;
+                // case "/master-data/requirement-documents":
+                //     $prefix = null;
+                //     $tabel = 'requirements_documents';
+                //     break;
             default:
                 $prefix = null;
                 $tabel = null;
@@ -268,13 +268,13 @@ class Helper
                     $querysearch = ' MATCH(' . strtolower($colName) . ') AGAINST (' . $cariQ . ' IN BOOLEAN MODE) ';
                     // Log::info($column['search']['value'] . '-SAMU-' . $querysearch);
                     $filter .= $count > 0
-                    ? " AND " . $querysearch
-                    : $querysearch;
+                        ? " AND " . $querysearch
+                        : $querysearch;
                     $count++;
                 } else {
                     $filter .= $count > 0
-                    ? " AND lower($colName) LIKE '%" . strtolower($column['search']['value']) . "%'"
-                    : "lower($colName) LIKE '%" . strtolower($column['search']['value']) . "%'";
+                        ? " AND lower($colName) LIKE '%" . strtolower($column['search']['value']) . "%'"
+                        : "lower($colName) LIKE '%" . strtolower($column['search']['value']) . "%'";
                     $count++;
                 }
             }
@@ -294,12 +294,12 @@ class Helper
                     }
                     // Log::info($request->input('search.value') . '-SAMU-' . $querysearch);
                     $globalFilter .= $globalFilter == ""
-                    ? $querysearch
-                    : ($querysearch != '' ? " OR " . $querysearch : "");
+                        ? $querysearch
+                        : ($querysearch != '' ? " OR " . $querysearch : "");
                 } else {
                     $globalFilter .= $globalFilter == ""
-                    ? "lower($colName) LIKE '%" . strtolower($request->input('search.value')) . "%'"
-                    : " OR lower($colName) LIKE '%" . strtolower($request->input('search.value')) . "%'";
+                        ? "lower($colName) LIKE '%" . strtolower($request->input('search.value')) . "%'"
+                        : " OR lower($colName) LIKE '%" . strtolower($request->input('search.value')) . "%'";
                 }
             }
         }
@@ -377,20 +377,20 @@ class Helper
             $buttonDownload = "<a href=" . url("$url/$id/download") . " class='btn btn-icon rounded-circle btn-primary btn-download-$id' data-id='$id'><i class='bx bx-download'></i></a>";
 
             $buttonPdfPreview = Auth::user()->can("$menu-$menu Lihat")
-            ? "<a href=" . url("$url/$id/view-doc") . " target='_blank' class='btn btn-icon rounded-circle btn-info'><i class='bx bxs-folder-open'></i></a>"
-            : "";
+                ? "<a href=" . url("$url/$id/view-doc") . " target='_blank' class='btn btn-icon rounded-circle btn-info'><i class='bx bxs-folder-open'></i></a>"
+                : "";
 
-            $buttonDetail = Auth::user()->can("$menu-$menu Lihat")
-            ? "<a href=" . url("$url/$id/detail") . " class='btn btn-icon rounded-circle btn-info'><i class='bx bx-list-ul'></i></a>"
-            : "";
+            $buttonDetail = "<a href=" . url("$url/$id/detail") . " class='btn btn-icon rounded-circle btn-info'><i class='bx bx-list-ul'></i></a>";
+
+            $buttonLocation = "<a href=" . url("$url/$id/location") . " class='btn btn-icon rounded-circle btn-success'><i class='bx bx-map'></i></a>";
 
             $buttonEdit = Auth::user()->can("$menu-$menu Edit")
-            ? "<a href=" . url("$url/$id/edit") . " class='btn btn-icon rounded-circle btn-success'><i class='bx bx-edit-alt'></i></a>"
-            : "";
+                ? "<a href=" . url("$url/$id/edit") . " class='btn btn-icon rounded-circle btn-success'><i class='bx bx-edit-alt'></i></a>"
+                : "";
 
             $buttonDelete = Auth::user()->can("$menu-$menu Hapus")
-            ? "<button type='button' class='btn btn-icon rounded-circle btn-danger btn-delete'  data-id=" . $id . " data-name='$name' ><i class='bx bx-trash'></i></button>"
-            : "";
+                ? "<button type='button' class='btn btn-icon rounded-circle btn-danger btn-delete'  data-id=" . $id . " data-name='$name' ><i class='bx bx-trash'></i></button>"
+                : "";
 
             $buttonResetPassword = "<button type='button' class='btn btn-icon rounded-circle btn-warning btn-reset-password'  title='Reset Password' data-id=" . $id . " data-name='$name' data-toggle='tooltip'><i class='bx bx-key'></i></button>";
 
@@ -407,6 +407,9 @@ class Helper
                             break;
                         case 'detail':
                             $record->action .= "$buttonDetail ";
+                            break;
+                        case 'location':
+                            $record->action .= "$buttonLocation ";
                             break;
                         case 'preview':
                             $record->action .= "$buttonPdfPreview ";
@@ -470,8 +473,8 @@ class Helper
 
                 foreach ($fields as $field) {
                     $new_name = ($temp_records[$i]->$field != $temp_records[$x]->$field)
-                    ? $temp_records[$i]->$field
-                    : "";
+                        ? $temp_records[$i]->$field
+                        : "";
 
                     $object->$field = $new_name;
                 }
@@ -591,7 +594,8 @@ class Helper
                 'status' => $code > 299 ? false : true,
                 'message' => $message,
                 'data' => $data,
-            ], $code
+            ],
+            $code
         );
     }
 }

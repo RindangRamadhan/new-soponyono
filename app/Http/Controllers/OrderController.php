@@ -62,7 +62,7 @@ class OrderController extends Controller
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
             $request,
             $resources,
-            "/monitoring/orders",
+            "/orders",
             "Order",
             ['detail'],
             ['delete','edit'],
@@ -106,7 +106,7 @@ class OrderController extends Controller
             ],
             
             [
-                "link" => "monitoring/orders",
+                "link" => "orders",
                 "name" => "Order",
             ],
             [

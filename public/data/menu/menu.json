@@ -52,7 +52,7 @@
       ]
     },
     {
-      "url": "monitoring/orders",
+      "url": "orders",
       "name": "Order",
       "i18n": "Order",
       "icon": "notebook",
@@ -71,6 +71,29 @@
       "i18n": "Hak Akses",
       "icon": "unlock",
       "role": "Hak Akses-Hak Akses Lihat"
+    },
+    {
+      "url": "#",
+      "name": "Monitoring",
+      "i18n": "Monitoring",
+      "icon": "search",
+      "role": "Monitoring",
+      "submenu": [
+        {
+          "url": "monitoring/harians",
+          "name": "Harian",
+          "i18n": "Harian",
+          "icon": "bx bx-radio-circle",
+          "role": null
+        },
+        {
+          "url": "monitoring/bulanans",
+          "name": "Bulanan",
+          "i18n": "Bulanan",
+          "icon": "bx bx-radio-circle",
+          "role": null
+        }
+      ]
     }
   ]
 }

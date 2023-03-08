@@ -34,12 +34,12 @@
           <i class="bx bx-upload"></i>
           <span>Unggah Order</span>
         </button>
-        <a href="{{ url('/monitoring/orders/download-template') }}" id="btnDownload" class="btn btn-success">
+        <a href="{{ url('/orders/download-template') }}" id="btnDownload" class="btn btn-success">
 
           <i class="bx bx-download"></i>
           <span>Unduh Template</span>
         </a>
-        <a href="{{ url('/monitoring/orders/export') }}" class="btn btn-warning">
+        <a href="{{ url('/orders/export') }}" class="btn btn-warning">
           <i class="bx bx-download"></i>
           <span>Unduh Order</span>
         </a>
@@ -201,7 +201,7 @@
 
     
     const params = {
-      "url": "{{ url('/monitoring/orders') }}",
+      "url": "{{ url('/orders') }}",
       "columns": [
         { "data": "id", "visible": false },
         { "data": "up3__name" },
@@ -223,7 +223,7 @@
     var uuid=$('[name="uuid"]');
     if(uuid.val()){
       const params = {
-      "url": "{{ url('/monitoring/orders/') }}",
+      "url": "{{ url('/orders/') }}",
       "id": uuid.val(),
       "tr": $(this).parent("td").parent('tr')
     }
@@ -374,7 +374,7 @@
   //   if(uuid.val()){
   //     const params = {
   //     "uuid":uuid,  
-  //     "url": "{{ url('/monitoring/orders/') }}",
+  //     "url": "{{ url('/orders/') }}",
   //     "id": uuid,
   //     "tr": $(this).parent("td").parent('tr')
   //   }
