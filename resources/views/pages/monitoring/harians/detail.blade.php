@@ -26,7 +26,7 @@
                 <div class="form-group">
                   <label>Nama Petugas</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" class="form-control " value="{{ $order->officer_name }}" readonly>
+                    <input type="text" class="form-control " value="{{ $user->officer_name }}" readonly>
 
                   </div>
                 </div>
@@ -35,7 +35,7 @@
                 <div class="form-group">
                   <label>RBM</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" class="form-control " value="{{ $order->rbm_code }}" readonly>
+                    <input type="text" class="form-control " value="{{ $user->rbm_code }}" readonly>
 
                   </div>
                 </div>
@@ -43,7 +43,7 @@
 
             </div>
             <div class="table-responsive">
-              <table id="example" class="table table-sm table-ssr nowrap">
+              <table id="table" class="table table-sm table-ssr nowrap">
                 <thead>
                   <tr>
                     <th>ID PEL</th>
@@ -57,7 +57,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ($list_order as $row)
+                  @foreach ($orders as $row)
                   <tr>
                     <td>{{ $row->customer_id }}</td>
                     <td>{{ $row->customer_name }}</td>
@@ -90,19 +90,11 @@
 
 {{-- page scripts --}}
 @section('page-scripts')
-
-
 <script>
-  $(document).ready(function() {
-  const data = @php echo json_encode($list_order) @endphp;
-  // console.log(data)
-  });
-
   $(document).ready(function () {
-    $('#example').DataTable({
+    $('#table').DataTable({
       filter: true,
     });
 });
-
 </script>
 @endsection

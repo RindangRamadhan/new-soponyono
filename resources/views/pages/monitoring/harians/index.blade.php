@@ -6,12 +6,10 @@
 @section('vendor-styles')
 <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/forms/select/select2.min.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/tables/datatable/datatables.min.css')}}">
-<link rel="stylesheet" type="text/css" href="{{asset('vendors/css/extensions/toastr.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('vendors/css/pickers/daterange/daterangepicker.css')}}">
 @endsection
 {{-- page styles --}}
 @section('page-styles')
-<link rel="stylesheet" type="text/css" href="{{asset('css/plugins/extensions/toastr.css')}}">
-
 <style>
   .DTFC_Cloned thead {
     background: white;
@@ -20,6 +18,7 @@
   .DTFC_Cloned tbody {
     background: white;
   }
+
 </style>
 @endsection
 
@@ -30,7 +29,7 @@
     <div class="card-content">
       <div class="card-body card-dashboard">
         <div class="row">
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <div class="controls form-label-group position-relative has-icon-left">
               <select id="up3_id" name="up3_id" class="select2 form-control ">
                 <option></option>
@@ -40,7 +39,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <div class="controls form-label-group position-relative has-icon-left">
               <select id="ulp_id" name="ulp_id" class="select2 form-control ">
                 <option></option>
@@ -49,6 +48,19 @@
                 <i class="bx bx-edit-alt"></i>
               </div>
             </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="controls form-label-group position-relative has-icon-left">
+              <input type="text" name="date_range" id="date_range" class="form-control pickdaterange" placeholder="Pilih Tanggal">
+              <div class="form-control-position">
+                <i class="bx bx-calendar"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <button type="reset" id="btnSearch" class="btn btn-primary btn-block glow users-list-clear mb-0">
+              <i class="bx bx-search"></i> Search
+            </button>
           </div>
         </div>
 
@@ -86,38 +98,30 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-<script src="{{asset('vendors/js/extensions/sweetalert2.all.min.js')}}"></script>
-<script src="{{asset('vendors/js/extensions/toastr.min.js')}}"></script>
 <script src="{{asset('vendors/js/tables/datatable/datatables.min.js')}}"></script>
 <script src="{{asset('vendors/js/tables/datatable/dataTables.bootstrap4.min.js')}}"></script>
 <script src="{{asset('vendors/js/forms/select/select2.full.min.js')}}"></script>
+<script src="{{asset('vendors/js/pickers/pickadate/picker.js')}}"></script>
+<script src="{{asset('vendors/js/pickers/daterange/moment.min.js')}}"></script>
+<script src="{{asset('vendors/js/pickers/daterange/daterangepicker.js')}}"></script>
 @endsection
 
 @section('page-scripts')
 <script src="{{asset('js/scripts/forms/select/form-select2.js')}}"></script>
 <script>
-  @if (Session::get('status') == 200)
-    $(document).ready(function(){
-      toastr.success('Data has been saved', 'Success', { "progressBar": true, "showDuration": 500, "closeButton": true })
-    });
-  @endif
-
   $(document).ready(function () {
+    $('.pickdaterange').daterangepicker({
+      showDropdowns: true,
+      locale: {
+        format: 'YYYY-MM-DD'
+      }
+    });
 
-    
-    const params = {
-      "url": "{{ url('/monitoring/harians') }}",
-      "columns": [
-        { "data": "id", "visible": false },
-        { "data": "up3__name" },
-        { "data": "ulp__name" },
-        { "data": "officer_name" },
-        { "data": "status" },
-        { "data": "action", "searchable": false, "orderable": false }
-      ]
-    }
+    GetOrder()
+  })
 
-    dataTableServerSide(params)
+  $(document).on('click', '#btnSearch', function (e) {
+    GetOrder();
   })
 
   $(document).ready(function() {
@@ -156,5 +160,64 @@
     });
   })
 
+  function GetOrder() {
+    const date_range = $("#date_range").val().split(" - ");
+    const start_date = date_range[0];
+    const end_date = date_range[1];
+    const up3_id = $("#up3_id").val();
+    const ulp_id = $("#ulp_id").val();
+
+    let qFilter = "";
+    if (start_date != "") {
+      qFilter += `start_date=${start_date}`
+    }
+    
+    if (end_date != "") {
+      qFilter += `&end_date=${end_date}`
+    }
+    
+    if (up3_id != "") {
+      qFilter += `&up3_id=${up3_id}`
+    }
+
+    if (ulp_id != "") {
+      qFilter += `&ulp_id=${ulp_id}`
+    }
+    
+    const params = {
+      "url": "{{ url('/monitoring/harians') }}",
+      "columns": [
+        { "data": "orders__id", "visible": false },
+        { "data": "up3__name" },
+        { "data": "ulp__name" },
+        { "data": "u__name" },
+        { "data": "status" },
+        {
+          "data": "action", "searchable": false, "orderable": false,
+          "render": function (data, type, row) {
+            const detail = `
+              <a href="{{ url('/monitoring/harians/${row.user_id}/detail?${qFilter}') }}" class='btn btn-icon rounded-circle btn-info'>
+                <i class='bx bx-list-ul'></i>
+              </a>
+            `
+            const location = `
+              <a href="{{ url('/monitoring/harians/${row.user_id}/location?${qFilter}') }}" class='btn btn-icon rounded-circle btn-success'>
+                <i class='bx bx-map'></i>
+              </a>
+            `
+            return `${detail} ${location}`;
+          }
+        }
+      ],
+      "args": {
+        "start_date": start_date,
+        "end_date": end_date,
+        "up3_id": up3_id,
+        "ulp_id": ulp_id,
+      }
+    }
+
+    dataTableServerSide(params)
+  }
 </script>
 @endsection

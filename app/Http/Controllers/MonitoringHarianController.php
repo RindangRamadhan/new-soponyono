@@ -62,21 +62,17 @@ class MonitoringHarianController extends Controller
             ])
         );
     }
-    function list(Request $request)
-    {
-        $up3_id = $request->up3_id;
-        $ulp_id = $request->ulp_id;
-        $resources = $this->harianRepo->list_harian($up3_id, $ulp_id);
+    function list(Request $request) {
+        $resources = $this->harianRepo->list_harian($request);
 
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
             $request,
             $resources,
             "/monitoring/harians",
             "Harian",
-            ['detail', 'location'],
-            ['delete', 'edit'],
+            [],
+            ['detail', 'delete', 'edit'],
         );
-
 
         $result = [
             "draw" => intval($request->draw),
@@ -88,7 +84,7 @@ class MonitoringHarianController extends Controller
         return json_encode($result);
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
         $pageConfigs = [
             'pageHeader' => true,
@@ -100,7 +96,6 @@ class MonitoringHarianController extends Controller
                 'delete' => 'Harian-Harian Hapus',
             ],
         ];
-
 
         $breadcrumbs = [
             [
@@ -120,19 +115,19 @@ class MonitoringHarianController extends Controller
             ],
         ];
 
-        list($order,$list_order) = $this->harianRepo->show_petugas($id);
+        list($user, $orders) = $this->harianRepo->show_petugas($id, $request);
 
         return view('pages.monitoring.harians.detail')->with(
             compact([
                 'pageConfigs',
                 'breadcrumbs',
-                'order',
-                'list_order',
+                'user',
+                'orders',
             ])
         );
     }
 
-    public function location($id)
+    public function location($id, Request $request)
     {
         $pageConfigs = [
             'pageHeader' => true,
@@ -144,7 +139,6 @@ class MonitoringHarianController extends Controller
                 'delete' => 'Harian-Harian Hapus',
             ],
         ];
-
 
         $breadcrumbs = [
             [
@@ -164,14 +158,14 @@ class MonitoringHarianController extends Controller
             ],
         ];
 
-        list($order,$list_order) = $this->harianRepo->show_petugas($id);
+        list($user, $orders) = $this->harianRepo->show_petugas($id, $request);
 
         return view('pages.monitoring.harians.map')->with(
             compact([
                 'pageConfigs',
                 'breadcrumbs',
-                'order',
-                'list_order',
+                'user',
+                'orders',
             ])
         );
     }

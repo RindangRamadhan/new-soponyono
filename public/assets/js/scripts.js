@@ -4,6 +4,7 @@
     // DataTable Server Side
     dataTableServerSide = (params) => {
         "use strict";
+        $('.table-ssr').DataTable().destroy();
 
         switch (true) {
             case !params.url:

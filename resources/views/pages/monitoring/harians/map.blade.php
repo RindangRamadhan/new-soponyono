@@ -1,6 +1,6 @@
 @extends('layouts.app')
 {{-- page title --}}
-@section('title','Uid')
+@section('title','Detail Map')
 
 {{-- vendor styles --}}
 @section('vendor-styles')
@@ -28,6 +28,26 @@
   <div class="card">
     <div class="card-content">
       <div class="card-body card-dashboard">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Nama Petugas</label>
+              <div class="controls form-label-group position-relative ">
+                <input type="text" class="form-control " value="{{ $user->officer_name }}" readonly>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>RBM</label>
+              <div class="controls form-label-group position-relative ">
+                <input type="text" class="form-control " value="{{ $user->rbm_code }}" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div id="map"></div>
       </div>
     </div>
@@ -45,30 +65,7 @@
 
 @section('page-scripts')
 <script>
-  const data = @php echo json_encode($list_order) @endphp;
- 
-  // const data = [
-  //   {
-  //     lat: -6.1746338,
-  //     long: 106.8170099,
-  //     customer: 'Doni'
-  //   },
-  //   {
-  //     lat: -6.1722241,
-  //     long: 106.818969,
-  //     customer: 'Dona'
-  //   },
-  //   {
-  //     lat: -6.1712807,
-  //     long: 106.821249,
-  //     customer: 'Dani'
-  //   },
-  //   {
-  //     lat: -6.1713807,
-  //     long: 106.831249,
-  //     customer: 'Dina'
-  //   },
-  // ];
+  const data = @php echo json_encode($orders) @endphp;;
 
   const map_attr = `
     Map data &copy; 

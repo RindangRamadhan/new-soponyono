@@ -2,27 +2,25 @@
 
 namespace App\Repositories;
 
-use App\Helpers\Helper;
 use App\Imports\OrderImport;
 use App\Interfaces\OrderInterface;
-use App\Models\Ulp;
-use App\Models\Up3;
-use App\Models\User;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderUploadFailed;
 use App\Models\OrderUploadLog;
+use App\Models\Ulp;
+use App\Models\Up3;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderRepository implements OrderInterface
 {
-    function list()
-    {
+    function list() {
         $rowuser = Auth::user();
         $tipe = $rowuser->type;
 
@@ -34,7 +32,7 @@ class OrderRepository implements OrderInterface
             ->join('users AS user', 'orders.user_id', 'user.id')->where('orders.status', 'Open')
             ->where([
                 ['orders.created_by', $rowuser->id],
-                ['orders.status', 'Open']
+                ['orders.status', 'Open'],
             ]);
 
         if ($tipe == 'UP3') {
@@ -44,7 +42,7 @@ class OrderRepository implements OrderInterface
         } else if ($tipe == 'ULP') {
             $data = $order
                 ->where([
-                    ['orders.ulp_id', $rowuser->ulp_id]
+                    ['orders.ulp_id', $rowuser->ulp_id],
                 ]);
         } else if ($tipe == 'ALL') {
             $data = $order;
@@ -58,39 +56,41 @@ class OrderRepository implements OrderInterface
         return $data;
     }
 
-    function list_harian($up3_id, $ulp_id)
+    public function list_harian($request)
     {
-        
+        $date = Carbon::createFromFormat('Y-m-d', $request->end_date)->startOfDay();
+        $end_date = Carbon::parse($date->addDays(1))->toDateString();
+
         $order = Order::select(
             'orders.id',
+            'orders.id AS orders__id',
+            'orders.user_id',
             'orders.status',
             'orders.bill',
-            'customer.name as customer_name',
-            'user.name as officer_name',
+            'u.name as u__name',
             'up3.name AS up3__name',
             'ulp.name AS ulp__name'
         )
             ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
-            ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
             ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
-            ->join('customers AS customer', 'orders.customer_id', 'customer.id')
-            ->join('users AS user', 'orders.user_id', 'user.id')->where('orders.status', 'Open')->groupBy('orders.user_id');
+            ->join('users AS u', 'orders.user_id', 'u.id');
 
-        if ($ulp_id) {
-            $data = $order
-                ->where([
-                    ['orders.ulp_id', $ulp_id]
-                ]);
-        } else if (!$ulp_id && $up3_id) {
-            $data = $order->where([
-                ['orders.up3_id', $up3_id],
-            ]);
-        } else {
-            $data = $order;
-            // $data = $order->where([
-            //     ['orders.up3_id', 00],
-            // ]);
+        if ($request->up3_id) {
+            $order = $order
+                ->where('orders.up3_id', $request->up3_id);
         }
+
+        if ($request->ulp_id) {
+            $order = $order
+                ->where('orders.ulp_id', $request->ulp_id);
+        }
+
+        if ($request->start_date && $request->end_date) {
+            $order = $order
+                ->whereBetween('orders.created_at', [$request->start_date, $end_date]);
+        }
+
+        $data = $order->groupBy('orders.user_id');
 
         return $data;
     }
@@ -115,47 +115,51 @@ class OrderRepository implements OrderInterface
             ->where('orders.id', $id)
             ->first();
 
-
         return [$order];
     }
 
-    public function show_petugas($id)
+    public function show_petugas($id, $request)
     {
-        $order = Order::select(
-            'orders.*',
-            'uid.name AS uid_name',
-            'up3.name AS up3_name',
-            'ulp.name AS ulp_name',
-            'user.name AS officer_name',
-            'user.rbm_code AS rbm_code'
-        )
-            ->join('uids AS uid', 'orders.uid_id', 'uid.id')
-            ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
-            ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
-            ->join('customers AS customer', 'orders.customer_id', 'customer.id')
-            ->join('users AS user', 'orders.user_id', 'user.id')
-            ->where('orders.id', $id)
+        $date = Carbon::createFromFormat('Y-m-d', $request->end_date)->startOfDay();
+        $end_date = Carbon::parse($date->addDays(1))->toDateString();
+
+        $user = User::select('name AS officer_name', 'rbm_code')
+            ->where('id', $id)
             ->first();
 
-            $list_order = Order::select(
-                'orders.*',
-                'uid.name AS uid_name',
-                'up3.name AS up3_name',
-                'ulp.name AS ulp_name',
-                'customer.name AS customer_name',
-                'customer.address AS customer_address',
-                'user.name AS officer_name',
-                'user.rbm_code AS rbm_code'
-            )
-                ->join('uids AS uid', 'orders.uid_id', 'uid.id')
-                ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
-                ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
-                ->join('customers AS customer', 'orders.customer_id', 'customer.id')
-                ->join('users AS user', 'orders.user_id', 'user.id')
-                ->where('orders.user_id', $order->user_id)->get();
+        $orders = Order::select(
+            'orders.customer_id',
+            'customer.name AS customer_name',
+            'orders.tarif',
+            'orders.power',
+            'orders.substation',
+            'orders.bill',
+            'orders.status',
+            'orders.billing_status',
+            'orders.latitude',
+            'orders.longitude',
+        )
+            ->join('customers AS customer', 'orders.customer_id', 'customer.id')
+            ->where('orders.user_id', $id);
 
+        if ($request->up3_id) {
+            $orders = $orders
+                ->where('orders.up3_id', $request->up3_id);
+        }
 
-        return [$order,$list_order];
+        if ($request->ulp_id) {
+            $orders = $orders
+                ->where('orders.ulp_id', $request->ulp_id);
+        }
+
+        if ($request->start_date && $request->end_date) {
+            $orders = $orders
+                ->whereBetween('orders.created_at', [$request->start_date, $end_date]);
+        }
+
+        $orders = $orders->get();
+
+        return [$user, $orders];
     }
 
     public function upload(Request $request)
@@ -216,7 +220,6 @@ class OrderRepository implements OrderInterface
                     $substation = $v[8];
                     $address = $v[9];
                     $bill = $v[10];
-
 
                     $up3 = Up3::select('id')->where('id', $id_up3);
                     if ($up3->count() == 0) {
@@ -301,7 +304,7 @@ class OrderRepository implements OrderInterface
             }
 
             DB::commit();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             DB::rollBack();
             throw $th;
         }
