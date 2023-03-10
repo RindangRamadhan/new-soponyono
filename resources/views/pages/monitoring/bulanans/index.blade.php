@@ -20,6 +20,7 @@
   .DTFC_Cloned tbody {
     background: white;
   }
+
 </style>
 @endsection
 
@@ -106,7 +107,7 @@
 
     
     const params = {
-      "url": "{{ url('/monitoring/harians') }}",
+      "url": "{{ url('/monitoring') }}",
       "columns": [
         { "data": "id", "visible": false },
         { "data": "up3__name" },

@@ -2,14 +2,13 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\MonitoringLocationController;
 use App\Http\Controllers\MonitoringHarianController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UidController;
 use App\Http\Controllers\UlpController;
 use App\Http\Controllers\Up3Controller;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\OrderController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
@@ -56,7 +55,6 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::resource('/up3s', Up3Controller::class);
         Route::resource('/ulps', UlpController::class);
         Route::resource('/customers', CustomerController::class);
-        
 
         Route::get('/customers/{id}/detail', [CustomerController::class, 'show']);
 
@@ -81,17 +79,15 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::resource('/orders', OrderController::class);
     Route::post('/orders/list', [OrderController::class, 'list']);
     Route::get('/orders/{id}/detail', [OrderController::class, 'show']);
-    
+
     // Monitoring
     Route::prefix('/monitoring')->group(function () {
-        Route::resource('/locations', MonitoringLocationController::class);
-        Route::resource('/harians', MonitoringHarianController::class);
-        Route::post('/harians/list', [MonitoringHarianController::class, 'list']);
-        Route::get('/harians/{id}/detail', [MonitoringHarianController::class, 'show']);
-        Route::get('/harians/{id}/location', [MonitoringHarianController::class, 'location']);
-        
-    });
+        Route::resource('', MonitoringHarianController::class);
+        Route::post('/list', [MonitoringHarianController::class, 'list']);
+        Route::get('/{id}/detail', [MonitoringHarianController::class, 'show']);
+        Route::get('/{id}/location', [MonitoringHarianController::class, 'location']);
 
+    });
 
     // Profile
     Route::prefix('/users')->group(function () {

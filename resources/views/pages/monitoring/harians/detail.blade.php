@@ -1,6 +1,6 @@
 @extends('layouts.app')
 {{-- title --}}
-@section('title','Petugas')
+@section('title','Monitoring Detail')
 {{-- vendor scripts --}}
 @section('vendor-styles')
 <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/tables/datatable/datatables.min.css')}}">

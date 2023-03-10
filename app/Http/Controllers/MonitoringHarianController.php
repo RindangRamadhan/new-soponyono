@@ -51,7 +51,6 @@ class MonitoringHarianController extends Controller
         $breadcrumbs = [
             ["link" => "/", "name" => "Home"],
             ["link" => "#", "name" => "Monitoring"],
-            ["link" => "#", "name" => "Harian"],
         ];
 
         return view('pages.monitoring.harians.index')->with(
@@ -68,7 +67,7 @@ class MonitoringHarianController extends Controller
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
             $request,
             $resources,
-            "/monitoring/harians",
+            "/monitoring",
             "Harian",
             [],
             ['detail', 'delete', 'edit'],
@@ -105,10 +104,6 @@ class MonitoringHarianController extends Controller
             [
                 "link" => "#",
                 "name" => "Monitoring",
-            ],
-            [
-                "link" => "/monitoring/harians",
-                "name" => "Harian",
             ],
             [
                 "name" => "Detail",
@@ -150,11 +145,7 @@ class MonitoringHarianController extends Controller
                 "name" => "Monitoring",
             ],
             [
-                "link" => "/monitoring/harians",
-                "name" => "Harian",
-            ],
-            [
-                "name" => "Location",
+                "name" => "Lokasi",
             ],
         ];
 

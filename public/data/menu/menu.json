@@ -59,13 +59,6 @@
       "role": "Order-Order Lihat"
     },
     {
-      "url": "monitoring/locations",
-      "name": "Lokasi",
-      "i18n": "Lokasi",
-      "icon": "location-alt",
-      "role": "Lokasi-Lokasi Lihat"
-    },
-    {
       "url": "master-data/roles",
       "name": "Hak Akses",
       "i18n": "Hak Akses",
@@ -73,21 +66,28 @@
       "role": "Hak Akses-Hak Akses Lihat"
     },
     {
-      "url": "#",
+      "url": "monitoring",
       "name": "Monitoring",
       "i18n": "Monitoring",
-      "icon": "search",
-      "role": "Monitoring",
+      "icon": "map",
+      "role": null
+    },
+    {
+      "url": "#",
+      "name": "Laporan",
+      "i18n": "Laporan",
+      "icon": "desktop",
+      "role": null,
       "submenu": [
         {
-          "url": "monitoring/harians",
+          "url": "report/daily",
           "name": "Harian",
           "i18n": "Harian",
           "icon": "bx bx-radio-circle",
           "role": null
         },
         {
-          "url": "monitoring/bulanans",
+          "url": "report/monthly",
           "name": "Bulanan",
           "i18n": "Bulanan",
           "icon": "bx bx-radio-circle",

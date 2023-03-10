@@ -1,6 +1,6 @@
 @extends('layouts.app')
 {{-- page title --}}
-@section('title','Detail Map')
+@section('title','Monitoring Lokasi')
 
 {{-- vendor styles --}}
 @section('vendor-styles')

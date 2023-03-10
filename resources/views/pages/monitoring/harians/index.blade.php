@@ -185,7 +185,7 @@
     }
     
     const params = {
-      "url": "{{ url('/monitoring/harians') }}",
+      "url": "{{ url('/monitoring') }}",
       "columns": [
         { "data": "orders__id", "visible": false },
         { "data": "up3__name" },
@@ -196,12 +196,12 @@
           "data": "action", "searchable": false, "orderable": false,
           "render": function (data, type, row) {
             const detail = `
-              <a href="{{ url('/monitoring/harians/${row.user_id}/detail?${qFilter}') }}" class='btn btn-icon rounded-circle btn-info'>
+              <a href="{{ url('/monitoring/${row.user_id}/detail?${qFilter}') }}" class='btn btn-icon rounded-circle btn-info'>
                 <i class='bx bx-list-ul'></i>
               </a>
             `
             const location = `
-              <a href="{{ url('/monitoring/harians/${row.user_id}/location?${qFilter}') }}" class='btn btn-icon rounded-circle btn-success'>
+              <a href="{{ url('/monitoring/${row.user_id}/location?${qFilter}') }}" class='btn btn-icon rounded-circle btn-success'>
                 <i class='bx bx-map'></i>
               </a>
             `
