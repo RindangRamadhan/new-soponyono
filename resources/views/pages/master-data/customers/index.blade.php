@@ -85,12 +85,12 @@
     const params = {
       "url": "{{ url('/master-data/customers') }}",
       "columns": [
-        { "data": "id" },
+        { "data": "customers__id" },
         { "data": "up3__name" },
         { "data": "ulp__name" },
-        { "data": "name" },
+        { "data": "customers__name" },
         { "data": "phone_number" },
-        { "data": "substation" },
+        { "data": "customers__substation" },
         { "data": "action", "searchable": false, "orderable": false }
       ]
     }

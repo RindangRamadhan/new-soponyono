@@ -84,12 +84,12 @@
     const params = {
       "url": "{{ url('/master-data/uids') }}",
       "columns": [
-        { "data": "id" },
-        { "data": "name" },
+        { "data": "uids__id" },
+        { "data": "uids__name" },
         { "data": "phone_number" },
-        { "data": "address" },
-        { "data": "latitude" },
-        { "data": "longitude" },
+        { "data": "uids__address" },
+        { "data": "uids__latitude" },
+        { "data": "uids__longitude" },
         { "data": "action", "searchable": false, "orderable": false }
       ]
     }

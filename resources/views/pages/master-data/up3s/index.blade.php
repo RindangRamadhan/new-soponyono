@@ -81,11 +81,11 @@
     const params = {
       "url": "{{ url('/master-data/up3s') }}",
       "columns": [
-        { "data": "id" },
+        { "data": "up3s__id" },
         { "data": "uid__name" },
-        { "data": "name" },
-        { "data": "latitude" },
-        { "data": "longitude" },
+        { "data": "up3s__name" },
+        { "data": "up3s__latitude" },
+        { "data": "up3s__longitude" },
         { "data": "action", "searchable": false, "orderable": false }
       ]
     }

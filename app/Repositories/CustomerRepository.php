@@ -15,7 +15,7 @@ class CustomerRepository implements CustomerInterface
         $rowuser = Auth::user();
         $tipe = $rowuser->type;
 
-        $customer = Customer::select('customers.id', 'customers.name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.substation')
+        $customer = Customer::select('customers.id','customers.id AS customers__id', 'customers.name','customers.name AS customers__name',  'up3.name AS up3__name', 'ulp.name AS ulp__name', 'customers.phone_number',  'customers.substation AS customers__substation')
             ->join('up3s AS up3', 'customers.up3_id', 'up3.id')
             ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
             ->join('ulps AS ulp', 'customers.ulp_id', 'ulp.id');

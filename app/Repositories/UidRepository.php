@@ -13,11 +13,11 @@ class UidRepository implements UidInterface
     {
         $rowuser = Auth::user();
         $tipe = $rowuser->type;
-        
+        $uid = Uid::select('uids.id','uids.id AS uids__id', 'uids.name', 'uids.name As uids__name', 'uids.phone_number', 'uids.address AS uids__address', 'uids.latitude AS uids__latitude', 'uids.longitude AS uids__longitude');
         if ($tipe == 'ALL') {
-            $data = Uid::select('id', 'name', 'phone_number', 'address', 'latitude', 'longitude');
+            $data = $uid;
         } else {
-            $data = Uid::select('id', 'name', 'phone_number', 'address', 'latitude', 'longitude')->where([
+            $data = $uid->where([
                 ['id', $rowuser->uid_id]
             ]);
         }

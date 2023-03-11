@@ -14,7 +14,7 @@ class UlpRepository implements UlpInterface
     {
         $rowuser = Auth::user();
         $tipe = $rowuser->type;
-        $ulp = Ulp::select('ulps.id', 'ulps.name',  'up3.name AS up3__name', 'ulps.latitude', 'ulps.longitude')->join('up3s AS up3', 'ulps.up3_id', 'up3.id')->join('uids as uid', 'uid.id', '=', 'up3.uid_id');
+        $ulp = Ulp::select('ulps.id','ulps.id AS ulps__id', 'ulps.name', 'ulps.name AS ulps__name',  'up3.name AS up3__name', 'ulps.latitude AS ulps__latitude', 'ulps.longitude AS ulps__longitude')->join('up3s AS up3', 'ulps.up3_id', 'up3.id')->join('uids as uid', 'uid.id', '=', 'up3.uid_id');
 
         switch ($tipe) {
             case 'ALL':

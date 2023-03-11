@@ -203,13 +203,13 @@
     const params = {
       "url": "{{ url('/orders') }}",
       "columns": [
-        { "data": "id", "visible": false },
+        { "data": "orders__id", "visible": false },
         { "data": "up3__name" },
         { "data": "ulp__name" },
-        { "data": "officer_name" },
-        { "data": "customer_name" },
-        { "data": "bill" },
-        { "data": "status" },
+        { "data": "user__name" },
+        { "data": "customer__name" },
+        { "data": "orders__bill" },
+        { "data": "orders__status" },
         { "data": "action", "searchable": false, "orderable": false }
       ]
     }
