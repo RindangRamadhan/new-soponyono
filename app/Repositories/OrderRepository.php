@@ -24,16 +24,13 @@ class OrderRepository implements OrderInterface
         $rowuser = Auth::user();
         $tipe = $rowuser->type;
 
-        $order = Order::select('orders.id','orders.id As orders__id', 'orders.status AS orders__status',  'orders.bill AS orders__bill', 'customer.name as customer__name', 'user.name as user__name', 'up3.name AS up3__name', 'ulp.name AS ulp__name')
+        $order = Order::select('orders.id', 'orders.id As orders__id', 'orders.status AS orders__status', 'orders.bill AS orders__bill', 'customer.name as customer__name', 'user.name as user__name', 'up3.name AS up3__name', 'ulp.name AS ulp__name')
             ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
             ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
             ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
             ->join('customers AS customer', 'orders.customer_id', 'customer.id')
-            ->join('users AS user', 'orders.user_id', 'user.id')->where('orders.status', 'Open')
-            ->where([
-                ['orders.created_by', $rowuser->id],
-                ['orders.status', 'Open'],
-            ]);
+            ->join('users AS user', 'orders.user_id', 'user.id')
+            ->where('orders.created_by', $rowuser->id);
 
         if ($tipe == 'UP3') {
             $data = $order->where([
