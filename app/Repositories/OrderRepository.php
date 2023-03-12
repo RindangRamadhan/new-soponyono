@@ -84,7 +84,7 @@ class OrderRepository implements OrderInterface
 
         if ($request->start_date && $request->end_date) {
             $order = $order
-                ->whereBetween('orders.created_at', [$request->start_date, $end_date]);
+                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
         }
 
         $data = $order->groupBy('orders.user_id');
@@ -137,7 +137,8 @@ class OrderRepository implements OrderInterface
             'orders.longitude',
         )
             ->join('customers AS customer', 'orders.customer_id', 'customer.id')
-            ->where('orders.user_id', $id);
+            ->where('orders.user_id', $id)
+            ->where('orders.billing_status', 'Paid');
 
         if ($request->up3_id) {
             $orders = $orders
@@ -151,7 +152,7 @@ class OrderRepository implements OrderInterface
 
         if ($request->start_date && $request->end_date) {
             $orders = $orders
-                ->whereBetween('orders.created_at', [$request->start_date, $end_date]);
+                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
         }
 
         $orders = $orders->get();

@@ -28,7 +28,7 @@ class AuthController extends Controller
             [
                 'user' => [
                     "name" => $user->name,
-                    "photo" => $user->photo,
+                    "photo" => ($user->photo != "") ? "https://pratulonline.com/images/upload/$user->photo" : null,
                 ],
                 '_token' => $user->createToken("API TOKEN")->plainTextToken,
             ],

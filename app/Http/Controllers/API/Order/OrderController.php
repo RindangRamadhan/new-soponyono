@@ -32,9 +32,12 @@ class OrderController extends Controller
             )
                 ->join('customers AS customer', 'orders.customer_id', 'customer.id')
                 ->where('orders.user_id', $user->id)
-                ->where('orders.status', 'Open')
                 ->whereMonth('orders.created_at', date('m'))
                 ->get();
+
+            foreach ($data as &$v) {
+                $v["bill"] = "Rp. " . number_format($v["bill"], 2, ',', '.');
+            }
 
             Order::where('user_id', $user->id)
                 ->where('status', 'Open')
