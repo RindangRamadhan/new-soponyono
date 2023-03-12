@@ -26,6 +26,10 @@ class AuthController extends Controller
         return Helper::ResponseWriter(
             'Log in successfull',
             [
+                'user' => [
+                    "name" => $user->name,
+                    "photo" => $user->photo,
+                ],
                 '_token' => $user->createToken("API TOKEN")->plainTextToken,
             ],
         );
