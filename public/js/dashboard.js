@@ -64,9 +64,9 @@
       ]
     }
 
-    const status_orders = JSON.parse($("#status_orders").val());
-    if (status_orders) {
-      options.series = [status_orders.total_paid, status_orders.total_debt, status_orders.total_not_executed]
+    if (params.status_orders.length > 0) {
+      const v = params.status_orders[0]
+      options.series = [parseInt(v.total_paid, 10), parseInt(v.total_debt, 10), parseInt(v.total_not_executed, 10)]
     }
 
     orderStatusChart.updateOptions(options);

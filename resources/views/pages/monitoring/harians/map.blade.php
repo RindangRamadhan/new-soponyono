@@ -96,7 +96,7 @@
     .addTo(map)
 
   L.Routing.control({
-    waypoints: data.map(el => L.latLng(el.latitude,el.longitude)),
+    waypoints: data.filter(el => el.latitude != null && el.longitude != null).data.map(el => L.latLng(el.latitude,el.longitude)),
     createMarker: (i, wp, n) => L.marker(wp.latLng).bindPopup(`Pelanggan ${data[i].customer_name}`)
   }).addTo(map);
 </script>

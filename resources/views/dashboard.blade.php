@@ -391,7 +391,7 @@
         $("#total_promise").text(number(resp.total_promise))
         $("#total_not_executed").text(number(resp.total_not_executed))
 
-        updateSummaryChart(resp.summary)
+        updateSummaryChart(resp)
       },
       error: function(xhr) {}
     });
