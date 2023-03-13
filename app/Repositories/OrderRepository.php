@@ -72,20 +72,17 @@ class OrderRepository implements OrderInterface
             ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
             ->join('users AS u', 'orders.user_id', 'u.id');
 
-        if ($request->up3_id) {
-            $order = $order
-                ->where('orders.up3_id', $request->up3_id);
-        }
-
-        if ($request->ulp_id) {
-            $order = $order
-                ->where('orders.ulp_id', $request->ulp_id);
-        }
-
-        if ($request->start_date && $request->end_date) {
-            $order = $order
-                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
-        }
+            if ($request->up3_id && ! $request->ulp_id) {
+                $order = $order
+                    ->where('orders.up3_id', $request->up3_id)
+                    ->whereBetween('orders.created_at', [$request->start_date, $end_date]);
+            }else if ($request->ulp_id) {
+                $order = $order
+                    ->where('orders.ulp_id', $request->ulp_id)
+                    ->whereBetween('orders.created_at', [$request->start_date, $end_date]);
+            }else{
+                $order = $order->where('orders.ulp_id', 00);
+            }
 
         $data = $order->groupBy('orders.user_id');
 
