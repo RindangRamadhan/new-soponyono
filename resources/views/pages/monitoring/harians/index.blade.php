@@ -116,8 +116,6 @@
         format: 'YYYY-MM-DD'
       }
     });
-
-    GetOrder()
   })
 
   $(document).on('click', '#btnSearch', function (e) {
@@ -166,6 +164,10 @@
     const end_date = date_range[1];
     const up3_id = $("#up3_id").val();
     const ulp_id = $("#ulp_id").val();
+
+    if (up3_id == "" && ulp_id == "") {
+      return
+    }
 
     let qFilter = "";
     if (start_date != "") {
