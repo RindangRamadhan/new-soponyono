@@ -94,7 +94,6 @@ class Helper
             if (gettype($data[$key]) === gettype($dataDefault[$key])) {
                 if (is_string($data[$key])) {
                     if (is_array($value)) {
-
                         $result = array_search($data[$key], $value);
                         if (empty($result)) {
                             $data[$key] = $dataDefault[$key];
@@ -281,9 +280,7 @@ class Helper
 
             // Set filter search global
             if ($column['searchable'] == "true") {
-
                 if ($fullTextSerch == '1') {
-
                     $cekKata = explode('+', $request->input('search.value'));
                     $cariQ = count($cekKata) >= $limitCek ? '\'\"' . $request->input('search.value') . '\"\'' : '\'' . $request->input('search.value') . '\'';
                     /*bug fix kalo tidak ada pencarin kata*/
@@ -382,6 +379,7 @@ class Helper
             : "";
 
             $buttonDetail = "<a href=" . url("$url/$id/detail") . " class='btn btn-icon rounded-circle btn-info'><i class='bx bx-list-ul'></i></a>";
+            $buttonPrint = "<a href=" . url("$url/cetak/$id") . " class='btn btn-icon rounded-circle btn-info'><i class='bx bx-printer'></i></a>";
 
             $buttonLocation = "<a href=" . url("$url/$id/location") . " class='btn btn-icon rounded-circle btn-success'><i class='bx bx-map'></i></a>";
 
@@ -398,7 +396,6 @@ class Helper
             $record->action = "";
             if (count($customeButton) > 0) {
                 foreach ($customeButton as $v) {
-
                     switch ($v) {
                         case 'download':
                             $record->action .= "$buttonDownload ";
@@ -409,6 +406,9 @@ class Helper
                         case 'detail':
                             $record->action .= "$buttonDetail ";
                             break;
+                            case 'print':
+                                $record->action .= "$buttonPrint ";
+                                break;
                         case 'location':
                             $record->action .= "$buttonLocation ";
                             break;
@@ -423,7 +423,6 @@ class Helper
 
             if (count($takeoutButton) > 0) {
                 foreach ($takeoutButton as $v) {
-
                     switch ($v) {
                         case 'edit':
                             $record->action = str_replace($buttonEdit, "", $record->action);
@@ -528,14 +527,14 @@ class Helper
                     "text" => "ULP",
                 ],
             ];
-        } else if ($tipe == 'ULP') {
+        } elseif ($tipe == 'ULP') {
             return [
                 [
                     "id" => "ULP",
                     "text" => "ULP",
                 ],
             ];
-        } else if ($tipe == 'ALL') {
+        } elseif ($tipe == 'ALL') {
             return [
                 [
                     "id" => "ALL",
@@ -599,4 +598,42 @@ class Helper
             $code
         );
     }
+
+    public static function FormatDateIndo($timestamp = '', $date_format = 'l, j F Y | H:i', $suffix = '')
+    {
+        if (trim($timestamp) == '') {
+            $timestamp = time();
+        } elseif (!ctype_digit($timestamp)) {
+            $timestamp = strtotime($timestamp);
+        }
+        # remove S (st,nd,rd,th) there are no such things in indonesia :p
+        $date_format = preg_replace("/S/", "", $date_format);
+        $pattern = array(
+            '/Mon[^day]/','/Tue[^sday]/','/Wed[^nesday]/','/Thu[^rsday]/',
+
+            '/Fri[^day]/','/Sat[^urday]/','/Sun[^day]/','/Monday/','/Tuesday/',
+            '/Wednesday/','/Thursday/','/Friday/','/Saturday/','/Sunday/',
+            '/Jan[^uary]/','/Feb[^ruary]/','/Mar[^ch]/','/Apr[^il]/','/May/',
+            '/Jun[^e]/','/Jul[^y]/','/Aug[^ust]/','/Sep[^tember]/','/Oct[^ober]/',
+            '/Nov[^ember]/','/Dec[^ember]/','/January/','/February/','/March/',
+            '/April/','/June/','/July/','/August/','/September/','/October/',
+            '/November/','/December/',
+        );
+
+        $replace = array( 'Sen','Sel','Rab','Kam','Jum','Sab','Min',
+            'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu',
+            'Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des',
+            'Januari','Februari','Maret','April','Juni','Juli','Agustus','September',
+            'Oktober','November','Desember',
+        );
+
+        $date = date($date_format, $timestamp);
+        $date = preg_replace($pattern, $replace, $date);
+        $date = "{$date} {$suffix}";
+        return $date;
+    }
 }
+
+
+ 
+

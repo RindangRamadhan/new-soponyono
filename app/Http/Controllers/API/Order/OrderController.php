@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Order;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderUploadLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,8 +28,17 @@ class OrderController extends Controller
 
         try {
             $data = Order::select(
-                'orders.id', 'orders.customer_id', 'customer.name as customer_name', 'customer.address as customer_address',
-                'orders.tarif', 'orders.power', 'orders.class', 'orders.substation', 'orders.bill', 'orders.billing_status', 'orders.status'
+                'orders.id',
+                'orders.customer_id',
+                'customer.name as customer_name',
+                'customer.address as customer_address',
+                'orders.tarif',
+                'orders.power',
+                'orders.class',
+                'orders.substation',
+                'orders.bill',
+                'orders.billing_status',
+                'orders.status'
             )
                 ->join('customers AS customer', 'orders.customer_id', 'customer.id')
                 ->where('orders.user_id', $user->id)
@@ -46,8 +56,15 @@ class OrderController extends Controller
                     'status' => 'On Progress',
                 ]);
 
+                //delete log order
+            $row_order = Order::select('uuid')
+                ->where('user_id', $user->id)
+                ->first();
+            OrderUploadLog::where('uuid', $row_order->uuid)
+                ->delete();
+
             DB::commit();
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
@@ -125,7 +142,7 @@ class OrderController extends Controller
             ];
 
             return Helper::ResponseWriter("Successfully upload order", $data, 201);
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             throw $th;
         }
     }

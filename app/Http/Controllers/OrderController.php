@@ -43,9 +43,9 @@ class OrderController extends Controller
             ["link" => "#", "name" => "Order"],
         ];
         $id = Auth::user()->id;
-        $logs = OrderUploadLog::select('uuid','created_at', )
-        ->where('created_by', $id)
-        ->get();
+        $logs = OrderUploadLog::select('uuid', 'created_at',)
+            ->where('created_by', $id)
+            ->get();
         return view('pages.orders.index')->with(
             compact([
                 'pageConfigs',
@@ -58,14 +58,14 @@ class OrderController extends Controller
     function list(Request $request)
     {
         $resources = $this->orderRepo->list();
-
+        
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
             $request,
             $resources,
             "/orders",
             "Order",
             ['detail'],
-            ['delete','edit'],
+            ['delete', 'edit'],
         );
 
         $result = [
@@ -85,7 +85,7 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function show($id)
+    public function show($id)
     {
         $pageConfigs = [
             'pageHeader' => true,
@@ -104,7 +104,7 @@ class OrderController extends Controller
                 "link" => "/",
                 "name" => "Home",
             ],
-            
+
             [
                 "link" => "orders",
                 "name" => "Order",
@@ -138,6 +138,12 @@ class OrderController extends Controller
         Order::find($id)->delete();
         return response()->json(['status' => 200]);
     }
+    public function delete_logs($uuid)
+    {
+        Order::where('uuid',$uuid)->delete(); 
+        OrderUploadLog::where('uuid',$uuid)->delete(); 
+        return response()->json(['status' => 200]);
+    }
 
     public function download()
     {
@@ -154,5 +160,4 @@ class OrderController extends Controller
         $filename = "Daftar order gagal upload.xlsx";
         return Excel::download(new OrderUploadFailedExport(), $filename);
     }
-
 }

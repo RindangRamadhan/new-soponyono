@@ -173,7 +173,7 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-5">
+    <div class="col-sm-6">
       <div class="card">
         <div class="card-content">
           <div class="card-body card-dashboard">
@@ -186,7 +186,7 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-7">
+    <div class="col-sm-6">
       <div class="card">
         <div class="card-content">
           <div class="card-body card-dashboard" style="padding-bottom: 0.7rem;">
@@ -196,12 +196,14 @@
 
               <ul class="nav nav-pills ml-2">
                 <li class="nav-item">
-                  <a class="nav-link active" id="home-tab" data-toggle="pill" href="#home" aria-expanded="true" style="border-radius: 100px">
+                  <a class="nav-link active" id="home-tab" data-toggle="pill" href="#home" aria-expanded="true"
+                    style="border-radius: 100px">
                     Tertinggi 3 Bulan Terakhir
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="profile-tab" data-toggle="pill" href="#profile" aria-expanded="false" style="border-radius: 100px">
+                  <a class="nav-link" id="profile-tab" data-toggle="pill" href="#profile" aria-expanded="false"
+                    style="border-radius: 100px">
                     Terendah 3 Bulan Terakhir
                   </a>
                 </li>
@@ -331,6 +333,13 @@
     }
 
     if (params.month != "" && params.year != "") {
+      
+      let lastDay1 = new Date(params.year, params.month, 0);
+      let lastDay =lastDay1.getFullYear() +'-'+(lastDay1.getMonth()+1) +'-'+ lastDay1.getDate()+' 23:59:59'
+      lastDay1.setMonth(lastDay1.getMonth() - 3)
+      let firstDay =lastDay1.getFullYear() +'-'+(lastDay1.getMonth()+1) +'-'+ lastDay1.getDate()+' 00:00:01'
+      params.last_month=lastDay
+      params.first_month=firstDay
       filterDashboard(params);
     }
   })

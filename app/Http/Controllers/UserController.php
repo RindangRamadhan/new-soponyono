@@ -243,6 +243,17 @@ class UserController extends Controller
         return redirect('/master-data/users')->with(['status' => 200]);
     }
 
+    public function listSelect(Request $request)
+    {
+
+        $data = User::select('id', 'name AS text')
+                ->where('ulp_id', $request->ulp_id)
+                ->where('type', 'ULP')
+                ->get();
+
+        return response()->json($data);
+    }
+
     public function reset_password($id)
     {
         $this->userRepo->reset_password($id);

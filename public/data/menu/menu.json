@@ -92,6 +92,20 @@
           "i18n": "Bulanan",
           "icon": "bx bx-radio-circle",
           "role": null
+        },
+        {
+          "url": "report/detail",
+          "name": "Detail",
+          "i18n": "Detail",
+          "icon": "bx bx-radio-circle",
+          "role": null
+        },
+        {
+          "url": "report/print",
+          "name": "Cetak",
+          "i18n": "Cetak",
+          "icon": "bx bx-radio-circle",
+          "role": null
         }
       ]
     }

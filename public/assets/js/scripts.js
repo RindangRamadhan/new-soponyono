@@ -4,7 +4,7 @@
     // DataTable Server Side
     dataTableServerSide = (params) => {
         "use strict";
-        $('.table-ssr').DataTable().destroy();
+        $(".table-ssr").DataTable().destroy();
 
         switch (true) {
             case !params.url:
@@ -201,7 +201,7 @@
 
     confirmDeleteLogs = (params) => {
         "use strict";
-        let uuid =params.id;
+        let uuid = params.id;
 
         Swal.fire({
             title: "Konfirmasi",
@@ -366,6 +366,107 @@
         }, []);
     };
 
+    createTanggalIndo = (value) => {
+        let today = "";
+        if (value) {
+            today = new Date(value);
+        } else {
+            today = new Date();
+        }
+        var year = today.getFullYear();
+        var day = today.getDay();
+        var month = today.getMonth();
+        var date = today.getDate();
+        today.setHours(today.getHours() - 7);
+        var hour = today.getHours();
+        var minute = today.getMinutes();
+
+        var first2 = new Array(
+            "Minggu",
+            "Senin",
+            "Selasa",
+            "Rabu",
+            "Kamis",
+            "Jumat",
+            "Sabtu"
+        );
+        var second2 = new Array(
+            "Januari",
+            "Februari",
+            "Maret",
+            "April",
+            "Mei",
+            "Juni",
+            "Juli",
+            "Agustus",
+            "September",
+            "Oktober",
+            "November",
+            "Desember"
+        );
+
+        if (date < 10) date = "0" + date;
+
+        var tanggalIndonesia =
+            first2[day] +
+            ", " +
+            date +
+            " " +
+            second2[month] +
+            " " +
+            year +
+            " " +
+            hour +
+            ":" +
+            minute;
+
+        return tanggalIndonesia;
+    };
+
+    formatTanggalIndonesia = (value) => {
+        let today = "";
+        if (value) {
+            today = new Date(value);
+        } else {
+            today = new Date();
+        }
+        var year = today.getFullYear();
+        var day = today.getDay();
+        var month = today.getMonth();
+        var date = today.getDate();
+
+        var first2 = new Array(
+            "Minggu",
+            "Senin",
+            "Selasa",
+            "Rabu",
+            "Kamis",
+            "Jumat",
+            "Sabtu"
+        );
+        var second2 = new Array(
+            "Januari",
+            "Februari",
+            "Maret",
+            "April",
+            "Mei",
+            "Juni",
+            "Juli",
+            "Agustus",
+            "September",
+            "Oktober",
+            "November",
+            "Desember"
+        );
+
+        if (date < 10) date = "0" + date;
+
+        var tanggalIndonesia =
+            first2[day] + ", " + date + " " + second2[month] + " " + year;
+
+        return tanggalIndonesia;
+    };
+
     setInputFilter = (textbox, inputFilter, errMsg) => {
         [
             "input",
@@ -430,24 +531,24 @@
                 `https://icongr.am/fontawesome/${icon}.svg?size=16&color=696969`
             );
     });
-    
-    currency = (number)=>{
-      return new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR"
-      }).format(number);
-    }
-    
-    number = (nStr)=> {
-      nStr += '';
-      var x = nStr.split('.');
-      var x1 = x[0];
-      var x2 = x.length > 1 ? '.' + x[1] : '';
-      var rgx = /(\d+)(\d{3})/;
-      while (rgx.test(x1)) {
-          x1 = x1.replace(rgx, '$1' + ',' + '$2');
-      }
-  
-      return x1 + x2;
-    }
+
+    currency = (number) => {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+        }).format(number);
+    };
+
+    number = (nStr) => {
+        nStr += "";
+        var x = nStr.split(".");
+        var x1 = x[0];
+        var x2 = x.length > 1 ? "." + x[1] : "";
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, "$1" + "," + "$2");
+        }
+
+        return x1 + x2;
+    };
 })(jQuery);

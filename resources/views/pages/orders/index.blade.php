@@ -223,7 +223,7 @@
     var uuid=$('[name="uuid"]');
     if(uuid.val()){
       const params = {
-      "url": "{{ url('/orders/') }}",
+      "url": "{{ url('/orders/delete-logs/') }}",
       "id": uuid.val(),
       "tr": $(this).parent("td").parent('tr')
     }

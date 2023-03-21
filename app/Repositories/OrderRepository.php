@@ -20,7 +20,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class OrderRepository implements OrderInterface
 {
-    function list() {
+    function list()
+    {
         $rowuser = Auth::user();
         $tipe = $rowuser->type;
 
@@ -72,24 +73,152 @@ class OrderRepository implements OrderInterface
             ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
             ->join('users AS u', 'orders.user_id', 'u.id');
 
-        if ($request->up3_id) {
-            $order = $order
-                ->where('orders.up3_id', $request->up3_id);
-        }
-
-        if ($request->ulp_id) {
-            $order = $order
-                ->where('orders.ulp_id', $request->ulp_id);
-        }
-
-        if ($request->start_date && $request->end_date) {
-            $order = $order
+        if ($request->up3_id && !$request->ulp_id) {
+            $data = $order
+                ->where('orders.up3_id', $request->up3_id)
                 ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
+        } else if (!$request->up3_id && $request->ulp_id) {
+            $data = $order
+                ->where('orders.ulp_id', $request->ulp_id)
+                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
+        } elseif (!$request->up3_id && !$request->ulp_id) {
+            $data = $order
+                ->where('orders.ulp_id', 00);
         }
 
         $data = $order->groupBy('orders.user_id');
 
         return $data;
+    }
+
+    public function list_detail($request)
+    {
+        $date = Carbon::createFromFormat('Y-m-d', $request->end_date)->startOfDay();
+        $end_date = Carbon::parse($date->addDays(1))->toDateString();
+
+        $order = Order::select(
+            'orders.id',
+            'orders.id AS orders__id',
+            'orders.user_id',
+            'orders.bill',
+            'customer.name as customer__name',
+            'u.name as u__name',
+            'ulp.name AS ulp__name',
+            DB::raw('(CASE WHEN orders.billing_status =  "Paid"  THEN "LUNAS"
+            WHEN orders.billing_status =  "Debt"  THEN "JANJI" 
+            ELSE "TIDAK DIEKSEKUSI" END) AS billing_status'),
+            DB::raw('DATE_FORMAT(orders.updated_at,"%d/%m/%Y %h:%i:%s") as updated__in')
+        )
+            ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
+            ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
+            ->join('customers AS customer', 'orders.customer_id', 'customer.id')
+            ->join('users AS u', 'orders.user_id', 'u.id');
+
+        if ($request->up3_id && !$request->ulp_id) {
+            $data = $order
+                ->where('orders.up3_id', $request->up3_id)
+                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
+        } else if (!$request->up3_id && $request->ulp_id) {
+            $data = $order
+                ->where('orders.ulp_id', $request->ulp_id)
+                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
+        } elseif (!$request->up3_id && !$request->ulp_id) {
+            $data = $order
+                ->where('orders.ulp_id', 00);
+        }
+        $data = $order->where('orders.status', 'Done');
+        return $data;
+    }
+
+    public function list_monthly($request)
+    {
+        $uid_id = Auth::user()->uid_id;
+        $month = $request->month;
+        $year = $request->year;
+        $args = [$month, $year];
+
+        $query = "
+          WITH vtb_top_officer AS (
+            SELECT
+              u.name,
+              COUNT( o.id
+              ) AS total_wo,
+              COUNT(
+                CASE WHEN o.billing_status = 'Paid' THEN 1 ELSE NULL END
+              ) AS total_paid,
+              COUNT(
+                CASE WHEN o.billing_status = 'Debt' THEN 1 ELSE NULL END
+              ) AS total_debt,
+              COUNT(
+                CASE WHEN o.billing_status = 'Debt' OR  o.billing_status = 'Paid' THEN 1 ELSE NULL END
+              ) AS total_realisasi
+            FROM orders o
+              JOIN users u
+                ON o.user_id = u.id
+            WHERE MONTH(o.updated_at) = ? AND YEAR(o.updated_at) = ?
+        ";
+
+        if ($request->up3_id) {
+            $query .= "
+                    AND o.up3_id = ?
+                  ";
+
+            $args[] = $request->up3_id;
+        }
+
+        if ($request->ulp_id) {
+            $query .= "
+                    AND o.ulp_id = ?
+                  ";
+
+            $args[] = $request->ulp_id;
+        }
+        $query .= "
+                    AND o.uid_id = ?
+                  ";
+        $args[] = $uid_id;
+        $query .= "
+                  GROUP BY u.id
+                )
+              ";
+
+        $top_officers = DB::select("
+          $query
+          SELECT
+            *
+          FROM vtb_top_officer
+          ORDER BY total_realisasi DESC
+        ", $args);
+
+
+        return $top_officers;
+    }
+
+    public function list_print($request)
+    {
+
+        $order = Order::select(
+            'orders.id',
+            'orders.id AS orders__id',
+            'orders.user_id',
+            'orders.bill',
+            'orders.updated_at',
+            'orders.printout_status',
+            'orders.phone_number',
+            'customer.name as customer__name',
+            'u.name as u__name',
+            'ulp.name AS ulp__name',
+            DB::raw('DATE_FORMAT(orders.updated_at,"%d/%m/%Y %h:%i:%s") as updated__in')
+        )
+            ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
+            ->join('customers AS customer', 'orders.customer_id', 'customer.id')
+            ->join('users AS u', 'orders.user_id', 'u.id')
+            ->where('orders.user_id', $request->user_id)
+            ->where('orders.billing_status', 'Paid')
+            ->whereMonth('orders.updated_at', $request->month)
+            ->whereYear('orders.updated_at', $request->year);
+
+        return $order;
     }
 
     public function show($id)
@@ -102,7 +231,9 @@ class OrderRepository implements OrderInterface
             'customer.name AS customer_name',
             'customer.address AS customer_address',
             'user.name AS officer_name',
-            'user.rbm_code AS rbm_code'
+            'user.rbm_code AS rbm_code',
+            DB::raw('(CASE WHEN orders.billing_status =  "Paid"  THEN "LUNAS"
+            WHEN orders.billing_status =  "Debt"  THEN "JANJI" ELSE "TIDAK DIEKSEKUSI" END) AS billing_status')
         )
             ->join('uids AS uid', 'orders.uid_id', 'uid.id')
             ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
@@ -261,7 +392,7 @@ class OrderRepository implements OrderInterface
                     }
 
                     $rowuser = User::select('id')->where('rbm_code', $rbm_code)->first();
-                    if ($rowuser->count() == 0) {
+                    if (!$rowuser) {
                         $upload_failed['reason'] = "Kode RBM tidak ditemukan";
                         $upload_faileds[] = $upload_failed;
                         continue;
@@ -283,6 +414,7 @@ class OrderRepository implements OrderInterface
                         'photos' => '',
                         'status' => 'Open',
                         'billing_status' => 'Unpaid',
+                        'printout_status' => 'Belum',
                         'created_by' => $created_by,
                         'uuid' => $uuid,
                     ]);
@@ -302,7 +434,7 @@ class OrderRepository implements OrderInterface
             }
 
             DB::commit();
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
