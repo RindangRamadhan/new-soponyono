@@ -108,7 +108,12 @@ class DashboardController extends Controller
 
       $args[] = $request->ulp_id;
     }
-    $query .= ` AND o.uid_id = $uid_id `;
+    $query .= "
+              AND o.uid_id = ?
+            ";
+
+      $args[] = $uid_id;
+    
     $query .= "
             GROUP BY u.id
           )
@@ -161,7 +166,9 @@ class DashboardController extends Controller
               AND o.ulp_id = ?
             ";
     }
-    $querySO .= ` AND o.uid_id = $uid_id `;
+    $querySO .= "
+              AND o.uid_id = ?
+            ";
 
     $status_orders = DB::select("$querySO", $args);
 
