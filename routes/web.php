@@ -10,6 +10,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UidController;
 use App\Http\Controllers\UlpController;
+use App\Http\Controllers\ManagerUlpController;
 use App\Http\Controllers\Up3Controller;
 use App\Http\Controllers\UserController;
 use App\Models\User;
@@ -57,6 +58,7 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::resource('/uids', UidController::class);
         Route::resource('/up3s', Up3Controller::class);
         Route::resource('/ulps', UlpController::class);
+        Route::resource('/manager-ulps', ManagerUlpController::class);
         Route::resource('/customers', CustomerController::class);
 
         Route::get('/customers/{id}/detail', [CustomerController::class, 'show']);
@@ -67,6 +69,7 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::post('/uids/list', [UidController::class, 'list']);
         Route::post('/up3s/list', [Up3Controller::class, 'list']);
         Route::post('/ulps/list', [UlpController::class, 'list']);
+        Route::post('/manager-ulps/list', [ManagerUlpController::class, 'list']);
         Route::post('/customers/list', [CustomerController::class, 'list']);
 
         // List Select2

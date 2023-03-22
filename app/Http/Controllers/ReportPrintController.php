@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 
-use App\Exports\OrderExport;
 use App\Helpers\Helper;
 use App\Interfaces\OrderInterface;
 use App\Models\Up3;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 
 class ReportPrintController extends Controller
 {
@@ -145,8 +145,27 @@ class ReportPrintController extends Controller
 
     public function print($id)
     {
-        $filename = "Order.xlsx";
-        return $filename.' ID'. $id;
+        $order = Order::select(
+            'orders.*',
+            'uid.name AS uid_name',
+            'up3.name AS up3_name',
+            'ulp.name AS ulp_name',
+            'customer.name AS customer_name',
+            'customer.address AS customer_address',
+            'user.name AS officer_name',
+            'user.rbm_code AS rbm_code'
+        )
+            ->join('uids AS uid', 'orders.uid_id', 'uid.id')
+            ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
+            ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
+            ->join('customers AS customer', 'orders.customer_id', 'customer.id')
+            ->join('users AS user', 'orders.user_id', 'user.id')
+            ->where('orders.id', $id)
+            ->first();
+ 
+        $pdf = PDF::loadview('pages.report.prints.cetak', ['order' => $order])->setPaper('a4', 'landscape');
+        return $pdf->download('laporan-pegawai.pdf');
+
     }
 
     public function print_all($user_id, $month, $year)

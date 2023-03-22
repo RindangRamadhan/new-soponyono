@@ -48,6 +48,13 @@
           "i18n": "ULP",
           "icon": "bx bx-radio-circle",
           "role": "Ulp-Ulp Lihat"
+        },
+        {
+          "url": "master-data/manager-ulps",
+          "name": "Manager ULP",
+          "i18n": "Manager ULP",
+          "icon": "bx bx-radio-circle",
+          "role": "Manager Ulp-Manager Ulp Lihat"
         }
       ]
     },

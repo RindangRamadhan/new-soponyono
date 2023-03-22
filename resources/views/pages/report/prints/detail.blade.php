@@ -149,7 +149,7 @@
                 <div class="form-group">
                   <label>Status Cetak</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="class" class="form-control " value="{{ $order->status_cetak }}" readonly>
+                    <input type="text" name="class" class="form-control " value="{{ $order->printout_status }}" readonly>
 
                   </div>
                 </div>
