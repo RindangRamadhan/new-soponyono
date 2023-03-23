@@ -1,3 +1,4 @@
+@foreach ($orders as $order)
 <table style="width: 100%; height: 50px; font-family: 'Tahoma, sans-serif';font-size: 14; " cellspacing="0"
   cellpadding="0">
   <tbody>
@@ -178,3 +179,5 @@
     </tr>
   </tbody>
 </table>
+
+@endforeach

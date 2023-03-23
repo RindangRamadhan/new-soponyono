@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Interfaces\OrderInterface;
 use App\Models\Up3;
 use App\Models\Order;
+use App\Models\ManagerUlp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDF;
@@ -83,7 +84,8 @@ class ReportPrintController extends Controller
             ])
         );
     }
-    function list(Request $request) {
+    function list(Request $request)
+    {
         $resources = $this->detailRepo->list_print($request);
 
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
@@ -91,7 +93,7 @@ class ReportPrintController extends Controller
             $resources,
             "/report/print",
             "Cetak",
-            ['detail','print'],
+            ['detail', 'print'],
             ['delete', 'edit'],
         );
 
@@ -162,16 +164,87 @@ class ReportPrintController extends Controller
             ->join('users AS user', 'orders.user_id', 'user.id')
             ->where('orders.id', $id)
             ->first();
- 
-        $pdf = PDF::loadview('pages.report.prints.cetak', ['order' => $order])->setPaper('a4', 'landscape');
-        return $pdf->download('laporan-pegawai.pdf');
 
+        $ulp_id = $order->ulp_id;
+
+        $manager_ulp = ManagerUlp::select(
+            'manager_ulps.*',
+            'user.name AS manager_name'
+        )
+            ->join('users AS user', 'manager_ulps.user_id', 'user.id')
+            ->where('manager_ulps.ulp_id', $ulp_id)
+            ->first();
+        // return view('pages.report.prints.cetak')->with(
+        //     compact([
+        //         'order',
+        //     ])
+        // );
+
+        $order->bill = "Rp. " . number_format($order->bill, 2, ',', '.');
+
+        Order::where('id', $id)
+            ->update([
+                'printout_status' => 'Sudah',
+            ]);
+
+        $date_now = Helper::FormatDateIndo(date('Y-m-d'), 'l, j F Y');
+        $pdf = PDF::loadview('pages.report.prints.cetak', ['order' => $order, 'manager_ulp' => $manager_ulp, 'date_now' => $date_now])->setPaper('a4', 'landscape')->setWarnings(false);
+        return $pdf->download('cetak-pratul.pdf');
     }
 
     public function print_all($user_id, $month, $year)
     {
-        $filename = "cetak.xlsx";
-        return $filename;
-    }
+        
+        $orders = Order::select(
+            'orders.*',
+            'uid.name AS uid_name',
+            'up3.name AS up3_name',
+            'ulp.name AS ulp_name',
+            'customer.name AS customer_name',
+            'customer.address AS customer_address',
+            'user.name AS officer_name',
+            'user.rbm_code AS rbm_code'
+        )
+            ->join('uids AS uid', 'orders.uid_id', 'uid.id')
+            ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
+            ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
+            ->join('customers AS customer', 'orders.customer_id', 'customer.id')
+            ->join('users AS user', 'orders.user_id', 'user.id')
+            ->where('orders.user_id', $user_id)
+            ->where('orders.billing_status', 'Paid')
+            ->whereMonth('orders.updated_at', $month)
+            ->whereYear('orders.updated_at', $year)->get();
 
+        if ($orders) {
+
+            $ulp_id = $orders[0]->ulp_id;
+
+            $manager_ulp = ManagerUlp::select(
+                'manager_ulps.*',
+                'user.name AS manager_name'
+            )
+                ->join('users AS user', 'manager_ulps.user_id', 'user.id')
+                ->where('manager_ulps.ulp_id', $ulp_id)
+                ->first();
+
+
+            foreach ($orders as &$v) {
+                $v["bill"] = "Rp. " . number_format($v["bill"], 2, ',', '.');
+            }
+
+            Order::where('orders.user_id', $user_id)
+                ->where('orders.billing_status', 'Paid')
+                ->whereMonth('orders.updated_at', $month)
+                ->whereYear('orders.updated_at', $year)
+                ->update([
+                    'printout_status' => 'Sudah',
+                ]);
+
+            $date_now = Helper::FormatDateIndo(date('Y-m-d'), 'l, j F Y');
+            $pdf = PDF::loadview('pages.report.prints.cetak_all', ['orders' => $orders, 'manager_ulp' => $manager_ulp, 'date_now' => $date_now])->setPaper('a4', 'landscape')->setWarnings(false);
+            return $pdf->download('cetak-pratul-all.pdf');
+        } else {
+            return 'Data Kosong';
+        }
+    }
 }

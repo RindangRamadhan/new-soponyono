@@ -97,6 +97,7 @@ Route::middleware('auth', 'verified')->group(function () {
     });
     Route::get('/report/detail/export/{up3_id}/{ulp_id}/{start_date}/{end_date}/', [ReportDetailController::class, 'export'])->name('report.detail.export');
     Route::get('/report/print/print-all/{user_id}/{month}/{year}/', [ReportPrintController::class, 'print_all']);
+    Route::get('/report/monthly/share-all/{up3_id}/{ulp_id}/{month}/{year}/', [ReportMonthlyController::class, 'share_all']);
     // Report
     Route::prefix('/report')->group(function () {
         // Detail
