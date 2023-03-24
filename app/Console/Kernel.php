@@ -16,6 +16,12 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            Order::whereMonth('created_at', date('m'))
+            ->update([
+                'status' => 'Done',
+            ]);
+        })->cron('* * 23 * *')->timezone('Asia/Jakarta');
     }
 
     /**
