@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Exports\OrderExport;
 use App\Helpers\Helper;
 use App\Interfaces\OrderInterface;
-use App\Models\Up3;
 use App\Models\Ulp;
+use App\Models\Up3;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -66,8 +65,7 @@ class ReportDetailController extends Controller
             ])
         );
     }
-    function list(Request $request)
-    {
+    function list(Request $request) {
         $resources = $this->detailRepo->list_detail($request);
 
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
@@ -129,13 +127,13 @@ class ReportDetailController extends Controller
 
     public function export($up3_id, $ulp_id, $start_date, $end_date)
     {
-       if ($up3_id && $ulp_id=='-'){
-        $up3 = Up3::find($up3_id);
-        $filename = 'UP3 '.$up3->name." Order.xlsx";
-       }else{
-        $ulp = Ulp::find($ulp_id);
-        $filename = 'ULP '.$ulp->name." Order.xlsx";
-       }
+        if ($up3_id && $ulp_id == '-') {
+            $up3 = Up3::find($up3_id);
+            $filename = 'UP3 ' . $up3->name . " Order.xlsx";
+        } else {
+            $ulp = Ulp::find($ulp_id);
+            $filename = 'ULP ' . $ulp->name . " Order.xlsx";
+        }
 
         return Excel::download(new OrderExport($up3_id, $ulp_id, $start_date, $end_date), $filename);
     }

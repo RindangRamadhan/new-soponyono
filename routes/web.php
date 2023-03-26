@@ -2,15 +2,16 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ManagerUlpController;
 use App\Http\Controllers\MonitoringHarianController;
-use App\Http\Controllers\ReportDetailController;
-use App\Http\Controllers\ReportPrintController;
-use App\Http\Controllers\ReportMonthlyController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReportDailyController;
+use App\Http\Controllers\ReportDetailController;
+use App\Http\Controllers\ReportMonthlyController;
+use App\Http\Controllers\ReportPrintController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UidController;
 use App\Http\Controllers\UlpController;
-use App\Http\Controllers\ManagerUlpController;
 use App\Http\Controllers\Up3Controller;
 use App\Http\Controllers\UserController;
 use App\Models\User;
@@ -83,6 +84,7 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::post('/upload-template', [OrderController::class, 'upload'])->name('orders.upload');
         Route::get('/export', [OrderController::class, 'export'])->name('orders.export');
     });
+
     Route::resource('/orders', OrderController::class);
     Route::post('/orders/list', [OrderController::class, 'list']);
     Route::get('/orders/{id}/detail', [OrderController::class, 'show']);
@@ -95,31 +97,40 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::get('/{id}/detail', [MonitoringHarianController::class, 'show']);
         Route::get('/{id}/location', [MonitoringHarianController::class, 'location']);
     });
+
     Route::get('/report/detail/export/{up3_id}/{ulp_id}/{start_date}/{end_date}/', [ReportDetailController::class, 'export'])->name('report.detail.export');
     Route::get('/report/print/print-all/{user_id}/{month}/{year}/', [ReportPrintController::class, 'print_all']);
     Route::get('/report/monthly/share-all/{up3_id}/{ulp_id}/{month}/{year}/', [ReportMonthlyController::class, 'share_all']);
+
     // Report
     Route::prefix('/report')->group(function () {
         // Detail
         Route::resource('/detail', ReportDetailController::class);
         Route::prefix('/detail')->group(function () {
             Route::post('/list', [ReportDetailController::class, 'list']);
-            
+
             Route::get('/{id}/detail', [ReportDetailController::class, 'show']);
         });
+
         // Print
         Route::resource('/print', ReportPrintController::class);
         Route::prefix('/print')->group(function () {
             Route::post('/list', [ReportPrintController::class, 'list']);
             Route::get('/{id}/detail', [ReportPrintController::class, 'show']);
             Route::get('/cetak/{id}', [ReportPrintController::class, 'print']);
-            
+
         });
+
         // Monthly
         Route::resource('/monthly', ReportMonthlyController::class);
         Route::prefix('/monthly')->group(function () {
             Route::post('/list', [ReportMonthlyController::class, 'list']);
-            
+        });
+
+        // Daily
+        Route::prefix('/daily')->group(function () {
+            Route::get('/', [ReportDailyController::class, 'index']);
+            Route::post('/list', [ReportDailyController::class, 'list']);
         });
     });
 

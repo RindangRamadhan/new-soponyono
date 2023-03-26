@@ -20,8 +20,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class OrderRepository implements OrderInterface
 {
-    function list()
-    {
+    function list() {
         $rowuser = Auth::user();
         $tipe = $rowuser->type;
 
@@ -73,22 +72,24 @@ class OrderRepository implements OrderInterface
             ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
             ->join('users AS u', 'orders.user_id', 'u.id');
 
-        if ($request->up3_id && !$request->ulp_id) {
-            $data = $order
-                ->where('orders.up3_id', $request->up3_id)
-                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
-        } else if (!$request->up3_id && $request->ulp_id) {
-            $data = $order
-                ->where('orders.ulp_id', $request->ulp_id)
-                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
-        } elseif (!$request->up3_id && !$request->ulp_id) {
-            $data = $order
-                ->where('orders.ulp_id', 00);
+        if ($request->up3_id) {
+            $order = $order
+                ->where('orders.up3_id', $request->up3_id);
         }
 
-        $data = $order->groupBy('orders.user_id');
+        if ($request->ulp_id) {
+            $order = $order
+                ->where('orders.ulp_id', $request->ulp_id);
+        }
 
-        return $data;
+        if ($request->start_date && $request->end_date) {
+            $order = $order
+                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
+        }
+
+        $order = $order->groupBy('orders.user_id');
+
+        return $order;
     }
 
     public function list_detail($request)
@@ -105,7 +106,7 @@ class OrderRepository implements OrderInterface
             'u.name as u__name',
             'ulp.name AS ulp__name',
             DB::raw('(CASE WHEN orders.billing_status =  "Paid"  THEN "LUNAS"
-            WHEN orders.billing_status =  "Debt"  THEN "JANJI" 
+            WHEN orders.billing_status =  "Debt"  THEN "JANJI"
             ELSE "TIDAK DIEKSEKUSI" END) AS billing_status'),
             DB::raw('DATE_FORMAT(orders.updated_at,"%d/%m/%Y %h:%i:%s") as updated__in')
         )
@@ -114,20 +115,24 @@ class OrderRepository implements OrderInterface
             ->join('customers AS customer', 'orders.customer_id', 'customer.id')
             ->join('users AS u', 'orders.user_id', 'u.id');
 
-        if ($request->up3_id && !$request->ulp_id) {
-            $data = $order
-                ->where('orders.up3_id', $request->up3_id)
-                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
-        } else if (!$request->up3_id && $request->ulp_id) {
-            $data = $order
-                ->where('orders.ulp_id', $request->ulp_id)
-                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
-        } elseif (!$request->up3_id && !$request->ulp_id) {
-            $data = $order
-                ->where('orders.ulp_id', 00);
+        if ($request->up3_id) {
+            $order = $order
+                ->where('orders.up3_id', $request->up3_id);
         }
-        $data = $order->where('orders.status', 'Done');
-        return $data;
+
+        if ($request->ulp_id) {
+            $order = $order
+                ->where('orders.ulp_id', $request->ulp_id);
+        }
+
+        if ($request->start_date && $request->end_date) {
+            $order = $order
+                ->whereBetween('orders.updated_at', [$request->start_date, $end_date]);
+        }
+
+        $order = $order->where('orders.status', 'Done');
+
+        return $order;
     }
 
     public function list_monthly($request)
@@ -190,7 +195,6 @@ class OrderRepository implements OrderInterface
           ORDER BY total_realisasi DESC
         ", $args);
 
-
         return $top_officers;
     }
 
@@ -219,6 +223,41 @@ class OrderRepository implements OrderInterface
             ->whereYear('orders.updated_at', $request->year);
 
         return $order;
+    }
+
+    public function report_daily($request)
+    {
+        $args = [$request->up3_id, $request->ulp_id, $request->month];
+
+        $query = DB::select("
+          WITH RECURSIVE days AS (
+            SELECT 1 AS n
+              UNION ALL
+            SELECT n + 1 FROM days WHERE n < 20
+          )
+          SELECT
+            u.id,
+            u.name,
+            COUNT(
+              CASE WHEN o.billing_status = 'Paid' THEN 1 ELSE NULL END
+            ) AS total_paid,
+            COUNT(
+              CASE WHEN o.billing_status = 'Debt' THEN 1 ELSE NULL END
+            ) AS total_debt,
+            d.n AS 'day'
+          FROM days d
+            LEFT JOIN orders o
+              ON DAY(o.updated_at) = d.n
+            LEFT JOIN users u
+              ON o.user_id = u.id
+          WHERE o.up3_id = ?
+            AND o.ulp_id = ?
+            AND MONTH(o.updated_at) = ?
+          GROUP BY 1,5
+          ORDER BY 5 ASC
+        ", $args);
+
+        return $query;
     }
 
     public function show($id)
@@ -434,7 +473,7 @@ class OrderRepository implements OrderInterface
             }
 
             DB::commit();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             DB::rollBack();
             throw $th;
         }

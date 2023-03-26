@@ -10,6 +10,7 @@ interface OrderInterface
     function list_harian($request);
     function list_detail($request);
     function list_monthly($request);
+    function report_daily($request);
     function show($id);
     function show_petugas($id, $request);
     function upload(Request $request);
