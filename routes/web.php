@@ -131,6 +131,7 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::prefix('/daily')->group(function () {
             Route::get('/', [ReportDailyController::class, 'index']);
             Route::post('/list', [ReportDailyController::class, 'list']);
+            Route::get('/export', [ReportDailyController::class, 'export']);
         });
     });
 

@@ -254,7 +254,7 @@ class OrderRepository implements OrderInterface
             AND o.ulp_id = ?
             AND MONTH(o.updated_at) = ?
           GROUP BY 1,5
-          ORDER BY 5 ASC
+          ORDER BY 2 ASC
         ", $args);
 
         return $query;

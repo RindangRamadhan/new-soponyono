@@ -49,7 +49,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <div class="controls form-label-group position-relative has-icon-left">
               <select id="month" name="month" class="select2 form-control filter-change">
                 <option></option>
@@ -60,9 +60,19 @@
             </div>
           </div>
           <div class="col-sm-2">
-            <button type="reset" id="btnSearch" class="btn btn-primary btn-block glow users-list-clear mb-0">
+            <button type="button" id="btnSearch" class="btn btn-primary btn-block glow users-list-clear mb-0">
               <i class="bx bx-search"></i> Search
             </button>
+          </div>
+          <div class="col-sm-4 mb-2" id="btnDownload" style="display: none">
+            {{-- <button type="button" id="btnPdf" class="btn btn-danger glow users-list-clear mb-0">
+              <i class="bx bxs-file-pdf"></i> PDF
+            </button> --}}
+
+            <button type="button" id="btnExcel" class="btn btn-success glow users-list-clear mb-0">
+              <i class="bx bxs-file-doc"></i> Unduh Excel
+            </button>
+
           </div>
         </div>
 
@@ -129,6 +139,22 @@
 
   $(document).on('click', '#btnSearch', function (e) {
     GetOrder();
+  })
+
+  $(document).on('click', '#btnPdf', function (e) {
+    const month = $("#month").val();
+    const up3_id = $("#up3_id").val();
+    const ulp_id = $("#ulp_id").val();
+
+    window.open(`/report/daily/export?up3_id=${up3_id}&ulp_id=${ulp_id}&month=${month}&doc_type=pdf`);
+  })
+
+  $(document).on('click', '#btnExcel', function (e) {
+    const month = $("#month").val();
+    const up3_id = $("#up3_id").val();
+    const ulp_id = $("#ulp_id").val();
+
+    window.open(`/report/daily/export?up3_id=${up3_id}&ulp_id=${ulp_id}&month=${month}&doc_type=excel`);
   })
 
   $(document).ready(function() {
@@ -209,6 +235,9 @@
         initDataTable(params)
       }
     });
+
+
+    $("#btnDownload").show();
   }
 
   function initDataTable(params) {
