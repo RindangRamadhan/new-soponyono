@@ -110,8 +110,7 @@
                 <div class="form-group">
                   <label>Gardu</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="substation" class="form-control " value="{{ $order->substation }}"
-                      readonly>
+                    <input type="text" name="substation" class="form-control " value="{{ $order->substation }}" readonly>
 
                   </div>
                 </div>
@@ -120,8 +119,7 @@
                 <div class="form-group">
                   <label>Alamat</label>
                   <div class="controls form-label-group position-relative ">
-                    <textarea class="form-control editors" name="customer_address" rows="10" cols="30"
-                      readonly>{{ $order->customer_address }}</textarea>
+                    <textarea class="form-control editors" name="customer_address" rows="10" cols="30" readonly>{{ $order->customer_address }}</textarea>
 
                   </div>
                 </div>
@@ -159,11 +157,34 @@
                   <label>Tanggal JANJI</label>
                   <div class="controls form-label-group position-relative ">
                     <input type="text" id="due_date" name="due_date" class="form-control " value="" readonly>
-
                   </div>
                 </div>
               </div>
+              @endif
 
+              @php
+              $photos = explode(',', $order->photos);
+              @endphp
+
+              @if (count($photos) > 0)
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Foto 1</label>
+                  <div class="controls form-label-group position-relative ">
+                    <img src="{{ asset('/images/upload/'.$photos[0]) }}" alt="order photo 1" class="users-avatar-shadow" height="150" width="150">
+                  </div>
+                </div>
+              </div>
+              @endif
+              @if (count($photos) > 1)
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Foto 2</label>
+                  <div class="controls form-label-group position-relative ">
+                    <img src="{{ asset('/images/upload/'.$photos[1]) }}" alt="order photo 2" class="users-avatar-shadow" height="150" width="150">
+                  </div>
+                </div>
+              </div>
               @endif
             </div>
           </div>

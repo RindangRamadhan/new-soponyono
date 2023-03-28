@@ -38,7 +38,7 @@ class OrderController extends Controller
                 'orders.substation',
                 'orders.bill',
                 'orders.billing_status',
-                'orders.status'
+                DB::raw("'Open' AS status"),
             )
                 ->join('customers AS customer', 'orders.customer_id', 'customer.id')
                 ->where('orders.user_id', $user->id)
@@ -56,7 +56,7 @@ class OrderController extends Controller
                     'status' => 'On Progress',
                 ]);
 
-                //delete log order
+            //delete log order
             $row_order = Order::select('uuid')
                 ->where('user_id', $user->id)
                 ->first();
@@ -64,7 +64,7 @@ class OrderController extends Controller
                 ->delete();
 
             DB::commit();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             DB::rollBack();
             throw $th;
         }
@@ -134,6 +134,7 @@ class OrderController extends Controller
                     'billing_status' => $request->billing_status,
                     'latitude' => $request->latitude,
                     'longitude' => $request->longitude,
+                    'updated_at' => $request->created_at,
                     'updated_by' => Auth::user()->id,
                 ]);
 
@@ -142,7 +143,7 @@ class OrderController extends Controller
             ];
 
             return Helper::ResponseWriter("Successfully upload order", $data, 201);
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             throw $th;
         }
     }
