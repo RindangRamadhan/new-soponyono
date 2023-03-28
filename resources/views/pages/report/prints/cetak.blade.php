@@ -1,9 +1,7 @@
-<table style="width: 100%; height: 50px; font-family: 'Tahoma, sans-serif';font-size: 14; " cellspacing="0"
-  cellpadding="0">
+<table style="width: 100%; height: 50px; font-family: 'Tahoma, sans-serif';font-size: 14; " cellspacing="0" cellpadding="0">
   <tbody>
     <tr>
-      <td style="width: 5%;" rowspan="2"><img src="{{ public_path('/images/logo_pln_print.png') }}" alt="logo pln"
-          width="50" height="50" /></td>
+      <td style="width: 5%;" rowspan="2"><img src="{{ asset('images/logo_pln_print.png') }}" alt="logo pln" width="50" height="50" /></td>
       <td style="width: 20%;"><b>PT. PLN (Persero)</b></td>
       <td style="width: 51%; text-align:center;vertical-align:middle" rowspan="2"><b>INFO REKENING LISTRIK</b></td>
       <td style="width: 24%; text-align:center;vertical-align:middle" rowspan="2"><b>
@@ -57,9 +55,7 @@
           untuk membayar rekening listrik tersebut di atas sebelum tanggal 20 untuk menghindari pemutusan sementara.</b>
       </td>
       <td style="height: 110px; width: 40%; text-align:center;vertical-align:middle" rowspan="3">
-        <table
-          style="width: 100%; height: 110px; font-family: 'Tahoma, sans-serif';font-size: 14; text-align:center;vertical-align:middle"
-          cellspacing="0" cellpadding="0">
+        <table style="width: 100%; height: 110px; font-family: 'Tahoma, sans-serif';font-size: 14; text-align:center;vertical-align:middle" cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
               <td style="height: 20px; ">{{ $manager_ulp->location }}, {{ $date_now }}</td>
@@ -89,13 +85,11 @@
 <hr style="border-top: 2px dashed black;">
 
 {{-- PELANGGAN --}}
-<table style="width: 100%; height: 50px; font-family: 'Tahoma, sans-serif';font-size: 14; " cellspacing="0"
-  cellpadding="0">
+<table style="width: 100%; height: 50px; font-family: 'Tahoma, sans-serif';font-size: 14; " cellspacing="0" cellpadding="0">
   <tbody>
     <tr>
 
-      <td style="width: 5%;" rowspan="2"><img src="{{ public_path('/images/logo_pln_print.png') }}" alt="logo pln"
-          width="50" height="50" /></td>
+      <td style="width: 5%;" rowspan="2"><img src="{{ public_path('/images/logo_pln_print.png') }}" alt="logo pln" width="50" height="50" /></td>
       <td style="width: 20%;"><b>PT. PLN (Persero)</b></td>
       <td style="width: 51%; text-align:center;vertical-align:middle" rowspan="2"><b>INFO REKENING LISTRIK</b></td>
       <td style="width: 24%; text-align:center;vertical-align:middle" rowspan="2"><b>
@@ -149,9 +143,7 @@
           untuk membayar rekening listrik tersebut di atas sebelum tanggal 20 untuk menghindari pemutusan sementara.</b>
       </td>
       <td style="height: 110px; width: 40%; text-align:center;vertical-align:middle" rowspan="3">
-        <table
-          style="width: 100%; height: 110px; font-family: 'Tahoma, sans-serif';font-size: 14; text-align:center;vertical-align:middle"
-          cellspacing="0" cellpadding="0">
+        <table style="width: 100%; height: 110px; font-family: 'Tahoma, sans-serif';font-size: 14; text-align:center;vertical-align:middle" cellspacing="0" cellpadding="0">
           <tbody>
             <tr>
               <td style="height: 20px; ">{{ $manager_ulp->location }}, {{ $date_now }}</td>
