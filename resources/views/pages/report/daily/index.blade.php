@@ -90,18 +90,18 @@
           <table class="table table-sm table-bordered table-ssr-custome nowrap">
             <tfoot style="display: table-row-group">
               <th>Petugas</th>
-              @for ($i = 1; $i <= 22; $i++) <th>Lunas</th>
+              @for ($i = 1; $i <= 20; $i++) <th>Lunas</th>
                 <th>Janji</th>
                 @endfor
             </tfoot>
             <thead>
               <tr>
                 <th rowspan="2">Petugas</th>
-                @for ($i = 1; $i <= 22; $i++) <th colspan="2">{{ $i }}</th>
+                @for ($i = 1; $i <= 20; $i++) <th colspan="2">{{ $i }}</th>
                   @endfor
               </tr>
               <tr>
-                @for ($i = 1; $i <= 22; $i++) <th>Lunas</th>
+                @for ($i = 1; $i <= 20; $i++) <th>Lunas</th>
                   <th>Janji</th>
                   @endfor
               </tr>
@@ -234,7 +234,7 @@
       "resp": null
     }
 
-    for (let i = 1; i <= 22; i++) {
+    for (let i = 1; i <= 20; i++) {
       params.columns.push(
         { "data": `total_paid_${i}`},
         { "data": `total_debt_${i}`}

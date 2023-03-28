@@ -91,7 +91,7 @@ class ReportDailyController extends Controller
                     'name' => $resource->name,
                 ];
 
-                for ($d = 1; $d <= 22; $d++) {
+                for ($d = 1; $d <= 20; $d++) {
                     if ($resource->day == $d) {
                         $obj["total_paid_$d"] = $resource->total_paid;
                         $obj["total_debt_$d"] = $resource->total_debt;
@@ -121,7 +121,7 @@ class ReportDailyController extends Controller
                     'name' => $resource->name,
                 ];
 
-                for ($d = 1; $d <= 22; $d++) {
+                for ($d = 1; $d <= 20; $d++) {
                     if ($resource->day == $d) {
                         $obj["total_paid_$d"] = $resource->total_paid;
                         $obj["total_debt_$d"] = $resource->total_debt;

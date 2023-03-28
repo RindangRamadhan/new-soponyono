@@ -234,7 +234,7 @@ class OrderRepository implements OrderInterface
             WITH RECURSIVE days AS (
               SELECT 1 AS n
                 UNION ALL
-              SELECT n + 1 FROM days WHERE n < 22
+              SELECT n + 1 FROM days WHERE n < 20
             )
             SELECT
               u.id,
@@ -263,7 +263,7 @@ class OrderRepository implements OrderInterface
           WITH RECURSIVE days AS (
             SELECT 1 AS n
               UNION ALL
-            SELECT n + 1 FROM days WHERE n < 22
+            SELECT n + 1 FROM days WHERE n < 20
           )
           SELECT
             u.id,
@@ -293,7 +293,7 @@ class OrderRepository implements OrderInterface
           WITH RECURSIVE days AS (
             SELECT 1 AS n
               UNION ALL
-            SELECT n + 1 FROM days WHERE n < 22
+            SELECT n + 1 FROM days WHERE n < 20
           )
           SELECT
             u.id,
