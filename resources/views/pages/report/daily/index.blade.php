@@ -60,18 +60,28 @@
             </div>
           </div>
           <div class="col-sm-2">
+            <div class="controls form-label-group position-relative has-icon-left">
+              <select id="year" name="year" class="select2 form-control filter-change">
+                <option></option>
+              </select>
+              <div class="form-control-position">
+                <i class="bx bx-edit-alt"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
             <button type="button" id="btnSearch" class="btn btn-primary btn-block glow users-list-clear mb-0">
               <i class="bx bx-search"></i> Search
             </button>
           </div>
           <div class="col-sm-4 mb-2" id="btnDownload" style="display: none">
-            {{-- <button type="button" id="btnPdf" class="btn btn-danger glow users-list-clear mb-0">
+            <button type="button" id="btnPdf" class="btn btn-danger glow users-list-clear mb-0">
               <i class="bx bxs-file-pdf"></i> PDF
-            </button> --}}
-
-            <button type="button" id="btnExcel" class="btn btn-success glow users-list-clear mb-0">
-              <i class="bx bxs-file-doc"></i> Unduh Excel
             </button>
+
+            {{-- <button type="button" id="btnExcel" class="btn btn-success glow users-list-clear mb-0">
+              <i class="bx bxs-file-doc"></i> Unduh Excel
+            </button> --}}
 
           </div>
         </div>
@@ -80,18 +90,18 @@
           <table class="table table-sm table-bordered table-ssr-custome nowrap">
             <tfoot style="display: table-row-group">
               <th>Petugas</th>
-              @for ($i = 1; $i <= 20; $i++) <th>Lunas</th>
+              @for ($i = 1; $i <= 22; $i++) <th>Lunas</th>
                 <th>Janji</th>
                 @endfor
             </tfoot>
             <thead>
               <tr>
                 <th rowspan="2">Petugas</th>
-                @for ($i = 1; $i <= 20; $i++) <th colspan="2">{{ $i }}</th>
+                @for ($i = 1; $i <= 22; $i++) <th colspan="2">{{ $i }}</th>
                   @endfor
               </tr>
               <tr>
-                @for ($i = 1; $i <= 20; $i++) <th>Lunas</th>
+                @for ($i = 1; $i <= 22; $i++) <th>Lunas</th>
                   <th>Janji</th>
                   @endfor
               </tr>
@@ -116,6 +126,7 @@
 <script src="{{asset('vendors/js/pickers/pickadate/picker.js')}}"></script>
 <script src="{{asset('vendors/js/pickers/daterange/moment.min.js')}}"></script>
 <script src="{{asset('vendors/js/pickers/daterange/daterangepicker.js')}}"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
 @endsection
 
 @section('page-scripts')
@@ -135,6 +146,11 @@
     });
 
     $("#month").val(date.month() + 1).change();
+    $('#year').select2({
+      data: @php echo json_encode($years) @endphp,
+      placeholder: 'Pilih Tahun'
+    });
+    $("#year").val(date.year()).change();
   })
 
   $(document).on('click', '#btnSearch', function (e) {
@@ -143,10 +159,11 @@
 
   $(document).on('click', '#btnPdf', function (e) {
     const month = $("#month").val();
+    const year = $("#year").val();
     const up3_id = $("#up3_id").val();
     const ulp_id = $("#ulp_id").val();
 
-    window.open(`/report/daily/export?up3_id=${up3_id}&ulp_id=${ulp_id}&month=${month}&doc_type=pdf`);
+    window.open(`/report/daily/export?up3_id=${up3_id}&ulp_id=${ulp_id}&month=${month}&year=${year}&doc_type=pdf`);
   })
 
   $(document).on('click', '#btnExcel', function (e) {
@@ -195,12 +212,13 @@
 
   function GetOrder() {
     const month = $("#month").val();
+    const year = $("#year").val();
     const up3_id = $("#up3_id").val();
     const ulp_id = $("#ulp_id").val();
 
-    if (up3_id == "" && ulp_id == "") {
-      return
-    }
+    // if (up3_id == "" && ulp_id == "") {
+    //   return
+    // }
     
     const params = {
       "url": "{{ url('/report/daily') }}",
@@ -209,13 +227,14 @@
       ],
       "args": {
         "month": month,
+        "year": year,
         "up3_id": up3_id,
         "ulp_id": ulp_id,
       },
       "resp": null
     }
 
-    for (let i = 1; i <= 20; i++) {
+    for (let i = 1; i <= 22; i++) {
       params.columns.push(
         { "data": `total_paid_${i}`},
         { "data": `total_debt_${i}`}
@@ -282,6 +301,10 @@
         // searchDelay: 500,
         // processing: true,
         // serverSide: true,
+        // scrollY:        "300px",
+        // scrollX:        true,
+        scrollCollapse: true,
+        fixedColumns:   true,
         data: params.resp,
         columns: params.columns,
         order: [params.order ? params.order : [0, "desc"]],
@@ -291,6 +314,8 @@
                 next: `<i class="bx bx-chevron-right"></i>`,
             },
         },
+        
+        
     });
 
     // Apply the search

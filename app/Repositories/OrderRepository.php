@@ -20,7 +20,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class OrderRepository implements OrderInterface
 {
-    function list() {
+    function list()
+    {
         $rowuser = Auth::user();
         $tipe = $rowuser->type;
 
@@ -227,13 +228,42 @@ class OrderRepository implements OrderInterface
 
     public function report_daily($request)
     {
-        $args = [$request->up3_id, $request->ulp_id, $request->month];
-
-        $query = DB::select("
+        if ($request->up3_id) {
+            $args = [$request->up3_id, $request->month, $request->year];
+            $query = DB::select("
+            WITH RECURSIVE days AS (
+              SELECT 1 AS n
+                UNION ALL
+              SELECT n + 1 FROM days WHERE n < 22
+            )
+            SELECT
+              u.id,
+              u.name,
+              COUNT(
+                CASE WHEN o.billing_status = 'Paid' THEN 1 ELSE NULL END
+              ) AS total_paid,
+              COUNT(
+                CASE WHEN o.billing_status = 'Debt' THEN 1 ELSE NULL END
+              ) AS total_debt,
+              d.n AS 'day'
+            FROM days d
+              LEFT JOIN orders o
+                ON DAY(o.updated_at) = d.n
+              LEFT JOIN users u
+                ON o.user_id = u.id
+            WHERE o.up3_id = ?
+              AND MONTH(o.updated_at) = ?
+              AND YEAR(o.updated_at) = ?
+            GROUP BY 1,5
+            ORDER BY 2 ASC
+          ", $args);
+        } else if ($request->ulp_id) {
+            $args = [$request->up3_id, $request->ulp_id, $request->month, $request->year];
+            $query = DB::select("
           WITH RECURSIVE days AS (
             SELECT 1 AS n
               UNION ALL
-            SELECT n + 1 FROM days WHERE n < 20
+            SELECT n + 1 FROM days WHERE n < 22
           )
           SELECT
             u.id,
@@ -250,12 +280,43 @@ class OrderRepository implements OrderInterface
               ON DAY(o.updated_at) = d.n
             LEFT JOIN users u
               ON o.user_id = u.id
-          WHERE o.up3_id = ?
-            AND o.ulp_id = ?
+          WHERE  o.ulp_id = ?
             AND MONTH(o.updated_at) = ?
+            AND YEAR(o.updated_at) = ?
           GROUP BY 1,5
           ORDER BY 2 ASC
         ", $args);
+        } else {
+            $uid_id = Auth::user()->uid_id;
+            $args = [$uid_id, $request->month, $request->year];
+            $query = DB::select("
+          WITH RECURSIVE days AS (
+            SELECT 1 AS n
+              UNION ALL
+            SELECT n + 1 FROM days WHERE n < 22
+          )
+          SELECT
+            u.id,
+            u.name,
+            COUNT(
+              CASE WHEN o.billing_status = 'Paid' THEN 1 ELSE NULL END
+            ) AS total_paid,
+            COUNT(
+              CASE WHEN o.billing_status = 'Debt' THEN 1 ELSE NULL END
+            ) AS total_debt,
+            d.n AS 'day'
+          FROM days d
+            LEFT JOIN orders o
+              ON DAY(o.updated_at) = d.n
+            LEFT JOIN users u
+              ON o.user_id = u.id
+          WHERE o.uid_id = ?
+            AND MONTH(o.updated_at) = ?
+            AND YEAR(o.updated_at) = ?
+          GROUP BY 1,5
+          ORDER BY 2 ASC
+        ", $args);
+        }
 
         return $query;
     }
@@ -473,7 +534,7 @@ class OrderRepository implements OrderInterface
             }
 
             DB::commit();
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }

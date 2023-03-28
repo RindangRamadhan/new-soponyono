@@ -21,12 +21,12 @@
       <th rowspan="2">No</th>
       <th rowspan="2">Petugas</th>
       
-      @for ($i = 1; $i <= 20; $i++) 
+      @for ($i = 1; $i <= 22; $i++) 
         <th colspan="2">{{ $i }}</th>
       @endfor
     </tr>
     <tr>
-      @for ($i = 1; $i <= 20; $i++) 
+      @for ($i = 1; $i <= 22; $i++) 
         <th>Lunas</th>
         <th>Janji</th>
       @endfor
@@ -37,7 +37,7 @@
         <tr>
           <td>{{ $loop->index + 1 }}</td>
           <td style="white-space: nowrap">{{ $report['name'] }}</td>
-          @for ($i = 1; $i <= 20; $i++) 
+          @for ($i = 1; $i <= 22; $i++) 
             <td>{{ $report["total_paid_$i"] }}</td>
             <td>{{ $report["total_debt_$i"] }}</td>
           @endfor

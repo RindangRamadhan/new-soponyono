@@ -49,6 +49,13 @@ class ReportDailyController extends Controller
                 "text" => date('F', mktime(0, 0, 0, $m, 1, date('Y'))),
             ];
         }
+        $years = [];
+        for ($y = 2023; $y <= 2033; $y++) {
+            $years[] = [
+                "id" => $y,
+                "text" => $y,
+            ];
+        }
 
         $user = Auth::user();
         $tipe = $user->type;
@@ -67,6 +74,7 @@ class ReportDailyController extends Controller
                 'pageConfigs',
                 'breadcrumbs',
                 'months',
+                'years',
                 'up3s',
             ])
         );
@@ -83,7 +91,7 @@ class ReportDailyController extends Controller
                     'name' => $resource->name,
                 ];
 
-                for ($d = 1; $d <= 20; $d++) {
+                for ($d = 1; $d <= 22; $d++) {
                     if ($resource->day == $d) {
                         $obj["total_paid_$d"] = $resource->total_paid;
                         $obj["total_debt_$d"] = $resource->total_debt;
@@ -103,16 +111,17 @@ class ReportDailyController extends Controller
     public function export(Request $request)
     {
         $resources = $this->orderRepo->report_daily($request);
-
+        $height=180;
         $reports = [];
         foreach ($resources as $resource) {
             if ($resource->id) {
+                $height=(int)$height+30;
                 $obj = [
                     'id' => $resource->id,
                     'name' => $resource->name,
                 ];
 
-                for ($d = 1; $d <= 20; $d++) {
+                for ($d = 1; $d <= 22; $d++) {
                     if ($resource->day == $d) {
                         $obj["total_paid_$d"] = $resource->total_paid;
                         $obj["total_debt_$d"] = $resource->total_debt;
@@ -125,11 +134,12 @@ class ReportDailyController extends Controller
                 $reports[] = $obj;
             }
         }
-
+        
+        $customPaper = array(0,0,$height,1850);
         switch ($request->doc_type) {
             case 'pdf':
                 $doc = Pdf::loadView('pages.report.daily.export', ['reports' => $reports])
-                    ->setPaper('a4', 'landscape');
+                    ->setPaper($customPaper, 'landscape');
 
                 return $doc->download("Laporan Harian.pdf");
                 break;
