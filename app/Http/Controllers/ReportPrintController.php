@@ -174,13 +174,9 @@ class ReportPrintController extends Controller
             ->join('users AS user', 'manager_ulps.user_id', 'user.id')
             ->where('manager_ulps.ulp_id', $ulp_id)
             ->first();
-        // return view('pages.report.prints.cetak')->with(
-        //     compact([
-        //         'order',
-        //     ])
-        // );
+        
 
-        $order->bill = "Rp. " . number_format($order->bill, 2, ',', '.');
+        $order->bill = "Rp. " . number_format($order->bill, 0, ',', '.');
 
         Order::where('id', $id)
             ->update([
@@ -188,8 +184,16 @@ class ReportPrintController extends Controller
             ]);
 
         $date_now = Helper::FormatDateIndo(date('Y-m-d'), 'l, j F Y');
-        $pdf = PDF::loadview('pages.report.prints.cetak', ['order' => $order, 'manager_ulp' => $manager_ulp, 'date_now' => $date_now])->setPaper('a4', 'landscape')->setWarnings(false);
+        $pdf = PDF::loadview('pages.report.prints.cetak', ['order' => $order, 'manager_ulp' => $manager_ulp, 'date_now' => $date_now])->setPaper('a4', 'portrait')->setWarnings(false);
         return $pdf->download('cetak-pratul.pdf');
+
+        // return view('pages.report.prints.cetak')->with(
+        //     compact([
+        //         'order',
+        //         'manager_ulp',
+        //         'date_now',
+        //     ])
+        // );
     }
 
     public function print_all($user_id, $month, $year)
@@ -241,7 +245,7 @@ class ReportPrintController extends Controller
                 ]);
 
             $date_now = Helper::FormatDateIndo(date('Y-m-d'), 'l, j F Y');
-            $pdf = PDF::loadview('pages.report.prints.cetak_all', ['orders' => $orders, 'manager_ulp' => $manager_ulp, 'date_now' => $date_now])->setPaper('a4', 'landscape')->setWarnings(false);
+            $pdf = PDF::loadview('pages.report.prints.cetak_all', ['orders' => $orders, 'manager_ulp' => $manager_ulp, 'date_now' => $date_now])->setPaper('a4', 'portrait')->setWarnings(false);
             return $pdf->download('cetak-pratul-all.pdf');
         } else {
             return 'Data Kosong';
