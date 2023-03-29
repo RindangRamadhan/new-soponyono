@@ -7,6 +7,9 @@ use App\Interfaces\ManagerUlpInterface;
 use App\Models\Ulp;
 use App\Models\ManagerUlp;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Str;
 
 class ManagerUlpRepository implements ManagerUlpInterface
 {
@@ -66,10 +69,29 @@ class ManagerUlpRepository implements ManagerUlpInterface
     public function store(ManagerUlpRequest $request)
     {
 
+        $filename='';
+        if ($request->hasFile('tanda_tangan')) {
+            $tanda_tangan = $request->file('tanda_tangan');
+
+            if (is_array($tanda_tangan) || is_object($tanda_tangan)) {
+                // mengambil extension file
+                $extension = $tanda_tangan->getClientOriginalExtension();
+                // membuat nama file random berikut extension
+                $filename = Str::random(40) . '.' . $extension;
+
+                $img = Image::make($tanda_tangan->getRealPath());
+                $img->save(public_path('images/upload/' . $filename));
+                $img->resize(255, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+            }
+        }
+
         ManagerUlp::create([
             'ulp_id' => $request->ulp_id,
             'user_id' => $request->user_id,
             'location' => $request->location,
+            'tanda_tangan'=>$filename
         ]);
     }
 
@@ -110,6 +132,38 @@ class ManagerUlpRepository implements ManagerUlpInterface
     {
         $row = ManagerUlp::find($id);
 
+        
+        if ($request->hasFile('tanda_tangan')) {
+            
+            $tanda_tangan = $request->file('tanda_tangan');
+
+            if (is_array($tanda_tangan) || is_object($tanda_tangan)) {
+                // mengambil extension file
+                $extension = $tanda_tangan->getClientOriginalExtension();
+                // membuat nama file random berikut extension
+                $filename = Str::random(40) . '.' . $extension;
+
+                $img = Image::make($tanda_tangan->getRealPath());
+                $img->save(public_path('images/upload/' . $filename));
+                $img->resize(255, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+                if ($row->tanda_tangan) {
+                    $filepath = public_path('images/upload/' . $row->tanda_tangan);
+                    try {
+                        File::delete($filepath);
+                    } catch (FileNotFoundException $e) {
+                        // File sudah dihapus/tidak ada
+                    }
+                }
+
+                $row->tanda_tangan = $filename;
+                // menyimpan field foto di table barangs  dengan filename yang baru dibuat
+                $row->save();
+            }
+        }
+
         $row->update([
             'ulp_id' => $request->ulp_id,
             'user_id' => $request->user_id,
@@ -119,7 +173,7 @@ class ManagerUlpRepository implements ManagerUlpInterface
 
     public function destroy($id)
     {
-        $role = ManagerUlp::find($id);
-        $role->delete();
+        $row = ManagerUlp::find($id);
+        $row->delete();
     }
 }

@@ -60,5 +60,26 @@
       </div>
     </div>
   </div>
+
+  <div class="col-sm-6">
+    <div class="media mb-1 d-flex justify-content-center">
+      <a class="mr-1" href="#">
+        @if (isset($manager_ulp->tanda_tangan))
+        <img src="{{ asset('/images/upload/'.$manager_ulp->tanda_tangan) }}" alt="users view avatar" class="users-avatar-shadow round" height="100" width="100">
+        @else
+        <img src="https://ui-avatars.com/api/?name=TTD" alt="users view avatar" class="users-avatar-shadow round" height="100" width="100">
+        @endif
+      </a>
+    </div>
+    <div class="form-group">
+      <label>Tanda Tangan</label>
+      <div class="controls form-label-group position-relative has-icon-left">
+        <div class="custom-file">
+          <input type="file" name="tanda_tangan" class="custom-file-input" accept=".png, .jpg, .jpeg">
+          <label class="custom-file-label" for="fileExcel">Unggah Foto</label>
+        </div>
+      </div>
+    </div>
+  </div>
   
 </div>

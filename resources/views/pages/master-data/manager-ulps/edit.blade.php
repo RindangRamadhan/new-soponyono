@@ -21,7 +21,7 @@
         </div>
         <div class="card-content">
           <div class="card-body">
-            <form class="form-horizontal form-submit" action="{{ route('manager-ulps.update', $manager_ulp->id) }}" method="POST" novalidate>
+            <form class="form-horizontal form-submit" action="{{ route('manager-ulps.update', $manager_ulp->id) }}" method="POST" enctype="multipart/form-data" novalidate>
               @csrf
               {{ method_field('PATCH') }}
               @include('pages.master-data.manager-ulps.form')

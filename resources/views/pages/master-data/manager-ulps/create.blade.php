@@ -21,7 +21,7 @@
         </div>
         <div class="card-content">
           <div class="card-body">
-            <form class="form-horizontal form-submit" action="{{ url('/master-data/manager-ulps') }}" method="post" novalidate>
+            <form class="form-horizontal form-submit" action="{{ url('/master-data/manager-ulps') }}" method="post" enctype="multipart/form-data" novalidate>
               @csrf
               @include('pages.master-data.manager-ulps.form')
             </form>

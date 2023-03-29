@@ -11,7 +11,7 @@ class ManagerUlp extends Model
     use HasFactory, AuditableTrait;
 
     protected $fillable = [
-        'id', 'ulp_id', 'user_id', 'location',
+        'id', 'ulp_id', 'user_id', 'location','tanda_tangan',
     ];
     
     public function Ulp()

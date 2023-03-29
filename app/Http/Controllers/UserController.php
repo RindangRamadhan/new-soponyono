@@ -268,6 +268,12 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $row = User::find($id);
+        
+        if (\File::exists(public_path('images/upload/' . $row->photo))) {
+            \File::delete(public_path('images/upload/' . $row->photo));
+        }
+
         User::find($id)->delete();
         return response()->json(['status' => 200]);
     }

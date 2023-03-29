@@ -7,7 +7,7 @@ use App\Http\Requests\ManagerUlpRequest;
 use App\Interfaces\ManagerUlpInterface;
 use App\Models\ManagerUlp;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class ManagerUlpController extends Controller
 {
@@ -25,7 +25,7 @@ class ManagerUlpController extends Controller
      */
     public function index()
     {
-        
+
         $pageConfigs = [
             'pageHeader' => true,
             'isReload' => true,
@@ -109,7 +109,7 @@ class ManagerUlpController extends Controller
                 "name" => "Tambah",
             ],
         ];
-        
+
         list($ulps) = $this->managerUlpRepo->create();
         return view('pages.master-data.manager-ulps.create')->with(
             compact([
@@ -128,7 +128,7 @@ class ManagerUlpController extends Controller
      */
     public function store(ManagerUlpRequest $request)
     {
-        
+
         $this->managerUlpRepo->store($request);
         return redirect('/master-data/manager-ulps')->with(['status' => 200]);
     }
@@ -192,6 +192,7 @@ class ManagerUlpController extends Controller
      */
     public function update(ManagerUlpRequest $request, $id)
     {
+
         $this->managerUlpRepo->update($request, $id);
         return redirect('/master-data/manager-ulps')->with(['status' => 200]);
     }
@@ -204,6 +205,13 @@ class ManagerUlpController extends Controller
      */
     public function destroy($id)
     {
+
+
+        $row = ManagerUlp::find($id);
+        // unlink(public_path('images/upload/' . $row->tanda_tangan));
+        if (\File::exists(public_path('images/upload/' . $row->tanda_tangan))) {
+            \File::delete(public_path('images/upload/' . $row->tanda_tangan));
+        }
         ManagerUlp::find($id)->delete();
         return response()->json(['status' => 200]);
     }
