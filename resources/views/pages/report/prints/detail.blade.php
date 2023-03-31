@@ -1,13 +1,12 @@
 @extends('layouts.app')
 {{-- title --}}
-@section('title','Detail')
+@section('title','Report Cetak')
 {{-- vendor scripts --}}
 @section('vendor-styles')
-<link rel="stylesheet" type="text/css" href="{{asset('vendors/css/forms/select/select2.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('vendors/css/tables/datatable/datatables.min.css')}}">
 @endsection
 {{-- page-styles --}}
 @section('page-styles')
-<link rel="stylesheet" type="text/css" href="{{asset('css/plugins/forms/validation/form-validation.css')}}">
 @endsection
 @section('content')
 
@@ -25,27 +24,9 @@
 
               <div class="col-sm-6">
                 <div class="form-group">
-                  <label>UP3</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="up3" class="form-control" value="{{ $order->up3_name }}" readonly>
-
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>ULP</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="ulp" class="form-control" value="{{ $order->ulp_name }}" readonly>
-
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
                   <label>Nama Petugas</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" class="form-control " value="{{ $order->officer_name }}" readonly>
+                    <input type="text" class="form-control " value="{{ $user->officer_name }}" readonly>
 
                   </div>
                 </div>
@@ -54,106 +35,47 @@
                 <div class="form-group">
                   <label>RBM</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" class="form-control " value="{{ $order->rbm_code }}" readonly>
-
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>ID PEL</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" class="form-control " value="{{ $order->customer_id }}" readonly>
+                    <input type="text" class="form-control " value="{{ $user->rbm_code }}" readonly>
 
                   </div>
                 </div>
               </div>
 
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Nama</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="name" class="form-control " value="{{ $order->customer_name }}" readonly>
-                  </div>
-                </div>
-              </div>
+            </div>
+            <div class="table-responsive">
+              <table id="table" class="table table-sm table-ssr nowrap">
+                <thead>
+                  <tr>
+                    <th>ID PEL</th>
+                    <th>Nama</th>
+                    <th>Tarif</th>
+                    <th>Daya</th>
+                    <th>Rp.Tag</th>
+                    <th>Status Cetak</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($orders as $row)
+                  <tr>
+                    <td>{{ $row->customer_id }}</td>
+                    <td>{{ $row->customer_name }}</td>
+                    <td>{{ $row->tarif }}</td>
+                    <td>{{ $row->power }}</td>
+                    <td>{{ $row->bill }}</td>
+                    @if ($row->printout_status==='Belum')
+                    <td style="background-color:#ff6666">{{ $row->printout_status }}</td>
+                    @else
+                    <td style="background-color:#b3ff99" >{{ $row->printout_status }}</td>
+                    @endif
 
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>No Telp</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="name" class="form-control " value="{{ $order->phone_number }}" readonly>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Tarif</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="tarif" class="form-control " value="{{ $order->tarif }}" readonly>
-
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Daya</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="power" class="form-control " value="{{ $order->power }}" readonly>
-
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Gardu</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="substation" class="form-control " value="{{ $order->substation }}"
-                      readonly>
-
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-12">
-                <div class="form-group">
-                  <label>Alamat</label>
-                  <div class="controls form-label-group position-relative ">
-                    <textarea class="form-control editors" name="customer_address" rows="10" cols="30"
-                      readonly>{{ $order->customer_address }}</textarea>
-
-                  </div>
-                </div>
-              </div>
-              
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>RP TAG</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="bill" class="form-control " value="{{ $order->bill }}" readonly>
-
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Tanggal Upload</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" id="update_at" name="update_at" class="form-control " value="" readonly>
-
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label>Status Cetak</label>
-                  <div class="controls form-label-group position-relative ">
-                    <input type="text" name="class" class="form-control " value="{{ $order->printout_status }}" readonly>
-
-                  </div>
-                </div>
-              </div>
+                    <td><a href="{{ url("/report/print/cetak-order/$row->id") }}" class='btn btn-icon rounded-circle btn-info'>
+                      <i class='bx bx-printer'></i>
+                    </a></td>
+                  </tr>
+                  @endforeach
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -166,21 +88,17 @@
 @endsection
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-<script src="{{asset('vendors/js/forms/select/select2.full.min.js')}}"></script>
-<script src="{{asset('vendors/js/forms/validation/jqBootstrapValidation.js')}}"></script>
+<script src="{{asset('vendors/js/tables/datatable/datatables.min.js')}}"></script>
+<script src="{{asset('vendors/js/tables/datatable/dataTables.bootstrap4.min.js')}}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
-<script src="{{asset('js/scripts/forms/select/form-select2.js')}}"></script>
-<script src="{{asset('js/scripts/forms/validation/form-validation.js')}}"></script>
-
 <script>
-  $(document).ready(function() {
-    const data = @php echo $order @endphp;
-    document.getElementById("update_at").value=createTanggalIndo(data.update_at)
-
-  });
-
+  $(document).ready(function () {
+    $('#table').DataTable({
+      filter: true,
+    });
+});
 </script>
 @endsection

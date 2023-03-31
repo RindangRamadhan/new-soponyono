@@ -47,16 +47,6 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-4">
-            <div class="controls form-label-group position-relative has-icon-left">
-              <select id="user_id" name="user_id" class="select2 form-control ">
-                <option></option>
-              </select>
-              <div class="form-control-position">
-                <i class="bx bx-edit-alt"></i>
-              </div>
-            </div>
-          </div>
           <div class="col-sm-3">
             <div class="controls form-label-group position-relative has-icon-left">
               <select id="month" name="month" class="select2 form-control filter-change">
@@ -82,40 +72,35 @@
               <i class="bx bx-search"></i> Search
             </button>
           </div>
-          <div class="col-sm-2">
+          {{-- <div class="col-sm-2">
             <button id="btnExcel" class="btn btn-success">
               <i class="bx bx-printer"></i> Print
             </button>
-          </div>
+          </div> --}}
         </div>
 
         <div class="table-responsive">
-          <table class="table table-sm table-ssr nowrap">
+          <table id="boruto" class="table table-sm table-ssr nowrap">
             <tfoot style="display: table-row-group">
               <th>Id</th>
-              <th>ULP</th>
-              <th>Pelanggan</th>
               <th>Petugas</th>
-              <th>No. HP</th>
-              <th>Tanggal Upload</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Total Wo</th>
+              <th>STATUS CETAK</th>
+              <th>ACTION</th>
             </tfoot>
             <thead>
               <tr>
                 <th>Id</th>
-                <th>ULP</th>
-                <th>Pelanggan</th>
                 <th>Petugas</th>
-                <th>No. HP</th>
-                <th>Tanggal Upload</th>
-                <th>Status</th>
-                <th>Action</th>
+              <th>Total Wo</th>
+              <th>STATUS CETAK</th>
+              <th>ACTION</th>
               </tr>
             </thead>
-            <tbody></tbody>
+
           </table>
         </div>
+
       </div>
     </div>
   </div>
@@ -136,7 +121,6 @@
 @section('page-scripts')
 <script src="{{asset('js/scripts/forms/select/form-select2.js')}}"></script>
 <script>
-  let petugas_name='cek'
   $(document).on('click', '#btnSearch', function (e) {
     GetOrder();
   })
@@ -144,23 +128,25 @@
   $(document).on('click', '#btnExcel', function (e) {
     const month = $("#month").val();
     const year = $("#year").val();
-    const user_id = $("#user_id").val();
+    const ulp_id = $("#ulp_id").val();
 
-    if (user_id == "" ) {
-      Swal.fire('Info', 'Petugas belum dipilih', 'warning');
+    if (ulp_id == "" ) {
+      Swal.fire('Info', 'ULP belum dipilih', 'warning');
       return
     }
 
     Swal.fire({
       title: 'Yakin Mau Cetak ???',
-      text: 'Petugas : '+ petugas_name,
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, Cetak!'
     }).then((result) => {
-      window.open(`/report/print/print-all/${user_id}/${month}/${year}`);
+      if (result.value) {
+        window.open(`/report/print/print-all/${ulp_id}/${month}/${year}`);
+        // GetOrder();
+      }
       
     })
     
@@ -177,9 +163,6 @@
       placeholder: 'Pilih ULP'
     });
 
-    $('#user_id').select2({
-      placeholder: 'Pilih Petugas'
-    });
     const date = moment();
 
     $('#month').select2({
@@ -220,43 +203,14 @@
       }
     });
   })
-  $(document).on('change', '#user_id', function (e) {
-    const data = $(this).select2('data')[0]    
-    petugas_name=data.text
-
-  })
-
-  $(document).on('change', '#ulp_id', function (e) {
-    const data = $(this).select2('data')[0]
-    const user = $('#user_id');
-
-    user.html('').select2({
-      data: [{id: '', text: ''}]
-    });
-
-    $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      type: "POST",
-      url: `${api}/master-data/user/list-select`,
-      dataType:"json",
-      data: { ulp_id: data.id },
-      success: function(response){
-        user.select2({
-          data: response,
-          placeholder: 'Pilih Petugas'
-        });
-      }
-    });
-  })
+  
 
   function GetOrder() {
     
     const month = $("#month").val();
     const year = $("#year").val();
-    const user_id = $("#user_id").val();
-    if (user_id == "") {
+    const ulp_id = $("#ulp_id").val();
+    if (ulp_id == "") {
       return
     }
 
@@ -268,33 +222,93 @@
       qFilter += `year=${year}`
     }
     
-    if (user_id != "") {
-      qFilter += `&user_id=${user_id}`
+    if (ulp_id != "") {
+      qFilter += `&ulp_id=${ulp_id}`
     }
     
     
     const params = {
       "url": "{{ url('/report/print') }}",
       "columns": [
-        { "data": "orders__id", "visible": false },
-        { "data": "ulp__name" },
-        { "data": "customer__name" },
+        { "data": "id", "visible": false },
         { "data": "u__name" },
-        { "data": "phone_number" },
-        { "data": "updated__in" },
+        { "data": "total__wo" },
         { "data": "printout_status" },
-        {
-          "data": "action", "searchable": false, "orderable": false
-        }
+        { "data": "action" },
+        
       ],
       "args": {
         "month": month,
         "year": year,
-        "user_id": user_id,
+        "ulp_id": ulp_id,
       }
     }
 
-    dataTableServerSide(params)
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      type: "POST",
+      url: `${api}/report/print/list`,
+      dataType:"json",
+      data: params.args,
+      success: function(response){
+        if(response.length>0){
+          response.map((row)=>{
+            const print = `
+              <a href="{{ url('/report/print/cetak/${row.id}/${month}/${year}') }}" class='btn btn-icon rounded-circle btn-info'>
+                <i class='bx bx-printer'></i>
+              </a>
+            `
+            const detail = `
+              <a href="{{ url('/report/print/detail/${row.id}/${month}/${year}') }}" class='btn btn-icon rounded-circle btn-info'>
+                <i class='bx bx-list-ul'></i>
+              </a>
+            `
+            row.action =print + detail;
+          })
+
+          $('#boruto tfoot th').each(function () {
+            var title = $(this).text();
+            if(title !='ACTION'){
+              $(this).html('<input type="text" size="15" placeholder="Search ' + title + '" />');
+            }
+          });
+          
+          $('#boruto').DataTable({
+            filter: true,
+            paging: false,
+            // scrollY: "300px",
+            data:response,
+            columns: params.columns,
+            order: [[1, 'asc']],
+            rowCallback: function (row, data) {
+              if (data.printout_status === 'Belum') {
+                $('td:eq(2)', row).css('background-color', '#ff6666');
+              }else{
+                $('td:eq(2)', row).css('background-color', '#b3ff99');
+              }
+            },
+            initComplete: function () {
+            // Apply the search
+            this.api()
+                .columns()
+                .every(function () {
+                    var that = this;
+ 
+                    $('input', this.footer()).on('keyup change clear', function () {
+                        if (that.search() !== this.value) {
+                            that.search(this.value).draw();
+                        }
+                    });
+                });
+        },
+          })
+          
+        }
+      }
+    });
+
   }
 
 </script>

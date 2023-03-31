@@ -98,9 +98,9 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::get('/{id}/location', [MonitoringHarianController::class, 'location']);
     });
 
-    Route::get('/report/detail/export/{up3_id}/{ulp_id}/{start_date}/{end_date}/', [ReportDetailController::class, 'export'])->name('report.detail.export');
-    Route::get('/report/print/print-all/{user_id}/{month}/{year}/', [ReportPrintController::class, 'print_all']);
-    Route::get('/report/monthly/share-all/{up3_id}/{ulp_id}/{month}/{year}/', [ReportMonthlyController::class, 'share_all']);
+    Route::get('/report/detail/export/{up3_id}/{ulp_id}/{start_date}/{end_date}', [ReportDetailController::class, 'export'])->name('report.detail.export');
+    Route::get('/report/print/print-all/{ulp_id}/{month}/{year}', [ReportPrintController::class, 'print_all']);
+    Route::get('/report/monthly/share-all/{up3_id}/{ulp_id}/{month}/{year}', [ReportMonthlyController::class, 'share_all']);
 
     // Report
     Route::prefix('/report')->group(function () {
@@ -116,8 +116,9 @@ Route::middleware('auth', 'verified')->group(function () {
         Route::resource('/print', ReportPrintController::class);
         Route::prefix('/print')->group(function () {
             Route::post('/list', [ReportPrintController::class, 'list']);
-            Route::get('/{id}/detail', [ReportPrintController::class, 'show']);
-            Route::get('/cetak/{id}', [ReportPrintController::class, 'print']);
+            Route::get('/detail/{id}/{month}/{year}', [ReportPrintController::class, 'show']);
+            Route::get('/cetak/{id}/{month}/{year}', [ReportPrintController::class, 'print']);
+            Route::get('/cetak-order/{id}', [ReportPrintController::class, 'print_order']);
 
         });
 

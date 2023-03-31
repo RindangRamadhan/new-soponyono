@@ -13,6 +13,7 @@ interface OrderInterface
     function report_daily($request);
     function show($id);
     function show_petugas($id, $request);
+    function show_petugas_cetak($id, $month,$year);
     function upload(Request $request);
     function destroy($id);
 }
