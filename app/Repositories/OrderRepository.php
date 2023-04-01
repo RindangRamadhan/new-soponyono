@@ -22,34 +22,35 @@ class OrderRepository implements OrderInterface
 {
   function list()
   {
-    $rowuser = Auth::user();
-    $tipe = $rowuser->type;
+    $user_id = Auth::user()->id;
+    // $tipe = $rowuser->type;
 
-    $order = Order::select('orders.id', 'orders.id As orders__id', 'orders.status AS orders__status', 'orders.bill AS orders__bill', 'customer.name as customer__name', 'user.name as user__name', 'up3.name AS up3__name', 'ulp.name AS ulp__name')
+    $data = Order::select('orders.id', 'orders.id As orders__id', 'orders.status AS orders__status', 'orders.bill AS orders__bill', 'customer.name as customer__name', 'user.name as user__name', 'up3.name AS up3__name', 'ulp.name AS ulp__name')
       ->join('up3s AS up3', 'orders.up3_id', 'up3.id')
       ->join('uids as uid', 'uid.id', '=', 'up3.uid_id')
       ->join('ulps AS ulp', 'orders.ulp_id', 'ulp.id')
       ->join('customers AS customer', 'orders.customer_id', 'customer.id')
       ->join('users AS user', 'orders.user_id', 'user.id')
-      ->where('orders.created_by', $rowuser->id);
+      ->where('orders.created_by', $user_id)
+      ->whereMonth('orders.created_at', date('m'));
 
-    if ($tipe == 'UP3') {
-      $data = $order->where([
-        ['orders.up3_id', $rowuser->up3_id],
-      ]);
-    } else if ($tipe == 'ULP') {
-      $data = $order
-        ->where([
-          ['orders.ulp_id', $rowuser->ulp_id],
-        ]);
-    } else if ($tipe == 'ALL') {
-      $data = $order;
-    } else {
+    // if ($tipe == 'UP3') {
+    //   $data = $order->where([
+    //     ['orders.up3_id', $rowuser->up3_id],
+    //   ]);
+    // } else if ($tipe == 'ULP') {
+    //   $data = $order
+    //     ->where([
+    //       ['orders.ulp_id', $rowuser->ulp_id],
+    //     ]);
+    // } else if ($tipe == 'ALL') {
+    //   $data = $order;
+    // } else {
 
-      $data = $order->where([
-        ['orders.uid_id', $rowuser->uid_id],
-      ]);
-    }
+    //   $data = $order->where([
+    //     ['orders.uid_id', $rowuser->uid_id],
+    //   ]);
+    // }
 
     return $data;
   }
@@ -529,15 +530,21 @@ class OrderRepository implements OrderInterface
               'substation' => $substation,
             ]);
           }
-
-          $rowuser = User::select('id')->where('rbm_code', $rbm_code)->first();
-          if (!$rowuser) {
+          if($rbm_code){
+            $rowuser = User::select('id')->where('rbm_code', $rbm_code)->first();
+            if (!$rowuser) {
+              $upload_failed['reason'] = "Kode RBM tidak ditemukan";
+              $upload_faileds[] = $upload_failed;
+              continue;
+            } else {
+              $user_id = $rowuser->id;
+            }
+          }else{
             $upload_failed['reason'] = "Kode RBM tidak ditemukan";
             $upload_faileds[] = $upload_failed;
             continue;
-          } else {
-            $user_id = $rowuser->id;
           }
+          
 
           Order::create([
             'customer_id' => $customer_id,
@@ -561,7 +568,7 @@ class OrderRepository implements OrderInterface
       }
 
       if (count($upload_faileds) > 0) {
-        OrderUploadFailed::query()->delete();
+        OrderUploadFailed::where('created_by', $created_by)->delete();
         OrderUploadFailed::insert($upload_faileds);
       }
       if ($upload_succeed != 0) {

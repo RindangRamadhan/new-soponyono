@@ -33,6 +33,7 @@ class OrderUploadFailedExport implements FromQuery, WithHeadings, WithMapping
                 'Alamat',
                 'RPTAG',
                 'Create At',
+                'Keterangan Gagal',
             ],
         ];
     }
@@ -52,6 +53,7 @@ class OrderUploadFailedExport implements FromQuery, WithHeadings, WithMapping
             $row->address,
             $row->bill,
             $row->created_at,
+            $row->reason,
         ];
     }
 

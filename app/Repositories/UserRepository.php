@@ -354,7 +354,7 @@ class UserRepository implements UserInterface
             }
 
             if (count($upload_faileds) > 0) {
-                UserUploadFailed::query()->delete();
+                UserUploadFailed::where('created_by', $created_by)->delete();
                 UserUploadFailed::insert($upload_faileds);
             }
 
@@ -447,9 +447,9 @@ class UserRepository implements UserInterface
                         continue;
                     }
 
-                    $ulp = Ulp::select('id')->where('id', $ulp_id);
+                    $ulp = Ulp::select('id')->where('id', $ulp_id)->where('up3_id', $up3_id);
                     if ($ulp->count() == 0) {
-                        $upload_failed['reason'] = "ULP tidak ditemukan";
+                        $upload_failed['reason'] = "ULP tidak ditemukan / relasi Ke UP3 tidak benar";
                         $upload_faileds[] = $upload_failed;
                         continue;
                     }
