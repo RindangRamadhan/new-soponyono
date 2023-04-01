@@ -59,7 +59,8 @@ class UserController extends Controller
 
     function list(Request $request)
     {
-        $resources = $this->userRepo->list();
+        $status='Pegawai';
+        $resources = $this->userRepo->list($status);
 
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
             $request,
@@ -78,6 +79,7 @@ class UserController extends Controller
 
         return json_encode($result);
     }
+
 
     /**
      * Show the form for creating a new resource.

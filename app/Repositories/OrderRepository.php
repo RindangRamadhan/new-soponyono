@@ -220,7 +220,7 @@ class OrderRepository implements OrderInterface
           FROM orders o
             JOIN users u
               ON o.user_id = u.id
-          WHERE MONTH(o.updated_at) = ? AND YEAR(o.updated_at) = ? AND o.ulp_id = ?
+          WHERE MONTH(o.created_at) = ? AND YEAR(o.created_at) = ? AND o.ulp_id = ?
       ";
     $query .= "
           GROUP BY u.id
@@ -421,8 +421,8 @@ class OrderRepository implements OrderInterface
     )
       ->join('customers AS customer', 'orders.customer_id', 'customer.id')
       ->where('orders.user_id', $id)
-      ->whereMonth('orders.updated_at', $month)
-      ->whereYear('orders.updated_at', $year);
+      ->whereMonth('orders.created_at', $month)
+      ->whereYear('orders.created_at', $year);
 
 
     $orders = $orders->get();

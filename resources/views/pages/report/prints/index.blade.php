@@ -145,7 +145,7 @@
     }).then((result) => {
       if (result.value) {
         window.open(`/report/print/print-all/${ulp_id}/${month}/${year}`);
-        // GetOrder();
+       
       }
       
     })

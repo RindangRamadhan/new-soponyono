@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Helpers\Helper;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\PetugasRequest;
 use App\Imports\UserImport;
 use App\Interfaces\UserInterface;
 use App\Models\Uid;
@@ -20,7 +21,7 @@ use Spatie\Permission\Models\Role;
 
 class UserRepository implements UserInterface
 {
-    function list()
+    function list($status)
     {
         $rowuser = Auth::user();
         $tipe = $rowuser->type;
@@ -41,7 +42,8 @@ class UserRepository implements UserInterface
             ->join('up3s AS up3', 'users.up3_id', 'up3.id')
             ->join('ulps AS ulp', 'users.ulp_id', 'ulp.id')
             ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
-            ->join('roles AS r', 'mhr.role_id', 'r.id');;
+            ->join('roles AS r', 'mhr.role_id', 'r.id')
+            ->where('users.status', $status);
         if ($tipe == 'UP3') {
             $data = $user->where([
                     ['users.up3_id', $rowuser->up3_id],
@@ -89,15 +91,36 @@ class UserRepository implements UserInterface
             'up3_id' => $request->up3_id,
             'ulp_id' => $request->ulp_id,
             'user_name' => $request->user_name,
-            'rbm_code' => $request->rbm_code,
             'name' => $request->name,
             'type' => $request->type,
             'phone' => $request->phone,
             'position' => $request->position,
+            'status' => 'Pegawai',
             'password' => Hash::make($request->password),
         ]);
 
         $role = Role::find($request->role_id);
+
+        $user->assignRole($role);
+    }
+
+    public function store_petugas(petugasRequest $request)
+    {
+        $user = User::create([
+            'uid_id' => $request->uid_id,
+            'up3_id' => $request->up3_id,
+            'ulp_id' => $request->ulp_id,
+            'user_name' => $request->user_name,
+            'rbm_code' => $request->rbm_code,
+            'name' => $request->name,
+            'type' => 'ULP',
+            'phone' => $request->phone,
+            'position' => 'Petugas',
+            'status' => 'Petugas',
+            'password' => Hash::make($request->password),
+        ]);
+
+        $role = Role::find(2);
 
         $user->assignRole($role);
     }
@@ -166,7 +189,8 @@ class UserRepository implements UserInterface
             'up3_id' => $request->up3_id,
             'ulp_id' => $request->ulp_id,
             'user_name' => $request->user_name,
-            'rbm_code' => $request->rbm_code,
+            'phone' => $request->phone,
+            'position' => $request->position,
             'name' => $request->name,
             'type' => $request->type,
         ]);
@@ -174,6 +198,43 @@ class UserRepository implements UserInterface
         DB::table('model_has_roles')->where("model_id", $user->id)->delete();
 
         $user->assignRole($role);
+    }
+
+    public function edit_petugas($id)
+    {
+        $petugas = User::select('users.*', 'r.id AS role_id')
+            ->join('model_has_roles AS mhr', 'users.id', 'mhr.model_id')
+            ->join('roles AS r', 'mhr.role_id', 'r.id')
+            ->where('users.id', $id)
+            ->first();
+
+        $rowuser = Auth::user();
+        $tipe = $rowuser->type;
+        if ($tipe == 'ALL') {
+            $uids = Uid::select('id', 'name as text')->get();
+        } else {
+            $uids = Uid::select('id', 'name as text')->where([
+                ['id', $rowuser->uid_id],
+            ])->get();
+        }
+
+
+        return [$petugas, $uids];
+    }
+
+    public function update_petugas(PetugasRequest $request, $id)
+    {
+        $petugas = User::find($id);
+        
+        $petugas->update([
+            'uid_id' => $request->uid_id,
+            'up3_id' => $request->up3_id,
+            'ulp_id' => $request->ulp_id,
+            'user_name' => $request->user_name,
+            'rbm_code' => $request->rbm_code,
+            'name' => $request->name,
+        ]);
+
     }
 
     public function reset_password($id)
@@ -244,7 +305,6 @@ class UserRepository implements UserInterface
                         continue;
                     }
 
-                    
 
                     $uid = Uid::select('id')->where('id', $v[6]);
                     if ($uid->count() == 0) {
@@ -284,6 +344,7 @@ class UserRepository implements UserInterface
                         'uid_id' => $v[6],
                         'up3_id' => $v[7],
                         'ulp_id' => $v[8],
+                        'status' => 'Petugas',
                         'password' => Hash::make("12345678"),
                     ]);
 
@@ -294,6 +355,129 @@ class UserRepository implements UserInterface
 
             if (count($upload_faileds) > 0) {
                 UserUploadFailed::query()->delete();
+                UserUploadFailed::insert($upload_faileds);
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+
+        return response()->json([
+            'status' => 200,
+            'user_upload' => $upload_succeed,
+            'user_failed' => count($upload_faileds),
+        ]);
+    }
+
+    public function upload_petugas(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,xls,xlsx',
+        ]);
+
+        $rowuser = Auth::user();
+        $created_by = $rowuser->id;
+
+        // Get file excel from requests
+        $file = $request->file('file');
+
+        // Convert Excel to Array
+        $excels = Excel::toArray(new UserImport, $file);
+
+        DB::beginTransaction();
+
+        try {
+            $upload_succeed = 0;
+            $upload_faileds = [];
+
+            foreach ($excels[0] as $k => $v) {
+                // Skip Header
+                if ($k == 0) {
+                    continue;
+                }
+                $uid_id =$v[4];
+                $up3_id =$v[5];
+                $ulp_id =$v[6];
+                $upload_failed = [
+                    'user_name' => $v[0],
+                    'rbm_code' => $v[1],
+                    'name' => $v[2],
+                    'phone' => $v[3],
+                    'type' => 'ULP',
+                    'position' => 'Petugas',
+                    'uid_id' => $uid_id,
+                    'up3_id' => $up3_id,
+                    'ulp_id' => $ulp_id,
+                    'role' => '',
+                    'created_by' => $created_by,
+                    'created_at' => new \DateTime(),
+                ];
+
+                if ($v[0]) {
+                    $upload_succeed++;
+
+                    $rbm_code = User::select('id')->where('rbm_code', $v[1])->count();
+                    if ($rbm_code > 0) {
+                        $upload_failed['reason'] = "Rbm Code sudah ada";
+                        $upload_faileds[] = $upload_failed;
+                        continue;
+                    }
+                    
+                    $user_name = User::select('id')->where('user_name', $v[0])->count();
+                    if ($user_name > 0) {
+                        $upload_failed['reason'] = "User name sudah ada";
+                        $upload_faileds[] = $upload_failed;
+                        continue;
+                    }
+
+
+                    $uid = Uid::select('id')->where('id', $uid_id);
+                    if ($uid->count() == 0) {
+                        $upload_failed['reason'] = "UID tidak ditemukan";
+                        $upload_faileds[] = $upload_failed;
+                        continue;
+                    }
+
+                    $up3 = Up3::select('id')->where('id', $up3_id);
+                    if ($up3->count() == 0) {
+                        $upload_failed['reason'] = "UP3 tidak ditemukan";
+                        $upload_faileds[] = $upload_failed;
+                        continue;
+                    }
+
+                    $ulp = Ulp::select('id')->where('id', $ulp_id);
+                    if ($ulp->count() == 0) {
+                        $upload_failed['reason'] = "ULP tidak ditemukan";
+                        $upload_faileds[] = $upload_failed;
+                        continue;
+                    }
+
+                    $role = 2;
+                    
+
+                    $user = User::create([
+                        'user_name' => $v[0],
+                        'rbm_code' => $v[1],
+                        'name' => $v[2],
+                        'phone' => $v[3],
+                        'type' => 'ULP',
+                        'position' => 'Petugas',
+                        'uid_id' => $uid_id,
+                        'up3_id' => $up3_id,
+                        'ulp_id' => $ulp_id,
+                        'status' => 'Petugas',
+                        'password' => Hash::make("12345678"),
+                    ]);
+
+                    $newRole = Role::find($role);
+                    $user->assignRole($newRole);
+                }
+            }
+
+            if (count($upload_faileds) > 0) {
+                UserUploadFailed::where('created_by', $created_by)->delete();
                 UserUploadFailed::insert($upload_faileds);
             }
 

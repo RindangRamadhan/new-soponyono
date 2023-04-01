@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRequest extends FormRequest
+class PetugasRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,8 +28,8 @@ class UserRequest extends FormRequest
         if ($this->isMethod('POST')) {
             $rules = [
                 'user_name' => 'required|unique:users,user_name',
+                'rbm_code' => 'required|unique:users,rbm_code',
                 'name' => 'required',
-                'type' => 'required',
                 'uid_id' => 'required',
                 'up3_id' => 'required',
                 'ulp_id' => 'required',
@@ -38,9 +38,9 @@ class UserRequest extends FormRequest
             ];
         } else {
             $rules = [
-                'user_name' => 'required|unique:users,user_name,' . $this->route('user'),
+                'user_name' => 'required|unique:users,user_name,' . $this->route('petugass'),
+                'rbm_code' => 'required|unique:users,rbm_code,' . $this->route('petugass'),
                 'name' => 'required',
-                'type' => 'required',
                 'uid_id' => 'required',
                 'up3_id' => 'required',
                 'ulp_id' => 'required',

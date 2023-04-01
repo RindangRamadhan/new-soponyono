@@ -14,6 +14,7 @@ use App\Http\Controllers\UidController;
 use App\Http\Controllers\UlpController;
 use App\Http\Controllers\Up3Controller;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PetugasController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
@@ -53,8 +54,15 @@ Route::middleware('auth', 'verified')->group(function () {
             Route::get('/export', [UserController::class, 'export'])->name('users.export');
             Route::get('/{id}/reset-password', [UserController::class, 'reset_password']);
         });
+        Route::prefix('/petugass')->group(function () {
+            Route::get('/download-template', [PetugasController::class, 'download'])->name('petugass.download');
+            Route::post('/upload-template', [PetugasController::class, 'upload'])->name('petugass.upload');
+            Route::get('/export', [PetugasController::class, 'export'])->name('petugass.export');
+            Route::get('/{id}/reset-password', [PetugasController::class, 'petugass.reset_password']);
+        });
 
         Route::resource('/users', UserController::class);
+        Route::resource('/petugass', PetugasController::class);
         Route::resource('/roles', RoleController::class);
         Route::resource('/uids', UidController::class);
         Route::resource('/up3s', Up3Controller::class);
@@ -66,6 +74,7 @@ Route::middleware('auth', 'verified')->group(function () {
 
         // List Server Side
         Route::post('/users/list', [UserController::class, 'list']);
+        Route::post('/petugass/list', [PetugasController::class, 'list']);
         Route::post('/roles/list', [RoleController::class, 'list']);
         Route::post('/uids/list', [UidController::class, 'list']);
         Route::post('/up3s/list', [Up3Controller::class, 'list']);

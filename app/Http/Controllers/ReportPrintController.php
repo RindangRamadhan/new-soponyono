@@ -169,8 +169,8 @@ class ReportPrintController extends Controller
             }
 
             Order::where('orders.user_id', $user_id)
-                ->whereMonth('orders.updated_at', $month)
-                ->whereYear('orders.updated_at', $year)
+                ->whereMonth('orders.created_at', $month)
+                ->whereYear('orders.created_at', $year)
                 ->update([
                     'printout_status' => 'Sudah',
                 ]);
@@ -202,8 +202,8 @@ class ReportPrintController extends Controller
             ->join('customers AS customer', 'orders.customer_id', 'customer.id')
             ->join('users AS user', 'orders.user_id', 'user.id')
             ->where('orders.ulp_id', $ulp_id)
-            ->whereMonth('orders.updated_at', $month)
-            ->whereYear('orders.updated_at', $year)->get();
+            ->whereMonth('orders.created_at', $month)
+            ->whereYear('orders.created_at', $year)->get();
 
         if ($orders) {
 
@@ -223,8 +223,8 @@ class ReportPrintController extends Controller
             }
 
             Order::where('orders.user_id', $ulp_id)
-                ->whereMonth('orders.updated_at', $month)
-                ->whereYear('orders.updated_at', $year)
+                ->whereMonth('orders.created_at', $month)
+                ->whereYear('orders.created_at', $year)
                 ->update([
                     'printout_status' => 'Sudah',
                 ]);

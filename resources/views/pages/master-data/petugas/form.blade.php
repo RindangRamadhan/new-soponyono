@@ -3,7 +3,7 @@
     <div class="form-group">
       <label>User Name</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="user_name" class="form-control  @error('user_name') is-invalid @enderror" placeholder="User Name" required data-validation-required-message="This user_name field is required" value="{{isset($user) ? $user->user_name : old('user_name')}}">
+        <input type="text" name="user_name" class="form-control  @error('user_name') is-invalid @enderror" placeholder="User Name" required data-validation-required-message="This user_name field is required" value="{{isset($petugas) ? $petugas->user_name : old('user_name')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
@@ -22,7 +22,7 @@
     <div class="form-group">
       <label>Nama</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="name" class="form-control  @error('name') is-invalid @enderror" placeholder="Nama" required data-validation-required-message="This name field is required" value="{{isset($user) ? $user->name : old('name')}}">
+        <input type="text" name="name" class="form-control  @error('name') is-invalid @enderror" placeholder="Nama" required data-validation-required-message="This name field is required" value="{{isset($petugas) ? $petugas->name : old('name')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
@@ -39,16 +39,14 @@
   </div>
   <div class="col-sm-6">
     <div class="form-group">
-      <label>Tipe</label>
+      <label>Kode RBM</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <select id="type" name="type" class="select2 form-control @error('type') is-invalid @enderror" required data-validation-required-message="This work unit field is required">
-          <option></option>
-        </select>
+        <input type="text" name="rbm_code" maxlength="3" class="form-control  @error('rbm_code') is-invalid @enderror" placeholder="Kode RBM" required data-validation-required-message="This rbm_code field is required" value="{{isset($petugas) ? $petugas->rbm_code : old('rbm_code')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
         <!-- Error Message -->
-        @error('type')
+        @error('rbm_code')
         <div class="help-block">
           <ul role="alert">
             <li>{{ $message }}</li>
@@ -62,7 +60,7 @@
     <div class="form-group">
       <label>No. Hp</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="phone" class="form-control  @error('phone') is-invalid @enderror" placeholder="No. Hp" value="{{isset($user) ? $user->phone : old('phone')}}">
+        <input type="text" name="phone" class="form-control  @error('phone') is-invalid @enderror" placeholder="No. Hp" value="{{isset($petugas) ? $petugas->phone : old('phone')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
@@ -77,25 +75,7 @@
       </div>
     </div>
   </div>
-  <div class="col-sm-6">
-    <div class="form-group">
-      <label>Jabatan</label>
-      <div class="controls form-label-group position-relative has-icon-left">
-        <input type="text" name="position" class="form-control  @error('position') is-invalid @enderror" placeholder="Jabatan" value="{{isset($user) ? $user->position : old('position')}}">
-        <div class="form-control-position">
-          <i class="bx bx-edit-alt"></i>
-        </div>
-        <!-- Error Message -->
-        @error('position')
-        <div class="help-block">
-          <ul role="alert">
-            <li>{{ $message }}</li>
-          </ul>
-        </div>
-        @enderror
-      </div>
-    </div>
-  </div>
+  
   <div class="col-sm-6">
     <div class="form-group">
       <label>UID</label>
@@ -159,35 +139,15 @@
       </div>
     </div>
   </div>
-  <div class="col-sm-6">
-    <div class="form-group">
-      <label>Hak Akses</label>
-      <div class="controls form-label-group position-relative has-icon-left">
-        <select id="role_id" name="role_id" class="select2 form-control @error('role_id') is-invalid @enderror" required data-validation-required-message="This work unit field is required">
-          <option></option>
-        </select>
-        <div class="form-control-position">
-          <i class="bx bx-edit-alt"></i>
-        </div>
-        <!-- Error Message -->
-        @error('role_id')
-        <div class="help-block">
-          <ul role="alert">
-            <li>{{ $message }}</li>
-          </ul>
-        </div>
-        @enderror
-      </div>
-    </div>
-  </div>
+  
 
-  @if (!isset($user))
+  @if (!isset($petugas))
 
   <div class="col-sm-6">
     <div class="form-group">
       <label>Password</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="password" name="password" class="form-control  @error('password') is-invalid @enderror" placeholder="Password" required data-validation-required-message="This password field is required" value="{{isset($user) ? $user->password : old('password')}}">
+        <input type="password" name="password" class="form-control  @error('password') is-invalid @enderror" placeholder="Password" required data-validation-required-message="This password field is required" value="{{isset($petugas) ? $petugas->password : old('password')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>
@@ -206,7 +166,7 @@
     <div class="form-group">
       <label>Konfirmasi Password</label>
       <div class="controls form-label-group position-relative has-icon-left">
-        <input type="password" name="password_confirmation" class="form-control  @error('password_confirmation') is-invalid @enderror" placeholder="Konfirmasi Password" required data-validation-required-message="This password confirmation field is required" value="{{isset($user) ? $user->password_confirmation : old('password_confirmation')}}">
+        <input type="password" name="password_confirmation" class="form-control  @error('password_confirmation') is-invalid @enderror" placeholder="Konfirmasi Password" required data-validation-required-message="This password confirmation field is required" value="{{isset($petugas) ? $petugas->password_confirmation : old('password_confirmation')}}">
         <div class="form-control-position">
           <i class="bx bx-edit-alt"></i>
         </div>

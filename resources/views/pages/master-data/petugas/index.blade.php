@@ -1,6 +1,6 @@
 @extends('layouts.app')
 {{-- page title --}}
-@section('title','Pengguna')
+@section('title','Petugas')
 
 {{-- vendor styles --}}
 @section('vendor-styles')
@@ -29,41 +29,39 @@
     <div class="card-content">
       <div class="card-body card-dashboard">
 
-        {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false"
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false"
           id="onshowbtn" data-target="#modal">
           <i class="bx bx-upload"></i>
           <span>Unggah Petugas</span>
         </button>
-        <a href="{{ url('/master-data/users/download-template') }}" id="btnDownload" class="btn btn-success">
+        <a href="{{ url('/master-data/petugass/download-template') }}" id="btnDownload" class="btn btn-success">
           <i class="bx bx-download"></i>
           <span>Unduh Template</span>
         </a>
-        <a href="{{ url('/master-data/users/export') }}" class="btn btn-warning">
+        <a href="{{ url('/master-data/petugass/export') }}" class="btn btn-warning">
           <i class="bx bx-download"></i>
           <span>Unduh Gagal Upload Petugas </span>
-        </a> --}}
+        </a>
 
         <div class="table-responsive">
           <table class="table table-sm table-ssr nowrap">
             <tfoot style="display: table-row-group">
               <th>Id</th>
               <th>Username</th>
+              <th>Kode RBM</th>
               <th>Nama</th>
-              <th>Tipe</th>
               <th>UP3</th>
               <th>ULP</th>
-              <th>Hak Akses</th>
               <th>Action</th>
             </tfoot>
             <thead>
               <tr>
                 <th>Id</th>
                 <th>Username</th>
+                <th>Kode RBM</th>
                 <th>Nama</th>
-                <th>Tipe</th>
                 <th>UP3</th>
                 <th>ULP</th>
-                <th>Hak Akses</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -140,15 +138,14 @@
 
   $(document).ready(function () {
     const params = {
-      "url": "{{ url('/master-data/users') }}",
+      "url": "{{ url('/master-data/petugass') }}",
       "columns": [
         { "data": "users__id", "visible": false },
         { "data": "user_name" },
+        { "data": "rbm_code" },
         { "data": "users__name" },
-        { "data": "users__type" },
         { "data": "up3__name" },
         { "data": "ulp__name" },
-        { "data": "r__name" },
         { "data": "action", "searchable": false, "orderable": false }
       ]
     }
@@ -161,7 +158,7 @@
     e.preventDefault();
     const params = {
       "name": this.dataset.name,
-      "url": "{{ url('/master-data/users/') }}",
+      "url": "{{ url('/master-data/petugass/') }}",
       "id": $(this).attr('data-id'),
       "tr": $(this).parent("td").parent('tr')
     }
@@ -174,7 +171,7 @@
     e.preventDefault();
     const params = {
       "name": this.dataset.name,
-      "url": "{{ url('/master-data/users/') }}",
+      "url": "{{ url('/master-data/petugass/') }}",
       "id": $(this).attr('data-id'),
       "tr": $(this).parent("td").parent('tr')
     }
@@ -221,7 +218,7 @@
 
           return xhr;
         },
-        url: "{{ route('users.upload') }}",
+        url: "{{ route('petugass.upload') }}",
         type: 'POST',
         processData: false,
         contentType: false,
