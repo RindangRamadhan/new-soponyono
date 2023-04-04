@@ -7,13 +7,7 @@ use App\Helpers\Helper;
 use App\Http\Requests\PetugasRequest;
 use App\Interfaces\UserInterface;
 use App\Models\User;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Intervention\Image\ImageManagerStatic as Image;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PetugasController extends Controller

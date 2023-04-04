@@ -463,7 +463,7 @@ class OrderRepository implements OrderInterface
           'uid_id' => $id_uid,
           'up3_id' => $v[0],
           'ulp_id' => $v[1],
-          'customer_id' => $v[2],
+          'customer_id' => (string)$v[2],
           'name' => $v[3],
           'tarif' => $v[4],
           'power' => $v[5],
@@ -480,7 +480,7 @@ class OrderRepository implements OrderInterface
           $upload_succeed++;
           $id_up3 = $v[0];
           $id_ulp = $v[1];
-          $customer_id = $v[2];
+          $customer_id = (string)$v[2];
           $name = $v[3];
           $tarif = $v[4];
           $power = $v[5];
