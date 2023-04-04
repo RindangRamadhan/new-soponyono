@@ -19,21 +19,21 @@
           "name": "Pengguna",
           "i18n": "Pengguna",
           "icon": "bx bx-radio-circle",
-          "role": null
+          "role": "Pengguna-Pengguna Lihat"
         },
         {
           "url": "master-data/petugass",
           "name": "Petugas",
           "i18n": "Petugas",
           "icon": "bx bx-radio-circle",
-          "role": null
+          "role": "Petugas-Petugas Lihat"
         },
         {
           "url": "master-data/customers",
           "name": "Pelanggan",
           "i18n": "Pelanggan",
           "icon": "bx bx-radio-circle",
-          "role": null
+          "role": "Pelanggan-Pelanggan Lihat"
         },
         {
           "url": "master-data/uids",
@@ -84,42 +84,42 @@
       "name": "Monitoring",
       "i18n": "Monitoring",
       "icon": "map",
-      "role": null
+      "role": "Monitoring"
     },
     {
       "url": "#",
       "name": "Laporan",
       "i18n": "Laporan",
       "icon": "desktop",
-      "role": null,
+      "role": "Laporan",
       "submenu": [
         {
           "url": "report/daily",
           "name": "Harian",
           "i18n": "Harian",
           "icon": "bx bx-radio-circle",
-          "role": null
+          "role": "Harian-Harian Lihat"
         },
         {
           "url": "report/monthly",
           "name": "Bulanan",
           "i18n": "Bulanan",
           "icon": "bx bx-radio-circle",
-          "role": null
+          "role": "Bulanan-Bulanan Lihat"
         },
         {
           "url": "report/detail",
           "name": "Detail",
           "i18n": "Detail",
           "icon": "bx bx-radio-circle",
-          "role": null
+          "role": "Detail-Detail Lihat"
         },
         {
           "url": "report/print",
           "name": "Cetak",
           "i18n": "Cetak",
           "icon": "bx bx-radio-circle",
-          "role": null
+          "role": "Cetak-Cetak Lihat"
         }
       ]
     }
