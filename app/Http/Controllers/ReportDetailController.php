@@ -114,7 +114,7 @@ class ReportDetailController extends Controller
             ],
         ];
 
-        list($order) = $this->detailRepo->show($id);
+        list($order) = $this->detailRepo->show_petugas($id, $request);
 
         return view('pages.report.details.detail')->with(
             compact([

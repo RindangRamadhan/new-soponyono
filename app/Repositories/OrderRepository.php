@@ -381,18 +381,18 @@ class OrderRepository implements OrderInterface
       'orders.longitude',
     )
       ->join('customers AS customer', 'orders.customer_id', 'customer.id')
-      ->where('orders.user_id', $id)
-      ->where('orders.billing_status', 'Paid');
+      ->where('orders.user_id', $id);
+      // ->where('orders.billing_status', 'Paid');
 
-    if ($request->up3_id) {
-      $orders = $orders
-        ->where('orders.up3_id', $request->up3_id);
-    }
+    // if ($request->up3_id) {
+    //   $orders = $orders
+    //     ->where('orders.up3_id', $request->up3_id);
+    // }
 
-    if ($request->ulp_id) {
-      $orders = $orders
-        ->where('orders.ulp_id', $request->ulp_id);
-    }
+    // if ($request->ulp_id) {
+    //   $orders = $orders
+    //     ->where('orders.ulp_id', $request->ulp_id);
+    // }
 
     if ($request->start_date && $request->end_date) {
       $orders = $orders
