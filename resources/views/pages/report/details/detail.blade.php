@@ -142,6 +142,8 @@
                   </div>
                 </div>
               </div>
+              
+              @if ($order->billing_status=='JANJI')
               <div class="col-sm-6">
                 <div class="form-group">
                   <label>Tanggal Upload</label>
@@ -151,12 +153,21 @@
                   </div>
                 </div>
               </div>
-              @if ($order->billing_status=='JANJI')
-              <div class="col-sm-12">
+              <div class="col-sm-6">
                 <div class="form-group">
                   <label>Tanggal JANJI</label>
                   <div class="controls form-label-group position-relative ">
                     <input type="text" id="due_date" name="due_date" class="form-control " value="" readonly>
+                  </div>
+                </div>
+              </div>
+              @else
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label>Tanggal Upload</label>
+                  <div class="controls form-label-group position-relative ">
+                    <input type="text" id="update_at" name="update_at" class="form-control " value="" readonly>
+
                   </div>
                 </div>
               </div>
