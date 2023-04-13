@@ -137,7 +137,7 @@
                 <div class="form-group">
                   <label>RP TAG</label>
                   <div class="controls form-label-group position-relative ">
-                    <input type="text" name="bill" class="form-control " value="{{ $order->bill }}" readonly>
+                    <input type="text" id="bill" name="bill" class="form-control " value="" readonly>
 
                   </div>
                 </div>
@@ -152,7 +152,7 @@
                 </div>
               </div>
               @if ($order->billing_status=='JANJI')
-              <div class="col-sm-6">
+              <div class="col-sm-12">
                 <div class="form-group">
                   <label>Tanggal JANJI</label>
                   <div class="controls form-label-group position-relative ">
@@ -210,9 +210,12 @@
 <script>
   $(document).ready(function() {
     const data = @php echo $order @endphp;
-    console.log(data.updated_at)
     document.getElementById("update_at").value=createTanggalIndo(data.updated_at)
-    document.getElementById("due_date").value=formatTanggalIndonesia(data.due_date,)
+    if(data.due_date){
+      document.getElementById("due_date").value=formatTanggalIndonesia(data.due_date)
+    }
+    document.getElementById("bill").value=formatUang(data.bill)
+
 
   });
 
