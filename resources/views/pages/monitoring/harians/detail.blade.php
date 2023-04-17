@@ -52,7 +52,6 @@
                     <th>Daya</th>
                     <th>Gardu</th>
                     <th>Rp.Tag</th>
-                    <th>Status</th>
                     <th>Status Bayar</th>
                   </tr>
                 </thead>
@@ -65,7 +64,6 @@
                     <td>{{ $row->power }}</td>
                     <td>{{ $row->substation }}</td>
                     <td>{{ $row->bill }}</td>
-                    <td>{{ $row->status }}</td>
                     <td>{{ $row->billing_status }}</td>
 
                   </tr>

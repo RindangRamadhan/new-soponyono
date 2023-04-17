@@ -376,7 +376,9 @@ class OrderRepository implements OrderInterface
       'orders.substation',
       'orders.bill',
       'orders.status',
-      'orders.billing_status',
+      DB::raw('(CASE WHEN orders.billing_status =  "Paid"  THEN "LUNAS"
+            WHEN orders.billing_status =  "Debt"  THEN "JANJI"
+            ELSE "TIDAK DIEKSEKUSI" END) AS billing_status'),
       'orders.latitude',
       'orders.longitude',
     )

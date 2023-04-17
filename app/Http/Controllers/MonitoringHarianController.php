@@ -112,6 +112,10 @@ class MonitoringHarianController extends Controller
 
         list($user, $orders) = $this->harianRepo->show_petugas($id, $request);
 
+        foreach ($orders as &$v) {
+            $v["bill"] = "Rp. " . number_format($v["bill"], 0, ',', '.');
+        }
+        
         return view('pages.monitoring.harians.detail')->with(
             compact([
                 'pageConfigs',
