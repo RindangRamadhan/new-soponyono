@@ -8,6 +8,7 @@
 {{-- page-styles --}}
 @section('page-styles')
 <link rel="stylesheet" type="text/css" href="{{asset('css/plugins/forms/validation/form-validation.css')}}">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css">
 @endsection
 @section('content')
 
@@ -142,7 +143,7 @@
                   </div>
                 </div>
               </div>
-              
+
               @if ($order->billing_status=='JANJI')
               <div class="col-sm-6">
                 <div class="form-group">
@@ -182,7 +183,9 @@
                 <div class="form-group">
                   <label>Foto 1</label>
                   <div class="controls form-label-group position-relative ">
-                    <img src="{{ asset('/images/upload/'.$photos[0]) }}" alt="order photo 1" class="users-avatar-shadow" height="100%" width="100%">
+                    <a class="image-popup-no-margins" href="{{ asset('/images/upload/'.$photos[0]) }}">
+                      <img src="{{ asset('/images/upload/'.$photos[0]) }}" width="100" height="100">
+                    </a>
                   </div>
                 </div>
               </div>
@@ -192,7 +195,9 @@
                 <div class="form-group">
                   <label>Foto 2</label>
                   <div class="controls form-label-group position-relative ">
-                    <img src="{{ asset('/images/upload/'.$photos[1]) }}" alt="order photo 2" class="users-avatar-shadow" height="100%" width="100%">
+                    <a class="image-popup-no-margins" href="{{ asset('/images/upload/'.$photos[1]) }}">
+                      <img src="{{ asset('/images/upload/'.$photos[1]) }}" width="100" height="100">
+                    </a>
                   </div>
                 </div>
               </div>
@@ -217,6 +222,7 @@
 @section('page-scripts')
 <script src="{{asset('js/scripts/forms/select/form-select2.js')}}"></script>
 <script src="{{asset('js/scripts/forms/validation/form-validation.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
 
 <script>
   $(document).ready(function() {
@@ -225,10 +231,46 @@
     if(data.due_date){
       document.getElementById("due_date").value=formatTanggalIndonesia(data.due_date)
     }
+
     document.getElementById("bill").value=formatUang(data.bill)
-
-
   });
+
+  $(document).ready(function() {
+
+    $('.image-popup-vertical-fit').magnificPopup({
+      type: 'image',
+      closeOnContentClick: true,
+      mainClass: 'mfp-img-mobile',
+      image: {
+        verticalFit: true
+      }
+      
+    });
+
+    $('.image-popup-fit-width').magnificPopup({
+      type: 'image',
+      closeOnContentClick: true,
+      image: {
+        verticalFit: false
+      }
+    });
+
+    $('.image-popup-no-margins').magnificPopup({
+      type: 'image',
+      closeOnContentClick: true,
+      closeBtnInside: false,
+      fixedContentPos: true,
+      mainClass: 'mfp-no-margins mfp-with-zoom', // class to remove default margin from left and right side
+      image: {
+        verticalFit: true
+      },
+      zoom: {
+        enabled: true,
+        duration: 300 // don't foget to change the duration also in CSS
+      }
+    });
+
+    });
 
 </script>
 @endsection
