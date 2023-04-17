@@ -182,7 +182,7 @@
                 <div class="form-group">
                   <label>Foto 1</label>
                   <div class="controls form-label-group position-relative ">
-                    <img src="{{ asset('/images/upload/'.$photos[0]) }}" alt="order photo 1" class="users-avatar-shadow" height="150" width="150">
+                    <img src="{{ asset('/images/upload/'.$photos[0]) }}" alt="order photo 1" class="users-avatar-shadow" height="100%" width="100%">
                   </div>
                 </div>
               </div>
@@ -192,7 +192,7 @@
                 <div class="form-group">
                   <label>Foto 2</label>
                   <div class="controls form-label-group position-relative ">
-                    <img src="{{ asset('/images/upload/'.$photos[1]) }}" alt="order photo 2" class="users-avatar-shadow" height="150" width="150">
+                    <img src="{{ asset('/images/upload/'.$photos[1]) }}" alt="order photo 2" class="users-avatar-shadow" height="100%" width="100%">
                   </div>
                 </div>
               </div>

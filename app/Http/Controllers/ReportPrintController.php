@@ -120,6 +120,10 @@ class ReportPrintController extends Controller
 
         list($user, $orders) = $this->detailRepo->show_petugas_cetak($id, $month, $year);
 
+        foreach ($orders as &$v) {
+            $v["bill"] = "Rp. " . number_format($v["bill"], 0, ',', '.');
+        }
+        
         return view('pages.report.prints.detail')->with(
             compact([
                 'pageConfigs',
