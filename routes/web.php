@@ -52,12 +52,14 @@ Route::middleware('auth', 'verified')->group(function () {
             Route::get('/download-template', [UserController::class, 'download'])->name('users.download');
             Route::post('/upload-template', [UserController::class, 'upload'])->name('users.upload');
             Route::get('/export', [UserController::class, 'export'])->name('users.export');
+            Route::get('/export-pengguna', [UserController::class, 'export_pengguna'])->name('users.export_users');
             Route::get('/{id}/reset-password', [UserController::class, 'reset_password']);
         });
         Route::prefix('/petugass')->group(function () {
             Route::get('/download-template', [PetugasController::class, 'download'])->name('petugass.download');
             Route::post('/upload-template', [PetugasController::class, 'upload'])->name('petugass.upload');
             Route::get('/export', [PetugasController::class, 'export'])->name('petugass.export');
+            Route::get('/export-petugas', [PetugasController::class, 'export_petugas'])->name('petugass.export_petugas');
             Route::get('/{id}/reset-password', [PetugasController::class, 'petugass.reset_password']);
         });
 

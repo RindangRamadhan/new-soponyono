@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\UserUploadFailedExport;
+use App\Exports\PetugasUploadExport;
 use App\Helpers\Helper;
 use App\Http\Requests\PetugasRequest;
 use App\Interfaces\UserInterface;
@@ -242,9 +243,16 @@ class PetugasController extends Controller
         return $this->userRepo->upload_petugas($request);
     }
 
+    public function export_petugas()
+    {
+        $status='Petugas';
+        $filename = "Daftar Petugas.xlsx";
+        return Excel::download(new PetugasUploadExport($status), $filename);
+    }
+
     public function export()
     {
-        $filename = "Daftar pengguna gagal upload.xlsx";
+        $filename = "Daftar petugas gagal upload.xlsx";
         return Excel::download(new UserUploadFailedExport(), $filename);
     }
 

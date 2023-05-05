@@ -42,6 +42,10 @@
           <i class="bx bx-download"></i>
           <span>Unduh Gagal Upload Petugas </span>
         </a>
+        <a href="{{ url('/master-data/petugass/export-petugas') }}" class="btn btn-success">
+          <i class="bx bx-download"></i>
+          <span>Unduh Petugas </span>
+        </a>
 
         <div class="table-responsive">
           <table class="table table-sm table-ssr nowrap">

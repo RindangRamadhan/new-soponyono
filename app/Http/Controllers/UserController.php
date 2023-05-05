@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\UserUploadFailedExport;
+use App\Exports\PetugasUploadExport;
 use App\Helpers\Helper;
 use App\Http\Requests\UserRequest;
 use App\Interfaces\UserInterface;
@@ -378,6 +379,13 @@ class UserController extends Controller
         ]);
 
         return redirect("/users/$id/profile")->with(['status' => 200]);
+    }
+
+    public function export_pengguna()
+    {
+        $status='Pegawai';
+        $filename = "Daftar Pengguna.xlsx";
+        return Excel::download(new PetugasUploadExport($status), $filename);
     }
 
     public function updatePass(Request $request, $id)
