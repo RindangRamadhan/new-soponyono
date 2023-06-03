@@ -176,19 +176,19 @@ class DashboardController extends Controller
       ->whereYear('created_at', $request->year)
       ->whereMonth('created_at', $request->month);
 
-    $total_paid = Order::select('id')->where('billing_status', 'Paid')
-    ->whereYear('updated_at', $request->year)
-      ->whereMonth('updated_at', $request->month);
+    $total_paid = Order::select('id')->where('status', 'Done')->where('billing_status', 'Paid')
+    ->whereYear('created_at', $request->year)
+      ->whereMonth('created_at', $request->month);
       // ->whereBetween(DB::raw("updated_at"), [$first_month, $last_month]);
 
-    $total_promise = Order::select('id')->where('billing_status', 'Debt')
-    ->whereYear('updated_at', $request->year)
-      ->whereMonth('updated_at', $request->month);
+    $total_promise = Order::select('id')->where('status', 'Done')->where('billing_status', 'Debt')
+    ->whereYear('created_at', $request->year)
+      ->whereMonth('created_at', $request->month);
       // ->whereBetween(DB::raw("updated_at"), [$first_month_1, $last_month]);
 
     $total_not_executed = Order::select('id')->where('status', 'Done')->where('billing_status', 'Unpaid')
-    ->whereYear('updated_at', $request->year)
-      ->whereMonth('updated_at', $request->month);
+    ->whereYear('created_at', $request->year)
+      ->whereMonth('created_at', $request->month);
       // ->whereBetween(DB::raw("updated_at"), [$first_month_1, $last_month]);
 
     if ($request->up3_id) {

@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->call(function () {
-            Order::whereMonth('created_at', date('m'))
+            Order::whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))
             ->update([
                 'status' => 'Done',
             ]);
