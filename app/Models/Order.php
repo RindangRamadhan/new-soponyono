@@ -16,7 +16,7 @@ class Order extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'customer_id', 'user_id', 'uid_id', 'up3_id', 'ulp_id', 'phone_number', 'tarif', 'power', 'class', 'substation', 'bill', 'address', 'photos', 'status', 'billing_status', 'created_by', 'uuid', 'latitude', 'longitude','printout_status',
+        'customer_id', 'user_id', 'uid_id', 'up3_id', 'ulp_id', 'phone_number', 'tarif', 'power', 'class', 'substation', 'bill', 'address', 'photos', 'status', 'billing_status', 'created_by', 'uuid', 'latitude', 'longitude', 'printout_status', 'due_date',
     ];
 
     public function Uid()
