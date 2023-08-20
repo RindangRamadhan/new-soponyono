@@ -80,28 +80,75 @@ class ReportDailyController extends Controller
         );
     }
 
-    function list(Request $request) {
+    function list(Request $request)
+    {
         $resources = $this->orderRepo->report_daily($request);
 
         $data = [];
         foreach ($resources as $resource) {
             if ($resource->id) {
-                $obj = [
-                    'id' => $resource->id,
-                    'name' => $resource->name,
-                ];
+                $id = $resource->id;
+                if (count($data) > 0) {
+                    $rsTemp = array_filter(
+                        $data,
+                        function ($row1) use ($id) {
+                            return  $row1['id']  == $id;
+                        }
+                    );
+                    if (count($rsTemp) == 0) {
+                        $obj = [
+                            'id' => $resource->id,
+                            'name' => $resource->name,
+                        ];
 
-                for ($d = 1; $d <= 20; $d++) {
-                    if ($resource->day == $d) {
-                        $obj["total_paid_$d"] = $resource->total_paid;
-                        $obj["total_debt_$d"] = $resource->total_debt;
-                    } else {
-                        $obj["total_paid_$d"] = 0;
-                        $obj["total_debt_$d"] = 0;
+                        for ($d = 1; $d <= 20; $d++) {
+                            $rsTemp = array_filter(
+                                $resources,
+                                function ($row1) use ($id, $d) {
+                                    return  $row1->id  == $id && $row1->day  == $d;
+                                }
+                            );
+
+                            if (count($rsTemp) > 0) {
+                                foreach ($rsTemp as $row) {
+                                    $obj["total_paid_$d"] = $row->total_paid;
+                                    $obj["total_debt_$d"] = $row->total_debt;
+                                }
+                            } else {
+                                $obj["total_paid_$d"] = 0;
+                                $obj["total_debt_$d"] = 0;
+                            }
+                        }
+
+                        $data[] = $obj;
                     }
-                }
+                } else {
+                    $obj = [
+                        'id' => $resource->id,
+                        'name' => $resource->name,
+                    ];
 
-                $data[] = $obj;
+                    for ($d = 1; $d <= 20; $d++) {
+                        $rsTemp = array_filter(
+                            $resources,
+                            function ($row1) use ($id, $d) {
+                                return  $row1->id  == $id && $row1->day  == $d;
+                            }
+                        );
+
+                        if (count($rsTemp) > 0) {
+                            foreach ($rsTemp as $row) {
+                                $obj["total_paid_$d"] = $row->total_paid;
+                                $obj["total_debt_$d"] = $row->total_debt;
+                            }
+                        } else {
+                            $obj["total_paid_$d"] = 0;
+                            $obj["total_debt_$d"] = 0;
+                        }
+                    }
+
+                    $data[] = $obj;
+                }
             }
         }
 
@@ -111,31 +158,77 @@ class ReportDailyController extends Controller
     public function export(Request $request)
     {
         $resources = $this->orderRepo->report_daily($request);
-        $height=180;
+        $height = 180;
         $reports = [];
         foreach ($resources as $resource) {
             if ($resource->id) {
-                $height=(int)$height+30;
-                $obj = [
-                    'id' => $resource->id,
-                    'name' => $resource->name,
-                ];
+                $height = (int)$height + 30;
+                $id = $resource->id;
+                if (count($reports) > 0) {
+                    $rsTemp = array_filter(
+                        $reports,
+                        function ($row1) use ($id) {
+                            return  $row1['id']  == $id;
+                        }
+                    );
+                    if (count($rsTemp) == 0) {
+                        $obj = [
+                            'id' => $resource->id,
+                            'name' => $resource->name,
+                        ];
 
-                for ($d = 1; $d <= 20; $d++) {
-                    if ($resource->day == $d) {
-                        $obj["total_paid_$d"] = $resource->total_paid;
-                        $obj["total_debt_$d"] = $resource->total_debt;
-                    } else {
-                        $obj["total_paid_$d"] = 0;
-                        $obj["total_debt_$d"] = 0;
+                        for ($d = 1; $d <= 20; $d++) {
+                            $rsTemp = array_filter(
+                                $resources,
+                                function ($row1) use ($id, $d) {
+                                    return  $row1->id  == $id && $row1->day  == $d;
+                                }
+                            );
+
+                            if (count($rsTemp) > 0) {
+                                foreach ($rsTemp as $row) {
+                                    $obj["total_paid_$d"] = $row->total_paid;
+                                    $obj["total_debt_$d"] = $row->total_debt;
+                                }
+                            } else {
+                                $obj["total_paid_$d"] = 0;
+                                $obj["total_debt_$d"] = 0;
+                            }
+                        }
+
+                        $reports[] = $obj;
                     }
-                }
+                } else {
+                    $obj = [
+                        'id' => $resource->id,
+                        'name' => $resource->name,
+                    ];
 
-                $reports[] = $obj;
+                    for ($d = 1; $d <= 20; $d++) {
+                        $rsTemp = array_filter(
+                            $resources,
+                            function ($row1) use ($id, $d) {
+                                return  $row1->id  == $id && $row1->day  == $d;
+                            }
+                        );
+
+                        if (count($rsTemp) > 0) {
+                            foreach ($rsTemp as $row) {
+                                $obj["total_paid_$d"] = $row->total_paid;
+                                $obj["total_debt_$d"] = $row->total_debt;
+                            }
+                        } else {
+                            $obj["total_paid_$d"] = 0;
+                            $obj["total_debt_$d"] = 0;
+                        }
+                    }
+
+                    $reports[] = $obj;
+                }
             }
         }
-        
-        $customPaper = array(0,0,$height,1850);
+
+        $customPaper = array(0, 0, $height, 1850);
         switch ($request->doc_type) {
             case 'pdf':
                 $doc = Pdf::loadView('pages.report.daily.export', ['reports' => $reports])

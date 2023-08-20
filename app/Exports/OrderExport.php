@@ -45,6 +45,8 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
                 'Tanggal Upload',
                 'Tanggal Janji',
                 'No. HP',
+                'Latitude',
+                'Longitude',
             ],
         ];
     }
@@ -68,6 +70,8 @@ class OrderExport implements FromQuery, WithHeadings, WithMapping
             $row->updated_at,
             $row->updated_at,
             $row->phone_number,
+            $row->latitude,
+            $row->longitude,
         ];
     }
 
