@@ -71,6 +71,9 @@ class DashboardController extends Controller
 
   public function filter(Request $request)
   {
+    $type = Auth::user()->type;
+    $up3_id = Auth::user()->up3_id;
+    $ulp_id = Auth::user()->ulp_id;
     $uid_id = Auth::user()->uid_id;
     $last_month = $request->last_month;
     $first_month = $request->first_month;
@@ -93,27 +96,64 @@ class DashboardController extends Controller
             WHERE o.updated_at BETWEEN ? AND ?
         ";
 
-    if ($request->up3_id) {
+    if ($type == 'ULP') {
+      if ($request->ulp_id) {
+        $query .= "
+                    AND o.ulp_id = ?
+                  ";
+
+        $args[] = $request->ulp_id;
+      } else {
+        $query .= "
+                    AND o.ulp_id = ?
+                  ";
+        $args[] = $ulp_id;
+      }
+    } else if ($type == 'UP3') {
+      if ($request->ulp_id) {
+        $query .= "
+                    AND o.ulp_id = ?
+                  ";
+
+        $args[] = $request->ulp_id;
+      }
+      if ($request->up3_id) {
+        $query .= "
+                    AND o.up3_id = ?
+                  ";
+
+        $args[] = $request->up3_id;
+      } else {
+        $query .= "
+                    AND o.up3_id = ?
+                  ";
+
+        $args[] = $up3_id;
+      }
+    } else if ($type == 'UID' || $type == 'UP2D' || $type == 'UP2K' || $type == 'ALL') {
+
+      if ($request->ulp_id) {
+        $query .= "
+                    AND o.ulp_id = ?
+                  ";
+
+        $args[] = $request->ulp_id;
+      }
+      if ($request->up3_id) {
+        $query .= "
+                    AND o.up3_id = ?
+                  ";
+
+        $args[] = $request->up3_id;
+      }
+
       $query .= "
-              AND o.up3_id = ?
-            ";
-
-      $args[] = $request->up3_id;
-    }
-
-    if ($request->ulp_id) {
-      $query .= "
-              AND o.ulp_id = ?
-            ";
-
-      $args[] = $request->ulp_id;
-    }
-    $query .= "
               AND o.uid_id = ?
             ";
-
       $args[] = $uid_id;
-    
+    }
+
+
     $query .= "
             GROUP BY u.id
           )
@@ -155,20 +195,41 @@ class DashboardController extends Controller
             WHERE  o.updated_at BETWEEN ? AND ?
         ";
 
-    if ($request->up3_id) {
+
+    if ($type == 'ULP') {
+      if ($request->ulp_id) {
+        $querySO .= "
+                    AND o.ulp_id = ?
+                  ";
+      }
+    } else if ($type == 'UP3') {
+      if ($request->ulp_id) {
+        $querySO .= "
+                    AND o.ulp_id = ?
+                  ";
+      }
+      if ($request->up3_id) {
+        $querySO .= "
+                    AND o.up3_id = ?
+                  ";
+      }
+    } else if ($type == 'UID' || $type == 'UP2D' || $type == 'UP2K' || $type == 'ALL') {
+
+      if ($request->ulp_id) {
+        $querySO .= "
+                    AND o.ulp_id = ?
+                  ";
+      }
+      if ($request->up3_id) {
+        $querySO .= "
+                    AND o.up3_id = ?
+                  ";
+      }
       $querySO .= "
-              AND o.up3_id = ?
+              AND o.uid_id = ?
             ";
     }
 
-    if ($request->ulp_id) {
-      $querySO .= "
-              AND o.ulp_id = ?
-            ";
-    }
-    $querySO .= "
-              AND o.uid_id = ?
-            ";
 
     $status_orders = DB::select("$querySO", $args);
 
@@ -177,40 +238,78 @@ class DashboardController extends Controller
       ->whereMonth('created_at', $request->month);
 
     $total_paid = Order::select('id')->where('status', 'Done')->where('billing_status', 'Paid')
-    ->whereYear('created_at', $request->year)
+      ->whereYear('created_at', $request->year)
       ->whereMonth('created_at', $request->month);
-      // ->whereBetween(DB::raw("updated_at"), [$first_month, $last_month]);
+    // ->whereBetween(DB::raw("updated_at"), [$first_month, $last_month]);
 
     $total_promise = Order::select('id')->where('status', 'Done')->where('billing_status', 'Debt')
-    ->whereYear('created_at', $request->year)
+      ->whereYear('created_at', $request->year)
       ->whereMonth('created_at', $request->month);
-      // ->whereBetween(DB::raw("updated_at"), [$first_month_1, $last_month]);
+    // ->whereBetween(DB::raw("updated_at"), [$first_month_1, $last_month]);
 
     $total_not_executed = Order::select('id')->where('status', 'Done')->where('billing_status', 'Unpaid')
-    ->whereYear('created_at', $request->year)
+      ->whereYear('created_at', $request->year)
       ->whereMonth('created_at', $request->month);
-      // ->whereBetween(DB::raw("updated_at"), [$first_month_1, $last_month]);
+    // ->whereBetween(DB::raw("updated_at"), [$first_month_1, $last_month]);
 
-    if ($request->up3_id) {
-      $total_wo = $total_wo->where('up3_id', $request->up3_id);
-      $total_paid = $total_paid->where('up3_id', $request->up3_id);
-      $total_promise = $total_promise->where('up3_id', $request->up3_id);
-      $total_not_executed = $total_not_executed->where('up3_id', $request->up3_id);
-    }
+    
 
-    if ($request->ulp_id) {
-      $total_wo = $total_wo->where('ulp_id', $request->ulp_id);
-      $total_paid = $total_paid->where('ulp_id', $request->ulp_id);
-      $total_promise = $total_promise->where('ulp_id', $request->ulp_id);
-      $total_not_executed = $total_not_executed->where('ulp_id', $request->ulp_id);
-    }
+    if ($type == 'ULP') {
+      if ($request->ulp_id) {
+        $total_wo = $total_wo->where('ulp_id', $request->ulp_id);
+        $total_paid = $total_paid->where('ulp_id', $request->ulp_id);
+        $total_promise = $total_promise->where('ulp_id', $request->ulp_id);
+        $total_not_executed = $total_not_executed->where('ulp_id', $request->ulp_id);
+      }else{
+        $total_wo = $total_wo->where('ulp_id', $ulp_id);
+        $total_paid = $total_paid->where('ulp_id', $ulp_id);
+        $total_promise = $total_promise->where('ulp_id', $ulp_id);
+        $total_not_executed = $total_not_executed->where('ulp_id', $ulp_id);
+      }
+    } else if ($type == 'UP3') {
+      
+      if ($request->up3_id) {
+        $total_wo = $total_wo->where('up3_id', $request->up3_id);
+        $total_paid = $total_paid->where('up3_id', $request->up3_id);
+        $total_promise = $total_promise->where('up3_id', $request->up3_id);
+        $total_not_executed = $total_not_executed->where('up3_id', $request->up3_id);
+      }else{
+        $total_wo = $total_wo->where('up3_id', $up3_id);
+        $total_paid = $total_paid->where('up3_id', $up3_id);
+        $total_promise = $total_promise->where('up3_id', $up3_id);
+        $total_not_executed = $total_not_executed->where('up3_id', $up3_id);
+      }
+  
+      if ($request->ulp_id) {
+        $total_wo = $total_wo->where('ulp_id', $request->ulp_id);
+        $total_paid = $total_paid->where('ulp_id', $request->ulp_id);
+        $total_promise = $total_promise->where('ulp_id', $request->ulp_id);
+        $total_not_executed = $total_not_executed->where('ulp_id', $request->ulp_id);
+      }
 
-    if (!$request->up3_id && !$request->ulp_id) {
+    } else if ($type == 'UID' || $type == 'UP2D' || $type == 'UP2K' || $type == 'ALL') {
 
-      $total_wo = $total_wo->where('uid_id', $uid_id);
-      $total_paid = $total_paid->where('uid_id', $uid_id);
-      $total_promise = $total_promise->where('uid_id', $uid_id);
-      $total_not_executed = $total_not_executed->where('uid_id', $uid_id);
+      if ($request->up3_id) {
+        $total_wo = $total_wo->where('up3_id', $request->up3_id);
+        $total_paid = $total_paid->where('up3_id', $request->up3_id);
+        $total_promise = $total_promise->where('up3_id', $request->up3_id);
+        $total_not_executed = $total_not_executed->where('up3_id', $request->up3_id);
+      }
+  
+      if ($request->ulp_id) {
+        $total_wo = $total_wo->where('ulp_id', $request->ulp_id);
+        $total_paid = $total_paid->where('ulp_id', $request->ulp_id);
+        $total_promise = $total_promise->where('ulp_id', $request->ulp_id);
+        $total_not_executed = $total_not_executed->where('ulp_id', $request->ulp_id);
+      }
+  
+      if (!$request->up3_id && !$request->ulp_id) {
+  
+        $total_wo = $total_wo->where('uid_id', $uid_id);
+        $total_paid = $total_paid->where('uid_id', $uid_id);
+        $total_promise = $total_promise->where('uid_id', $uid_id);
+        $total_not_executed = $total_not_executed->where('uid_id', $uid_id);
+      }
     }
 
 
