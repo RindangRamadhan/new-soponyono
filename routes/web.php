@@ -93,6 +93,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::prefix('/orders')->group(function () {
         Route::get('/download-template', [OrderController::class, 'download'])->name('orders.download');
         Route::post('/upload-template', [OrderController::class, 'upload'])->name('orders.upload');
+        Route::post('/delete-upload-template', [OrderController::class, 'delete_upload'])->name('orders.deleteupload');
         Route::get('/export', [OrderController::class, 'export'])->name('orders.export');
     });
 

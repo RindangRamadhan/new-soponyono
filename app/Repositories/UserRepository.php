@@ -418,7 +418,7 @@ class UserRepository implements UserInterface
                 if ($v[0]) {
                     $upload_succeed++;
 
-                    $rbm_code = User::select('id')->where('rbm_code', $v[1])->count();
+                    $rbm_code = User::select('id')->where('rbm_code', $v[1])->where('ulp_id', $ulp_id)->count();
                     if ($rbm_code > 0) {
                         $upload_failed['reason'] = "Rbm Code sudah ada";
                         $upload_faileds[] = $upload_failed;
@@ -456,7 +456,6 @@ class UserRepository implements UserInterface
 
                     $role = 2;
                     
-
                     $user = User::create([
                         'user_name' => $v[0],
                         'rbm_code' => $v[1],

@@ -155,6 +155,11 @@ class OrderController extends Controller
         return $this->orderRepo->upload($request);
     }
 
+    public function delete_upload(Request $request)
+    {
+        return $this->orderRepo->delete_upload($request);
+    }
+
     public function export()
     {
         $filename = "Daftar order gagal upload.xlsx";

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PetugasRequest extends FormRequest
 {
@@ -11,6 +12,7 @@ class PetugasRequest extends FormRequest
      *
      * @return bool
      */
+
     public function authorize()
     {
         return true;
@@ -21,6 +23,8 @@ class PetugasRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
+
+    //  $request
     public function rules()
     {
         $rules = [];
@@ -28,7 +32,10 @@ class PetugasRequest extends FormRequest
         if ($this->isMethod('POST')) {
             $rules = [
                 'user_name' => 'required|unique:users,user_name',
-                'rbm_code' => 'required|unique:users,rbm_code',
+                'rbm_code' => 'required',
+                'rbm_code' => Rule::unique('users')->where(function ($query) {
+                    return $query->where('rbm_code', $this->request->get('rbm_code'))->where('ulp_id', $this->request->get('ulp_id'));
+                }),
                 'name' => 'required',
                 'uid_id' => 'required',
                 'up3_id' => 'required',
@@ -39,7 +46,10 @@ class PetugasRequest extends FormRequest
         } else {
             $rules = [
                 'user_name' => 'required|unique:users,user_name,' . $this->route('petugass'),
-                'rbm_code' => 'required|unique:users,rbm_code,' . $this->route('petugass'),
+                // 'rbm_code' => 'required',
+                'rbm_code' => ['required', Rule::unique('users')->where(function ($query) {
+                    return $query->where('id', '!=', $this->id)->where('rbm_code', $this->request->get('rbm_code'))->where('ulp_id', $this->request->get('ulp_id'));
+                }) . $this->route('petugass')],
                 'name' => 'required',
                 'uid_id' => 'required',
                 'up3_id' => 'required',

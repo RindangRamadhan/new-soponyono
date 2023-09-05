@@ -21,7 +21,7 @@
         </div>
         <div class="card-content">
           <div class="card-body">
-            <form class="form-horizontal form-submit" action="{{ url('/master-data/petugas') }}" method="post" novalidate>
+            <form class="form-horizontal form-submit" action="{{ url('/master-data/petugass') }}" method="post" novalidate>
               @csrf
               @include('pages.master-data.petugas.form')
             </form>

@@ -43,6 +43,11 @@
           <i class="bx bx-download"></i>
           <span>Unduh Order</span>
         </a>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-backdrop="static" data-keyboard="false"
+          id="onshowbtndelete" data-target="#modal-delete">
+          <i class="bx bx-trash"></i>
+          <span>Hapus Order By Excel</span>
+        </button>
         <div class="row" style="padding-top: 10px;">
           <div class="col-sm-2">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-backdrop="static"
@@ -132,6 +137,51 @@
 
           <button class="btn btn-sm btn-primary ml-1" id="btnUpload" type="button">
             <span id="spanUpload">Unggah</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade text-left" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-danger">
+          <h5 class="modal-title white" id="myModalLabel160">Hapus Order</h5>
+          <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+            <i class="bx bx-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="post" id="form-delete" enctype="multipart/form-data">
+
+            <div class="custom-file">
+              <input type="file" name="file" class="custom-file-input" id="fileExcelDelete">
+              <label class="custom-file-label" for="fileExcelDelete">Unggah Dokumen Excel</label>
+            </div>
+
+            <div class="text-center mt-1" id="spinner-delete" style="display: none">
+              <div class="spinner-border spinner-border-lg text-primary" role="status">
+                <span class="sr-only"> ...</span>
+              </div>
+            </div>
+
+            <div class="progress progress-bar-primary mt-1" id="progress-delete" style="height: 15px; display: none">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" id="progressbar-delete" role="progressbar-delete"
+                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%;">0%</div>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-light-secondary mr-auto btn-close" data-dismiss="modal">
+            <i class="bx bx-x d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Batal</span>
+          </button>
+
+          <button class="btn btn-sm btn-danger ml-1" id="btnDeleteExcel" type="button">
+            <span id="spanUploadDelete">Hapus</span>
           </button>
         </div>
       </div>
@@ -233,20 +283,6 @@
       Swal.fire('Info', 'UUID belum terisi', 'warning');
     }
     
-  })
-
-  // Confirmation Delete
-  $(document).on('click', '.btn-delete', function (e) {
-    e.preventDefault();
-    
-    const params = {
-      "name": this.dataset.name,
-      "url": "{{ url('/master-data/up3s/') }}",
-      "id": $(this).attr('data-id'),
-      "tr": $(this).parent("td").parent('tr')
-    }
-    
-    confirmDelete(params)
   })
 
 
@@ -368,24 +404,124 @@
   });
 
 
-  // $('#btnHapusOrder').on('click', function (e) {
-  //   e.preventDefault();
-  //   var uuid=$('[name="uuid"]');
-  //   if(uuid.val()){
-  //     const params = {
-  //     "uuid":uuid,  
-  //     "url": "{{ url('/orders/') }}",
-  //     "id": uuid,
-  //     "tr": $(this).parent("td").parent('tr')
-  //   }
+  // delete Upload by excel
+  $('#btnDeleteExcel').on('click', function () {
+    let progress = 0;
+    let interval = setInterval(fakeProgressDelete, 25);
+    
+    const form = $('#form-delete');
 
-  //   confirmDeleteLogs(params)
+    const data = new FormData(form[0]);
+    data.tahun=2023;
+    console.log(data)
+    $("#spanUploadDelete").remove()
+    $(".btn-close").attr("disabled", true)
+    $("#fileExcelDelete").attr("disabled", true)
+    $(this).attr("disabled", true)
+    $(this).append("<span id='spanLoading' class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Memuat ...")
 
-  //   }else{
-  //     Swal.fire('Info', 'UUID belum terisi', 'warning');
-  //   }
-  // });
-  
+    $("#spinner-delete").show()
+    
+    // Send to server after progress bar show
+    $("#progress-delete").slideDown('fast', () => {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+      $.ajax({
+        xhr: function() {
+          const xhr = new window.XMLHttpRequest();
+
+          xhr.upload.addEventListener("progress", function(e) {
+            if (e.lengthComputable) {
+              const percent = parseInt((e.loaded / e.total) * 100);
+              
+              $("#progressbar-delete").attr('aria-valuenow', percent);
+              $("#progressbar-delete").css('width', `${percent}%`);
+              $("#progressbar-delete").html(`${percent}%`)
+            }
+          }, false);
+
+          return xhr;
+        },
+        url: "{{ route('orders.deleteupload') }}",
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        data: data,
+        success: function (resp){
+          $("#btnDeleteExcel").empty()
+          $("#btnDeleteExcel").attr("disabled", false)
+          $("#btnDeleteExcel").append("<span id='spanUploadDelete'>Unggah</span>")
+          $(".btn-close").attr("disabled", false)
+          $("#progressbar-delete").attr('aria-valuenow', 100);
+          $("#progressbar-delete").css('width', `${100}%`);
+          $("#progressbar-delete").html(`${100}%`)
+
+          $('.table-ssr').DataTable().draw();
+
+          clearInterval(interval);
+            
+          setTimeout(() => {
+            $("#modal-delete").modal('hide');
+            $("#progressbar-delete").attr('aria-valuenow', 0);
+            $("#progressbar-delete").css('width', `${0}%`);
+            $("#progressbar-delete").html(`${0}%`)
+            $("#progress-delete").slideUp('fast');
+            $("#form-delete").trigger('reset');
+            $(".custom-file-label").text('Unggah Dokumen Excel');
+            $("#spinner-delete").hide()
+            $("#fileExcelDelete").attr("disabled", false)
+          }, 1000);
+
+          if (resp.order_failed > 0) {
+            const message = `Total Order dihapus : ${resp.order_upload} Order gagal : ${resp.order_failed} `
+            toastr.warning(message, 'Sukses', { "progressBar": true, "showDuration": 3000, "closeButton": true })
+          } else {
+            toastr.success(`Dokumen berhasil di hapus `, 'Sukses', { "progressBar": true, "showDuration": 500, "closeButton": true })
+          }
+        },
+        error: function(xhr) {
+          const err = JSON.parse(xhr.responseText)
+
+          $("#btnDeleteExcel").empty()
+          $("#btnDeleteExcel").attr("disabled", false)
+          $("#btnDeleteExcel").append("<span id='spanUploadDelete'>Unggah</span>")
+
+          $(".btn-close").attr("disabled", false)
+          $("#progressbar-delete").attr('aria-valuenow', 100);
+          $("#progressbar-delete").css('width', `${100}%`);
+          $("#progressbar-delete").html(`${100}%`)
+          
+          clearInterval(interval);
+          setTimeout(() => {
+            $("#spinner-delete").hide()
+            $("#fileExcelDelete").attr("disabled", false)
+            $("#modal-delete").modal('hide');
+          }, 500);
+
+          if ('message' in err) {
+            toastr.error('Dokumen gagal di hapus '+ err.message, 'Gagal', { "progressBar": true, "showDuration": 500, "closeButton": true })
+          }
+        }
+      });
+    })
+
+    function fakeProgressDelete() {
+      const max = Math.floor(Math.random() * 41) + 50 
+
+      if (progress >= max) {
+        clearInterval(interval);
+        i = 0;
+      } else {
+        progress++;
+        $("#progressbar-delete").attr('aria-valuenow', progress);
+        $("#progressbar-delete").css('width', `${progress}%`);
+        $("#progressbar-delete").html(`${progress}%`)
+      }
+    }
+  });
 
 </script>
 @endsection

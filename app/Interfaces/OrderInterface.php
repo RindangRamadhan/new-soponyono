@@ -15,5 +15,6 @@ interface OrderInterface
     function show_petugas($id, $request);
     function show_petugas_cetak($id, $month,$year);
     function upload(Request $request);
+    function delete_upload(Request $request);
     function destroy($id);
 }

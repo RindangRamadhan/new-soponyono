@@ -54,7 +54,7 @@ class PetugasController extends Controller
 
     function list(Request $request)
     {
-        $status='Petugas';
+        $status = 'Petugas';
         $resources = $this->userRepo->list($status);
 
         list($records, $recordsTotal, $recordsFiltered) = Helper::selectServerSide(
@@ -132,7 +132,7 @@ class PetugasController extends Controller
     public function store(PetugasRequest $request)
     {
         $this->userRepo->store_petugas($request);
-        return redirect('/master-data/petugas')->with(['status' => 200]);
+            return redirect('/master-data/petugass')->with(['status' => 200]);
     }
 
 
@@ -194,6 +194,7 @@ class PetugasController extends Controller
      */
     public function update(PetugasRequest $request, $id)
     {
+
         $this->userRepo->update_petugas($request, $id);
         return redirect('/master-data/petugass')->with(['status' => 200]);
     }
@@ -202,9 +203,9 @@ class PetugasController extends Controller
     {
 
         $data = User::select('id', 'name AS text')
-                ->where('ulp_id', $request->ulp_id)
-                ->where('type', 'ULP')
-                ->get();
+            ->where('ulp_id', $request->ulp_id)
+            ->where('type', 'ULP')
+            ->get();
 
         return response()->json($data);
     }
@@ -224,7 +225,7 @@ class PetugasController extends Controller
     public function destroy($id)
     {
         $row = User::find($id);
-        
+
         if (\File::exists(public_path('images/upload/' . $row->photo))) {
             \File::delete(public_path('images/upload/' . $row->photo));
         }
@@ -245,7 +246,7 @@ class PetugasController extends Controller
 
     public function export_petugas()
     {
-        $status='Petugas';
+        $status = 'Petugas';
         $filename = "Daftar Petugas.xlsx";
         return Excel::download(new PetugasUploadExport($status), $filename);
     }
@@ -255,5 +256,4 @@ class PetugasController extends Controller
         $filename = "Daftar petugas gagal upload.xlsx";
         return Excel::download(new UserUploadFailedExport(), $filename);
     }
-
 }

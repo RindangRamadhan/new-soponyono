@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Imports\OrderImport;
+use App\Imports\OrderDeleteImport;
 use App\Interfaces\OrderInterface;
 use App\Models\Customer;
 use App\Models\Order;
@@ -206,7 +207,7 @@ class OrderRepository implements OrderInterface
     $month = $request->month;
     $year = $request->year;
     $ulp_id = $request->ulp_id;
-    $args = [$month, $year,$ulp_id];
+    $args = [$month, $year, $ulp_id];
 
     $query = "
         WITH vtb_top_officer AS (
@@ -384,7 +385,7 @@ class OrderRepository implements OrderInterface
     )
       ->join('customers AS customer', 'orders.customer_id', 'customer.id')
       ->where('orders.user_id', $id);
-      // ->where('orders.billing_status', 'Paid');
+    // ->where('orders.billing_status', 'Paid');
 
     // if ($request->up3_id) {
     //   $orders = $orders
@@ -406,9 +407,9 @@ class OrderRepository implements OrderInterface
     return [$user, $orders];
   }
 
-  public function show_petugas_cetak($id, $month,$year)
+  public function show_petugas_cetak($id, $month, $year)
   {
-    
+
     $user = User::select('name AS officer_name', 'rbm_code')
       ->where('id', $id)
       ->first();
@@ -479,7 +480,7 @@ class OrderRepository implements OrderInterface
         ];
 
         if ($v[0]) {
-          $upload_succeed++;
+
           $id_up3 = $v[0];
           $id_ulp = $v[1];
           $customer_id = (string)$v[2];
@@ -499,12 +500,13 @@ class OrderRepository implements OrderInterface
             continue;
           }
 
-          $ulp = Ulp::select('id')->where('id', $id_ulp);
+          $ulp = Ulp::select('id')->where('id', $id_ulp)->where('up3_id', $id_up3);
           if ($ulp->count() == 0) {
-            $upload_failed['reason'] = "ULP tidak ditemukan";
+            $upload_failed['reason'] = "ULP tidak ditemukan / relasi Ke UP3 tidak benar";
             $upload_faileds[] = $upload_failed;
             continue;
           }
+
           $customer = Customer::select('id')->where('id', $customer_id);
           if ($customer->count() == 0) {
             Customer::create([
@@ -532,8 +534,8 @@ class OrderRepository implements OrderInterface
               'substation' => $substation,
             ]);
           }
-          if($rbm_code){
-            $rowuser = User::select('id')->where('rbm_code', $rbm_code)->first();
+          if ($rbm_code) {
+            $rowuser = User::select('id')->where('rbm_code', $rbm_code)->where('ulp_id', $id_ulp)->first();
             if (!$rowuser) {
               $upload_failed['reason'] = "Kode RBM tidak ditemukan";
               $upload_faileds[] = $upload_failed;
@@ -541,13 +543,14 @@ class OrderRepository implements OrderInterface
             } else {
               $user_id = $rowuser->id;
             }
-          }else{
+          } else {
             $upload_failed['reason'] = "Kode RBM tidak ditemukan";
             $upload_faileds[] = $upload_failed;
             continue;
           }
-          
 
+
+          $upload_succeed++;
           Order::create([
             'customer_id' => $customer_id,
             'user_id' => $user_id,
@@ -591,6 +594,66 @@ class OrderRepository implements OrderInterface
       'status' => 200,
       'order_upload' => $upload_succeed,
       'order_failed' => count($upload_faileds),
+    ]);
+  }
+
+  public function delete_upload(Request $request)
+  {
+    $request->validate([
+      'file' => 'required|mimes:csv,xls,xlsx',
+    ]);
+
+    // Get file excel from requests
+    $file = $request->file('file');
+
+    // Convert Excel to Array
+    $excels = Excel::toArray(new OrderDeleteImport, $file);
+
+    DB::beginTransaction();
+
+    try {
+      $upload_succeed = 0;
+      $upload_faileds = 0;
+
+      foreach ($excels[0] as $k => $v) {
+        // Skip Header
+        if ($k == 0) {
+          continue;
+        }
+        $id_pel = (string)$v[0];
+
+
+        if ($id_pel) {
+
+          $total = Order::select('id')->where('customer_id', $id_pel)
+            ->whereYear('created_at', date('Y'))
+            ->whereMonth('created_at', date('m'));
+          if ($total->count() == 0) {
+            $upload_faileds++;
+          } else {
+            
+            DB::table('orders')
+              ->where('customer_id', $id_pel)
+              ->whereYear('created_at', date('Y'))
+              ->whereMonth('created_at', date('m'))
+              ->delete();
+
+            $upload_succeed++;
+          }
+        }
+      }
+
+
+      DB::commit();
+    } catch (\Throwable $th) {
+      DB::rollBack();
+      throw $th;
+    }
+
+    return response()->json([
+      'status' => 200,
+      'order_upload' => $upload_succeed,
+      'order_failed' => $upload_faileds,
     ]);
   }
 
