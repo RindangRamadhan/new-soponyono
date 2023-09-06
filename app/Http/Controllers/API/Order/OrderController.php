@@ -43,7 +43,7 @@ class OrderController extends Controller
                 ->join('customers AS customer', 'orders.customer_id', 'customer.id')
                 ->where('orders.user_id', $user->id)
                 ->whereMonth('orders.created_at', date('m'))
-                ->whereYear('created_at', date('Y'))
+                ->whereYear('orders.created_at', date('Y'))
                 ->get();
 
             foreach ($data as &$v) {
