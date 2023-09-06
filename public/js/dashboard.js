@@ -4,13 +4,13 @@
     const $info = "#00CFDD";
 
     const options = {
-        series: [0, 0, 0],
+        series: [0, 0, 0, 0],
         chart: {
             type: "donut",
             height: 326,
         },
-        colors: [$success, $info, $danger],
-        labels: ["Lunas", "Janji Bayar", "Tidak Dieksekusi"],
+        colors: ["#000000", $success, $info, $danger],
+        labels: ["Total WO", "Lunas", "Janji Bayar", "Tidak Dieksekusi"],
         responsive: [
             {
                 breakpoint: 480,

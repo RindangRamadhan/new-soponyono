@@ -78,6 +78,10 @@ class DashboardController extends Controller
     $last_month = $request->last_month;
     $first_month = $request->first_month;
     $args = [$first_month, $last_month];
+    $tahun=$request->year;
+    $bulan=$request->month;
+    $argsCount = [$tahun, $bulan];
+    
 
     $query = "
           WITH vtb_top_officer AS (
@@ -103,11 +107,13 @@ class DashboardController extends Controller
                   ";
 
         $args[] = $request->ulp_id;
+        $argsCount[] = $request->ulp_id;
       } else {
         $query .= "
                     AND o.ulp_id = ?
                   ";
         $args[] = $ulp_id;
+        $argsCount[] = $ulp_id;
       }
     } else if ($type == 'UP3') {
       if ($request->ulp_id) {
@@ -116,6 +122,7 @@ class DashboardController extends Controller
                   ";
 
         $args[] = $request->ulp_id;
+        $argsCount[] = $request->ulp_id;
       }
       if ($request->up3_id) {
         $query .= "
@@ -123,12 +130,14 @@ class DashboardController extends Controller
                   ";
 
         $args[] = $request->up3_id;
+        $argsCount[] = $request->up3_id;
       } else {
         $query .= "
                     AND o.up3_id = ?
                   ";
 
         $args[] = $up3_id;
+        $argsCount[] = $up3_id;
       }
     } else if ($type == 'UID' || $type == 'UP2D' || $type == 'UP2K' || $type == 'ALL') {
 
@@ -138,6 +147,7 @@ class DashboardController extends Controller
                   ";
 
         $args[] = $request->ulp_id;
+        $argsCount[] = $request->ulp_id;
       }
       if ($request->up3_id) {
         $query .= "
@@ -145,12 +155,14 @@ class DashboardController extends Controller
                   ";
 
         $args[] = $request->up3_id;
+        $argsCount[] = $request->up3_id;
       }
 
       $query .= "
               AND o.uid_id = ?
             ";
       $args[] = $uid_id;
+      $argsCount[] = $uid_id;
     }
 
 
@@ -192,7 +204,7 @@ class DashboardController extends Controller
                 CASE WHEN o.billing_status = 'Unpaid' AND  o.status = 'Done' THEN 1 ELSE NULL END
               ) AS total_not_executed
             FROM orders o
-            WHERE  o.updated_at BETWEEN ? AND ?
+            WHERE  Year(o.created_at)= ? AND Month(o.created_at)= ?
         ";
 
 
@@ -231,7 +243,7 @@ class DashboardController extends Controller
     }
 
 
-    $status_orders = DB::select("$querySO", $args);
+    $status_orders = DB::select("$querySO", $argsCount);
 
     $total_wo = Order::select('id')
       ->whereYear('created_at', $request->year)
