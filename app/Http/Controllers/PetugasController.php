@@ -8,6 +8,7 @@ use App\Helpers\Helper;
 use App\Http\Requests\PetugasRequest;
 use App\Interfaces\UserInterface;
 use App\Models\User;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -132,7 +133,7 @@ class PetugasController extends Controller
     public function store(PetugasRequest $request)
     {
         $this->userRepo->store_petugas($request);
-            return redirect('/master-data/petugass')->with(['status' => 200]);
+        return redirect('/master-data/petugass')->with(['status' => 200]);
     }
 
 
@@ -229,7 +230,7 @@ class PetugasController extends Controller
         if (\File::exists(public_path('images/upload/' . $row->photo))) {
             \File::delete(public_path('images/upload/' . $row->photo));
         }
-
+        Order::where('user_id', $id)->delete();
         User::find($id)->delete();
         return response()->json(['status' => 200]);
     }
