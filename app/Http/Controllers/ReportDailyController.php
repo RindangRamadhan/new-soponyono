@@ -76,6 +76,7 @@ class ReportDailyController extends Controller
                 'months',
                 'years',
                 'up3s',
+                'tipe',
             ])
         );
     }

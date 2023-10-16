@@ -18,7 +18,6 @@
   .DTFC_Cloned tbody {
     background: white;
   }
-
 </style>
 @endsection
 
@@ -154,14 +153,30 @@
   })
 
   $(document).on('click', '#btnSearch', function (e) {
+    
     GetOrder();
   })
 
   $(document).on('click', '#btnPdf', function (e) {
+    
+    const tipe = @php echo json_encode($tipe) @endphp;
+
     const month = $("#month").val();
     const year = $("#year").val();
     const up3_id = $("#up3_id").val();
     const ulp_id = $("#ulp_id").val();
+
+    if(tipe=='ULP'){
+      if (up3_id == "" || ulp_id == "" )  {
+      Swal.fire('Info', 'UP3 Atau ULP belum dipilih', 'warning');
+      return
+      }
+    }else if (tipe == 'UP3'){
+      if (up3_id == "" )  {
+      Swal.fire('Info', 'UP3  belum dipilih', 'warning');
+      return
+      }
+    }
 
     window.open(`/report/daily/export?up3_id=${up3_id}&ulp_id=${ulp_id}&month=${month}&year=${year}&doc_type=pdf`);
   })
@@ -211,6 +226,8 @@
   })
 
   function GetOrder() {
+    const tipe = @php echo json_encode($tipe) @endphp;
+    
     const month = $("#month").val();
     const year = $("#year").val();
     const up3_id = $("#up3_id").val();
@@ -220,6 +237,19 @@
     //   return
     // }
     
+    if(tipe=='ULP'){
+      if (up3_id == "" || ulp_id == "" )  {
+      Swal.fire('Info', 'UP3 Atau ULP belum dipilih', 'warning');
+      return
+      }
+    }else if (tipe == 'UP3'){
+      if (up3_id == "" )  {
+      Swal.fire('Info', 'UP3  belum dipilih', 'warning');
+      return
+      }
+    }
+    
+
     const params = {
       "url": "{{ url('/report/daily') }}",
       "columns": [
@@ -240,7 +270,7 @@
         { "data": `total_debt_${i}`}
       )
     }
-
+    
     $.ajax({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -251,17 +281,23 @@
       data: params.args,
       success: function(response){
         params.resp = response
+        
         initDataTable(params)
       }
     });
-
-
-    $("#btnDownload").show();
+    
+    
   }
 
   function initDataTable(params) {
     var dataTable;
     
+    var rsData=params.resp;
+    if(rsData.length>0){
+      $("#btnDownload").show();
+    }else{
+      $("#btnDownload").hide();
+    }
     $(".table-ssr-custome").DataTable().destroy();
 
     switch (true) {

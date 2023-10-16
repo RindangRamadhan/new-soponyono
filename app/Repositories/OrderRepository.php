@@ -242,7 +242,8 @@ class OrderRepository implements OrderInterface
 
   public function report_daily($request)
   {
-    if ($request->up3_id) {
+    
+    if ($request->up3_id && !$request->ulp_id) {
       $args = [$request->up3_id, $request->month, $request->year];
       $query = DB::select("
             WITH RECURSIVE days AS (
@@ -271,7 +272,7 @@ class OrderRepository implements OrderInterface
             GROUP BY 1,5
             ORDER BY 2 ASC
           ", $args);
-    } else if ($request->ulp_id) {
+    } else if ($request->up3_id && $request->ulp_id) {
       $args = [$request->up3_id, $request->ulp_id, $request->month, $request->year];
       $query = DB::select("
           WITH RECURSIVE days AS (
@@ -294,13 +295,14 @@ class OrderRepository implements OrderInterface
               ON DAY(o.updated_at) = d.n
             LEFT JOIN users u
               ON o.user_id = u.id
-          WHERE  o.ulp_id = ?
+          WHERE  o.up3_id = ?
+            AND o.ulp_id = ?
             AND MONTH(o.updated_at) = ?
             AND YEAR(o.updated_at) = ?
           GROUP BY 1,5
           ORDER BY 2 ASC
         ", $args);
-    } else {
+    } else if(!$request->up3_id && !$request->ulp_id) {
       $uid_id = Auth::user()->uid_id;
       $args = [$uid_id, $request->month, $request->year];
       $query = DB::select("
