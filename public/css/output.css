@@ -554,25 +554,285 @@ video {
   --tw-contain-style:  ;
 }
 
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.bottom-0 {
+  bottom: 0px;
+}
+
+.right-0 {
+  right: 0px;
+}
+
+.right-\[150px\] {
+  right: 150px;
+}
+
+.right-\[200px\] {
+  right: 200px;
+}
+
+.top-6 {
+  top: 1.5rem;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.h-\[120px\] {
+  height: 120px;
+}
+
+.h-\[1px\] {
+  height: 1px;
+}
+
+.h-\[200px\] {
+  height: 200px;
+}
+
+.h-\[300px\] {
+  height: 300px;
+}
+
+.h-\[547px\] {
+  height: 547px;
+}
+
+.h-\[60px\] {
+  height: 60px;
+}
+
+.h-\[75px\] {
+  height: 75px;
+}
+
+.h-\[calc\(100vh_-_75px\)\] {
+  height: calc(100vh - 75px);
+}
+
+.h-auto {
+  height: auto;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.w-\[113px\] {
+  width: 113px;
+}
+
+.w-\[235px\] {
+  width: 235px;
+}
+
+.w-\[261px\] {
+  width: 261px;
+}
+
+.w-\[50px\] {
+  width: 50px;
+}
+
+.w-\[550px\] {
+  width: 550px;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.max-w-\[1100px\] {
+  max-width: 1100px;
+}
+
+.max-w-\[323px\] {
+  max-width: 323px;
+}
+
+.basis-6\/12 {
+  flex-basis: 50%;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-10 {
+  gap: 2.5rem;
+}
+
+.gap-20 {
+  gap: 5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-40 {
+  gap: 10rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.bg-bunker {
+  --tw-bg-opacity: 1;
+  background-color: rgb(18 25 28 / var(--tw-bg-opacity));
+}
+
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-\[linear-gradient\(180deg\2c _\#21282C_0\%\2c _\#12191C_100\%\)\] {
+  background-image: linear-gradient(180deg, #21282C 0%, #12191C 100%);
+}
+
+.bg-\[linear-gradient\(180deg\2c _\#F4CC7E_0\%\2c _\#E1B152_100\%\)\] {
+  background-image: linear-gradient(180deg, #F4CC7E 0%, #E1B152 100%);
+}
+
+.bg-\[linear-gradient\(180deg\2c _\#FFDD9A_0\%\2c _\#D19A2E_100\%\)\] {
+  background-image: linear-gradient(180deg, #FFDD9A 0%, #D19A2E 100%);
+}
+
+.bg-\[linear-gradient\(90deg\2c _\#F4CD7F_0\%\2c _\#E0B052_100\%\)\] {
+  background-image: linear-gradient(90deg, #F4CD7F 0%, #E0B052 100%);
+}
+
+.bg-\[url\(\'\.\/image\/background_hero\.png\'\)\] {
+  background-image: url('./image/background_hero.png');
+}
+
+.bg-\[url\(\'\/image\/background_hero\.png\'\)\] {
+  background-image: url('/image/background_hero.png');
+}
+
+.bg-cover {
+  background-size: cover;
+}
+
+.bg-clip-text {
+  -webkit-background-clip: text;
+          background-clip: text;
+}
+
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.py-16 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+.text-8xl {
+  font-size: 6rem;
+  line-height: 1;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 
 .font-bold {
   font-weight: 700;
 }
 
-.text-red-500 {
-  --tw-text-opacity: 1;
-  color: rgb(239 68 68 / var(--tw-text-opacity));
+.font-light {
+  font-weight: 300;
 }
 
-.text-blue-500 {
-  --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity));
+.font-semibold {
+  font-weight: 600;
 }
 
-.underline {
+.text-boulder {
+  --tw-text-opacity: 1;
+  color: rgb(122 122 122 / var(--tw-text-opacity));
+}
+
+.text-transparent {
+  color: transparent;
+}
+
+.text-west_coast {
+  --tw-text-opacity: 1;
+  color: rgb(109 81 25 / var(--tw-text-opacity));
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.hover\:underline:hover {
   text-decoration-line: underline;
 }
