@@ -11,6 +11,9 @@ module.exports = {
         west_coast: '#6D5119',
         boulder: '#7A7A7A',
       },
+      fontFamily: {
+        sedan: ['Sedan', 'sans-serif'], // Add Sedan as a custom font family
+      },
     },
   },
   plugins: [],
