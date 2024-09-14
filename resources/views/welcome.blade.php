@@ -4,97 +4,288 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ asset('css/output.css') }}">
-  <link href="https://fonts.googleapis.com/css2?family=Sedan&display=swap" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sedan:ital@0;1&display=swap"
+    rel="stylesheet"
+  />
   <style>
-      .custom-strikethrough {
-        text-decoration-color: #ff0000;
-      }
-    </style>
-</head>
+    html {
+      scroll-behavior: smooth;
+    }
+    .custom-strikethrough {
+      text-decoration-color: #ff0000;
+    }
+    .font-sedan {
+      font-family: "Sedan", serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+  </style>
 <body>
  <!-- Header -->
- <main class="overflow-hidden">
-  
-      <header class="h-[75px] w-full bg-[#12191C] px-6 xl:px-0">
+  <main class="overflow-hidden">
+  <header class="h-[75px] w-full bg-[#12191C] px-6 xl:px-0">
         <nav
           class="max-w-[1100px] mx-auto flex items-center justify-between h-full"
         >
-          <img src="./image/logo.png" alt="Logo" class="w-[50px] h-auto" />
+          <img src="/image/logo.png" alt="Logo" class="w-[50px] h-auto" />
           <ul class="flex items-center gap-4 xl:gap-40 text-white">
-            <li class="cursor-pointer hover:underline">Home</li>
-            <li class="cursor-pointer hover:underline">About</li>
-            <li class="cursor-pointer hover:underline">Service</li>
-            <li class="cursor-pointer hover:underline">Pricelist</li>
-            <li class="cursor-pointer hover:underline">Galery</li>
+            <li class="cursor-pointer hover:underline">
+              <a href="#home">Home</a>
+            </li>
+            <li class="cursor-pointer hover:underline">
+              <a href="#about">About</a>
+            </li>
+            <li class="cursor-pointer hover:underline">
+              <a href="#service">Service</a>
+            </li>
+            <li class="cursor-pointer hover:underline">
+              <a href="#pricelist">Pricelist</a>
+            </li>
+            <li
+              id="dropdownButton"
+              class="cursor-pointer hover:underline flex items-center gap-1 relative"
+            >
+              <p>Galery</p>
+              <svg
+                width="14"
+                height="9"
+                viewBox="0 0 14 9"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M2 1.5L7 6.5L12 1.5" stroke="white" stroke-width="3" />
+              </svg>
+              <div
+                id="dropdownMenu"
+                class="top-6 absolute z-20 right-0 mt-2 w-56 bg-white bg-opacity-20 rounded-[20px] hidden"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="dropdownButton"
+              >
+                <div class="py-1" role="none">
+                  <a
+                    href="#"
+                    class="text-white block px-4 py-2 text-sm"
+                    role="menuitem"
+                    >Tenda</a
+                  >
+                  <a
+                    href="#"
+                    class="text-white block px-4 py-2 text-sm"
+                    role="menuitem"
+                    >Dekorasi</a
+                  >
+                  <a
+                    href="#"
+                    class="text-white block px-4 py-2 text-sm"
+                    role="menuitem"
+                    >Gedung</a
+                  >
+                  <a
+                    href="#"
+                    class="text-white block px-4 py-2 text-sm"
+                    role="menuitem"
+                    >MUA</a
+                  >
+                </div>
+              </div>
+            </li>
           </ul>
         </nav>
       </header>
       <!-- Hero -->
       <section
+        id="home"
         class="h-full lg:h-[calc(100vh_-_75px)] w-full bg-[url('/image/background_hero.png')] bg-cover relative"
       >
-
         <img
-          src="./image/bg_overlay.png"
+          src="/image/bg_overlay.png"
           alt="Background Overlay"
           class="h-full xl:h-[calc(100vh_-_75px)] w-full object-cover absolute"
         />
         <div
-          class="flex flex-col-reverse md:flex-row items-center justify-between relative z-10 h-full gap-20 py-16 px-6 lg:px-0 lg:py-0 max-w-[1100px] mx-auto"
+          id="heroCarousel"
+          class="relative overflow-hidden max-w-[1100px] mx-auto py-14"
         >
-          <img
-            src="./image/hero_background.png"
-            alt="background hero"
-            class="w-full h-auto md:w-[450px] md:h-full lg:w-[550px] lg:h-[547px] object-cover hidden md:block"
-          />
-          <div class="flex flex-col gap-4">
-            <p class="text-white font-light text-sm md:text-xl ">
-              We Are New Suponyono
-            </p>
-            <h1
-              class="bg-[linear-gradient(180deg,_#FFDD9A_0%,_#D19A2E_100%)] text-7xl md:text-8xl bg-clip-text text-transparent font-sedan"
+          <!-- Carousel Container -->
+          <div
+            id="hero-track"
+            class="flex transition-transform duration-500 ease-in-out"
+            style="transform: translateX(0)"
+          >
+            <!-- Slide 1 -->
+            <div
+              class="flex-shrink-0 w-full flex flex-col-reverse md:flex-row items-center justify-between relative z-10 h-full gap-20 py-16 px-6 lg:px-0 lg:py-0 max-w-[1100px]"
             >
-              Wedding <br />
-              Organizer,
-            </h1>
-            <div class="flex gap-10 mt-6">
-              <div
-                class="w-[113px] h-[1px] bg-white mt-2 hidden md:block"
-              ></div>
-              <p class="text-xl text-white font-light w-full md:max-w-[323px]">
-                Ciptakan Kenangan <br />
-                Tak Terlupakan Bersama Kami
-              </p>
+              <img
+                src="/image/hero_background.png"
+                alt="background hero"
+                class="w-full h-auto md:w-[450px] md:h-full lg:w-[550px] lg:h-auto object-cover hidden md:block"
+              />
+              <div class="flex flex-col gap-4">
+                <p class="text-white font-light text-sm md:text-xl">
+                  We Are New Suponyono
+                </p>
+                <h1
+                  class="font-sedan !leading-[120px] bg-[linear-gradient(180deg,_#FFDD9A_0%,_#D19A2E_100%)] text-8xl md:text-8xl bg-clip-text text-transparent"
+                >
+                  Wedding
+                </h1>
+                <h1
+                  class="font-sedan !leading-[120px] bg-[linear-gradient(180deg,_#FFDD9A_0%,_#D19A2E_100%)] text-8xl md:text-8xl bg-clip-text text-transparent"
+                >
+                  Organizer,
+                </h1>
+                <div class="flex gap-10 mt-6">
+                  <div
+                    class="w-[113px] h-[1px] bg-white mt-2 hidden md:block"
+                  ></div>
+                  <p
+                    class="text-xl text-white font-light w-full md:max-w-[323px]"
+                  >
+                    Ciptakan Kenangan <br />
+                    Tak Terlupakan Bersama Kami
+                  </p>
+                </div>
+                <button
+                  class="text-[#6D5119] font-bold text-sm bg-[linear-gradient(90deg,_#F4CD7F_0%,_#E0B052_100%)] text-center w-[261px] h-[60px]"
+                >
+                  Konsultasi Sekarang
+                </button>
+              </div>
             </div>
-            <button
-              class="text-[#6D5119] font-bold text-sm bg-[linear-gradient(90deg,_#F4CD7F_0%,_#E0B052_100%)] text-center w-[261px] h-[60px]"
+
+            <!-- Slide 2 -->
+            <div
+              class="flex-shrink-0 w-full flex flex-col-reverse md:flex-row items-center justify-between relative z-10 h-full gap-20 py-16 px-6 lg:px-0 lg:py-0 max-w-[1100px]"
             >
-              Konsultasi Sekarang
+              <img
+                src="/image/hero_background.png"
+                alt="background hero"
+                class="w-full h-auto md:w-[450px] md:h-full lg:w-[550px] lg:h-[547px] object-cover hidden md:block"
+              />
+              <div class="flex flex-col gap-4">
+                <p class="text-white font-light text-sm md:text-xl">
+                  We Are New Suponyono
+                </p>
+                <h1
+                  class="font-sedan !leading-[120px] bg-[linear-gradient(180deg,_#FFDD9A_0%,_#D19A2E_100%)] text-8xl md:text-8xl bg-clip-text text-transparent"
+                >
+                  Wedding
+                </h1>
+                <h1
+                  class="font-sedan !leading-[120px] bg-[linear-gradient(180deg,_#FFDD9A_0%,_#D19A2E_100%)] text-8xl md:text-8xl bg-clip-text text-transparent"
+                >
+                  Organizer,
+                </h1>
+                <div class="flex gap-10 mt-6">
+                  <div
+                    class="w-[113px] h-[1px] bg-white mt-2 hidden md:block"
+                  ></div>
+                  <p
+                    class="text-xl text-white font-light w-full md:max-w-[323px]"
+                  >
+                    Ciptakan Kenangan <br />
+                    Tak Terlupakan Bersama Kami
+                  </p>
+                </div>
+                <button
+                  class="text-[#6D5119] font-bold text-sm bg-[linear-gradient(90deg,_#F4CD7F_0%,_#E0B052_100%)] text-center w-[261px] h-[60px]"
+                >
+                  Konsultasi Sekarang
+                </button>
+              </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div
+              class="flex-shrink-0 w-full flex flex-col-reverse md:flex-row items-center justify-between relative z-10 h-full gap-20 py-16 px-6 lg:px-0 lg:py-0 max-w-[1100px]"
+            >
+              <img
+                src="/image/hero_background.png"
+                alt="background hero"
+                class="w-full h-auto md:w-[450px] md:h-full lg:w-[550px] lg:h-[547px] object-cover hidden md:block"
+              />
+              <div class="flex flex-col gap-4">
+                <p class="text-white font-light text-sm md:text-xl">
+                  We Are New Suponyono
+                </p>
+                <h1
+                  class="font-sedan !leading-[120px] bg-[linear-gradient(180deg,_#FFDD9A_0%,_#D19A2E_100%)] text-8xl md:text-8xl bg-clip-text text-transparent"
+                >
+                  Wedding
+                </h1>
+                <h1
+                  class="font-sedan !leading-[120px] bg-[linear-gradient(180deg,_#FFDD9A_0%,_#D19A2E_100%)] text-8xl md:text-8xl bg-clip-text text-transparent"
+                >
+                  Organizer,
+                </h1>
+                <div class="flex gap-10 mt-6">
+                  <div
+                    class="w-[113px] h-[1px] bg-white mt-2 hidden md:block"
+                  ></div>
+                  <p
+                    class="text-xl text-white font-light w-full md:max-w-[323px]"
+                  >
+                    Ciptakan Kenangan <br />
+                    Tak Terlupakan Bersama Kami
+                  </p>
+                </div>
+                <button
+                  class="text-[#6D5119] font-bold text-sm bg-[linear-gradient(90deg,_#F4CD7F_0%,_#E0B052_100%)] text-center w-[261px] h-[60px]"
+                >
+                  Konsultasi Sekarang
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Dots Navigation -->
+          <div
+            class="flex justify-center items-center mt-4 space-x-2 relative z-20"
+          >
+            <button
+              class="w-[8.97px] h-[8.97px] bg-[#D7D6C280] bg-opacity-50 rounded-full flex items-center justify-center !bg-transparent !bg-opacity-100 border-[1.79px] border-[#C3C2AF] !h-[16.14px] !w-[16.14px] p-[2px]"
+              data-index="0"
+            >
+              <div
+                class="min-h-[8.97px] min-w-[8.97px] rounded-full bg-[#C3C2AF]"
+              ></div>
             </button>
+            <button
+              class="w-[8.97px] h-[8.97px] bg-[#D7D6C280] bg-opacity-50 rounded-full"
+              data-index="1"
+            ></button>
+            <button
+              class="w-[8.97px] h-[8.97px] bg-[#D7D6C280] bg-opacity-50 rounded-full"
+              data-index="2"
+            ></button>
           </div>
         </div>
       </section>
       <!-- About Us -->
       <section
+        id="about"
         class="w-full bg-[linear-gradient(180deg,_#21282C_0%,_#12191C_100%)] py-16"
       >
         <div
-          class="max-w-[1100px] mx-auto h-full flex flex-col lg:flex-row justify-between px-6 lg:px-0"
+          class="max-w-[1100px] mx-auto h-full flex flex-col lg:flex-row gap-20 justify-between px-6 lg:px-0"
         >
           <div class="lg:basis-6/12 flex flex-col gap-6">
             <p class="text-[#7A7A7A] font-semibold text-sm md:text-xl">
               About Us
             </p>
             <h4
-              class="text-lg md:text-2xl bg-clip-text text-transparent bg-[linear-gradient(180deg,_#F4CC7E_0%,_#E1B152_100%)]"
+              class="font-sedan text-lg md:text-xl bg-clip-text text-transparent bg-[linear-gradient(180deg,_#F4CC7E_0%,_#E1B152_100%)]"
             >
               PT SOPONYONO DADI KENCONO
             </h4>
             <h2
-              class="text-2xl md:text-4xl bg-clip-text text-transparent bg-[linear-gradient(180deg,_#F4CC7E_0%,_#E1B152_100%)]"
+              class="font-sedan text-2xl md:text-3xl capitalize bg-clip-text text-transparent bg-[linear-gradient(180deg,_#F4CC7E_0%,_#E1B152_100%)]"
             >
-              Merupakan Perusahaan yang bergerak di bidang Pelayanan dan jasa.
+              Merupakan Perusahaan Yang Bergerak Di Bidang Pelayanan Dan Jasa.
             </h2>
             <p class="text-sm md:text-lg font-light text-white">
               “New Soponyono” sudah berdiri sejak tahun 2009 Dan kami sudah
@@ -105,25 +296,25 @@
           </div>
           <div class="lg:basis-6/12 relative hidden lg:block">
             <img
-              src="./image/about-us/image_1.png"
+              src="/image/about-us/image_1.png"
               alt="About us one"
-              class="absolute right-0 w-[235px] h-[300px]"
+              class="absolute left-1/2 -translate-x-1/2 w-[235px] h-[300px]"
             />
             <img
-              src="./image/about-us/image_2.png"
+              src="/image/about-us/image_2.png"
               alt="About us one"
-              class="absolute right-[200px] w-[235px] h-[200px] top-6"
+              class="absolute right-[0px] w-[235px] h-[200px] top-6"
             />
             <img
-              src="./image/about-us/image_3.png"
+              src="/image/about-us/image_3.png"
               alt="About us one"
-              class="absolute right-[150px] w-[235px] h-[120px] bottom-0"
+              class="absolute left-[0px] w-[235px] h-[120px] bottom-0"
             />
           </div>
         </div>
       </section>
       <!-- Service -->
-      <section class="w-full bg-white py-16">
+      <section id="service" class="w-full bg-white py-16">
         <div class="max-w-[1100px] mx-auto flex flex-col gap-10 px-6 lg:px-0">
           <p
             class="text-[#7A7A7A] font-semibold text-sm md:text-xl text-center"
@@ -216,7 +407,7 @@
         </div>
       </section>
       <!-- Price list -->
-      <section class="w-full bg-white py-16">
+      <section id="pricelist" class="w-full bg-white py-16">
         <div class="max-w-[1100px] mx-auto flex flex-col gap-10 px-6 lg:px-0">
           <p
             class="text-[#7A7A7A] font-semibold text-sm lg:text-xl text-center"
@@ -829,25 +1020,26 @@
       </section>
       <!-- Wedding Package -->
       <section
+        id="weddingpackage"
         class="w-full bg-[#181818] min-h-[500px] bg-[url('/image/wedding-package/bg_wedding_package.png')] bg-cover"
       >
         <div
           class="relative max-w-[1100px] mx-auto flex lg:justify-end px-6 lg:px-0"
         >
           <img
-            src="./image/wedding-package/shape_wedding_package.png"
+            src="/image/wedding-package/shape_wedding_package.png"
             alt="Wedding Package Shape"
             class="w-auto h-[550px] absolute left-0 top-0 hidden lg:block"
           />
           <div class="lg:basis-6/12 flex flex-col gap-6 h-full py-10">
             <div class="flex flex-col gap-3">
               <h2
-                class="bg-clip-text text-transparent bg-[linear-gradient(180deg,_#F4CD7F_0%,_#E1B153_100%)] text-2xl"
+                class="font-sedan bg-clip-text text-transparent bg-[linear-gradient(180deg,_#F4CD7F_0%,_#E1B153_100%)] text-2xl"
               >
                 Wedding Package
               </h2>
               <h1
-                class="bg-clip-text text-transparent bg-[linear-gradient(180deg,_#F4CD7F_0%,_#E1B153_100%)] text-5xl"
+                class="font-sedan bg-clip-text !leading-[60px] text-transparent bg-[linear-gradient(180deg,_#F4CD7F_0%,_#E1B153_100%)] text-5xl"
               >
                 Gedung & Aula
               </h1>
@@ -899,34 +1091,34 @@
         </div>
       </section>
       <!-- Gallery -->
-      <section class="w-full bg-white py-16">
+      <section id="gallery" class="w-full bg-white py-16">
         <div class="max-w-[1100px] mx-auto flex flex-col gap-10 px-6 lg:px-0">
           <p class="text-[#7A7A7A] font-semibold text-xln text-center">
             Gallery
           </p>
           <div class="grid grid-rows-2 grid-flow-col gap-4">
             <img
-              src="./image/gallery/img_1.png"
+              src="/image/gallery/img_1.png"
               alt="Gallery 1"
               class="col-span-4 object-cover w-full h-auto"
             />
             <img
-              src="./image/gallery/img_2.png"
+              src="/image/gallery/img_2.png"
               alt="Gallery 2"
               class="col-span-4 object-cover w-full h-auto"
             />
             <img
-              src="./image/gallery/img_4.png"
+              src="/image/gallery/img_4.png"
               alt="Gallery 4"
               class="col-span-4 object-cover w-full h-auto"
             />
             <img
-              src="./image/gallery/img_5.png"
+              src="/image/gallery/img_5.png"
               alt="Gallery 5"
               class="col-span-4 object-cover w-full h-auto"
             />
             <img
-              src="./image/gallery/img_3.png"
+              src="/image/gallery/img_3.png"
               alt="Gallery 3"
               class="col-span-4 row-span-2 object-cover w-full h-auto"
             />
@@ -935,10 +1127,11 @@
       </section>
       <!-- Hiburan -->
       <section
-        class="w-full relative min-h-[400px] bg-[#16191C] bg-[url('./image/hiburan/bg_hiburan.png')] bg-cover"
+        id="hiburan"
+        class="w-full relative min-h-[400px] bg-[#16191C] bg-[url('/image/hiburan/bg_hiburan.png')] bg-cover"
       >
         <img
-          src="./image/hiburan/shape_hiburan.png"
+          src="/image/hiburan/shape_hiburan.png"
           alt="Shape Hiburan"
           class="h-[430px] w-auto absolute right-0 -top-8 hidden lg:block"
         />
@@ -947,12 +1140,12 @@
         >
           <div class="flex flex-col gap-1">
             <h5
-              class="text-2xl bg-clip-text text-transparent bg-[linear-gradient(180deg,_#FFD278_0%,_#FFB628_100%)]"
+              class="font-sedan text-2xl bg-clip-text text-transparent bg-[linear-gradient(180deg,_#FFD278_0%,_#FFB628_100%)]"
             >
               Hiburan
             </h5>
             <h2
-              class="text-4xl bg-clip-text text-transparent bg-[linear-gradient(180deg,_#FFD278_0%,_#FFB628_100%)]"
+              class="font-sedan text-4xl bg-clip-text text-transparent bg-[linear-gradient(180deg,_#FFD278_0%,_#FFB628_100%)]"
             >
               Campursari
             </h2>
@@ -1009,82 +1202,267 @@
       </section>
       <!-- Promo -->
       <section
+        id="promo"
         class="w-full relative min-h-[356px] bg-[linear-gradient(90deg,_#FFFFFF_0%,_rgba(233,232,201,0.7)_125%)]"
       >
         <img
-          src="./image/promo/bg_promo.png"
+          src="/image/promo/bg_promo.png"
           alt="Background Promo"
-          class="h-[356px] w-full object-cover lg:object-contain object-no-repeat absolute top-0"
+          class="h-[356px] w-full object-cover xl:object-contain object-no-repeat absolute top-0"
         />
         <div
-          class="max-w-[1100px] mx-auto flex flex-col lg:flex-row gap-8 lg:gap-0 items-center justify-between py-10 px-6 lg:px-0"
+          id="promoCarousel"
+          class="max-w-[1100px] mx-auto flex flex-col gap-10 px-6 lg:px-0 py-10"
         >
-          <img
-            src="./image/promo/bg_1.png"
-            alt="Background"
-            class="h-[200px] md:h-[275px] w-auto"
-          />
-          <div class="flex flex-col gap-4 w-[320px] relative z-10">
-            <h3 class="font-bold text-[#CE3737] text-xl md:text-3xl">
-              Promo Lamaran Special Kemerdekaan
-            </h3>
-            <div class="flex flex-col md:flex-row justify-between">
-              <ul class="flex flex-col gap-2">
-                <li class="text-[#1B2023] font-medium text-base">
-                  - Dekorasi Lamaran
-                </li>
-                <li class="text-[#1B2023] font-medium text-base">
-                  - Box Hantaran
-                </li>
-              </ul>
-              <ul class="flex flex-col gap-2">
-                <li class="text-[#1B2023] font-medium text-base">- Make up</li>
-                <li class="text-[#1B2023] font-medium text-base">- Photo</li>
-              </ul>
-            </div>
-            <div class="flex line-through custom-strikethrough">
-              <p class="text-xs font-medium text-[#21252F]">Rp</p>
-              <h4 class="font-medium text-lg text-[#21252F]">2.800.000</h4>
-            </div>
-            <div class="flex">
-              <p class="text-lg font-bold text-[#21252F]">Rp</p>
-              <h4 class="font-bold text-3xl text-[#21252F]">1.800.000</h4>
+          <div class="relative overflow-hidden">
+            <div
+              id="promo-track"
+              class="flex transition-transform duration-500 ease-in-out"
+            >
+              <!-- Slide 1 -->
+              <div
+                class="flex-shrink-0 max-w-full w-full flex flex-col lg:flex-row gap-8 lg:gap-0 items-center justify-between py-10 px-6 lg:px-0"
+              >
+                <img
+                  src="/image/promo/bg_1.png"
+                  alt="Promo Background 1"
+                  class="h-[200px] md:h-[275px] w-auto relative z-20"
+                />
+                <div class="flex flex-col gap-4 w-[320px] relative z-10">
+                  <h3 class="font-bold text-[#CE3737] text-xl md:text-3xl">
+                    Promo Lamaran Special Kemerdekaan
+                  </h3>
+                  <div class="flex flex-col md:flex-row justify-between">
+                    <ul class="flex flex-col gap-2">
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Dekorasi Lamaran
+                      </li>
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Box Hantaran
+                      </li>
+                    </ul>
+                    <ul class="flex flex-col gap-2">
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Make up
+                      </li>
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Photo
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="flex line-through custom-strikethrough">
+                    <p class="text-xs font-medium text-[#21252F]">Rp</p>
+                    <h4 class="font-medium text-lg text-[#21252F]">
+                      2.800.000
+                    </h4>
+                  </div>
+                  <div class="flex">
+                    <p class="text-lg font-bold text-[#21252F]">Rp</p>
+                    <h4 class="font-bold text-3xl text-[#21252F]">1.800.000</h4>
+                  </div>
+                </div>
+                <button
+                  class="bg-[#D6D2B1] text-[#6D5119] font-bold text-sm text-center w-[200px] h-[50px]"
+                >
+                  Booking Sekarang
+                </button>
+              </div>
+
+              <!-- Slide 2 -->
+              <div
+                class="flex-shrink-0 max-w-full w-full flex flex-col lg:flex-row gap-8 lg:gap-0 items-center justify-between py-10 px-6 lg:px-0"
+              >
+                <img
+                  src="/image/promo/bg_1.png"
+                  alt="Promo Background 2"
+                  class="h-[200px] md:h-[275px] w-auto relative z-20"
+                />
+                <div class="flex flex-col gap-4 w-[320px] relative z-10">
+                  <h3 class="font-bold text-[#CE3737] text-xl md:text-3xl">
+                    Promo Lamaran Special Kemerdekaan
+                  </h3>
+                  <div class="flex flex-col md:flex-row justify-between">
+                    <ul class="flex flex-col gap-2">
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Dekorasi Lamaran
+                      </li>
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Box Hantaran
+                      </li>
+                    </ul>
+                    <ul class="flex flex-col gap-2">
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Make up
+                      </li>
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Photo
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="flex line-through custom-strikethrough">
+                    <p class="text-xs font-medium text-[#21252F]">Rp</p>
+                    <h4 class="font-medium text-lg text-[#21252F]">
+                      2.800.000
+                    </h4>
+                  </div>
+                  <div class="flex">
+                    <p class="text-lg font-bold text-[#21252F]">Rp</p>
+                    <h4 class="font-bold text-3xl text-[#21252F]">1.800.000</h4>
+                  </div>
+                </div>
+                <button
+                  class="bg-[#D6D2B1] text-[#6D5119] font-bold text-sm text-center w-[200px] h-[50px]"
+                >
+                  Booking Sekarang
+                </button>
+              </div>
+
+              <!-- Slide 3 -->
+              <div
+                class="flex-shrink-0 max-w-full w-full flex flex-col lg:flex-row gap-8 lg:gap-0 items-center justify-between py-10 px-6 lg:px-0"
+              >
+                <img
+                  src="/image/promo/bg_1.png"
+                  alt="Promo Background 3"
+                  class="h-[200px] md:h-[275px] w-auto relative z-20"
+                />
+                <div class="flex flex-col gap-4 w-[320px] relative z-10">
+                  <h3 class="font-bold text-[#CE3737] text-xl md:text-3xl">
+                    Promo Lamaran Special Kemerdekaan
+                  </h3>
+                  <div class="flex flex-col md:flex-row justify-between">
+                    <ul class="flex flex-col gap-2">
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Dekorasi Lamaran
+                      </li>
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Box Hantaran
+                      </li>
+                    </ul>
+                    <ul class="flex flex-col gap-2">
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Make up
+                      </li>
+                      <li class="text-[#1B2023] font-medium text-base">
+                        - Photo
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="flex line-through custom-strikethrough">
+                    <p class="text-xs font-medium text-[#21252F]">Rp</p>
+                    <h4 class="font-medium text-lg text-[#21252F]">
+                      2.800.000
+                    </h4>
+                  </div>
+                  <div class="flex">
+                    <p class="text-lg font-bold text-[#21252F]">Rp</p>
+                    <h4 class="font-bold text-3xl text-[#21252F]">1.800.000</h4>
+                  </div>
+                </div>
+                <button
+                  class="bg-[#D6D2B1] text-[#6D5119] font-bold text-sm text-center w-[200px] h-[50px]"
+                >
+                  Booking Sekarang
+                </button>
+              </div>
             </div>
           </div>
-          <button
-            class="bg-[#D6D2B1] text-[#6D5119] font-bold text-sm text-center w-[200px] h-[50px]"
+
+          <!-- Dots -->
+          <div
+            class="flex justify-center items-center mt-4 space-x-2 relative z-20"
           >
-            Booking Sekarang
-          </button>
+            <button
+              class="w-[8.97px] h-[8.97px] bg-[#D7D6C280] bg-opacity-50 rounded-full flex items-center justify-center !bg-transparent !bg-opacity-100 border-[1.79px] border-[#C3C2AF] !h-[16.14px] !w-[16.14px] p-[2px]"
+              data-index="0"
+            >
+              <div
+                class="min-h-[8.97px] min-w-[8.97px] rounded-full bg-[#C3C2AF]"
+              ></div>
+            </button>
+            <button
+              class="w-[8.97px] h-[8.97px] bg-[#D7D6C280] bg-opacity-50 rounded-full"
+              data-index="1"
+            ></button>
+            <button
+              class="w-[8.97px] h-[8.97px] bg-[#D7D6C280] bg-opacity-50 rounded-full"
+              data-index="2"
+            ></button>
+          </div>
         </div>
       </section>
       <!-- Recent Client -->
-      <section class="w-full py-16 bg-[#E9E8C9] relative md:min-h-[600px]">
+      <section
+        id="recentclient"
+        class="w-full py-16 bg-[#E9E8C9] relative md:min-h-[600px]"
+      >
         <img
-          src="./image/recent-client/bg_client.png"
+          src="/image/recent-client/bg_client.png"
           alt="Background"
           class="w-full h-auto absolute object-contain"
         />
-        <div class="max-w-[1100px] mx-auto flex flex-col gap-10 px-6 lg:px-0">
+        <div
+          id="recentclientcarousel"
+          class="max-w-[1100px] mx-auto flex flex-col gap-10 px-6 lg:px-0"
+        >
           <p class="text-[#7A7A7A] font-semibold text-xln text-center">
             Recent Client
           </p>
-          <img
-            src="./image/recent-client/testimoni_1.png"
-            alt="Background"
-            class="w-full h-full lg:w-auto lg:h-auto object-contain"
-          />
+
+          <div class="relative overflow-hidden">
+            <div
+              id="carousel-track"
+              class="flex transition-transform duration-500 ease-in-out"
+            >
+              <img
+                src="/image/recent-client/testimoni_1.png"
+                alt="Client 1"
+                class="w-full h-full lg:w-auto lg:h-auto object-contain"
+              />
+              <img
+                src="/image/recent-client/testimoni_1.png"
+                alt="Client 2"
+                class="w-full h-full lg:w-auto lg:h-auto object-contain"
+              />
+              <img
+                src="/image/recent-client/testimoni_1.png"
+                alt="Client 3"
+                class="w-full h-full lg:w-auto lg:h-auto object-contain"
+              />
+            </div>
+          </div>
+
+          <div
+            class="flex justify-center items-center mt-4 space-x-2 relative z-20"
+          >
+            <button
+              class="w-[8.97px] h-[8.97px] bg-[#D7D6C2] rounded-full flex items-center justify-center !bg-transparent !bg-opacity-100 border-[1.79px] border-[#C3C2AF] !h-[16.14px] !w-[16.14px] p-[2px]"
+              data-index="0"
+            >
+              <div
+                class="min-h-[8.97px] min-w-[8.97px] rounded-full bg-[#C3C2AF]"
+              ></div>
+            </button>
+            <button
+              class="w-[8.97px] h-[8.97px] bg-[#D7D6C2] rounded-full"
+              data-index="1"
+            ></button>
+            <button
+              class="w-[8.97px] h-[8.97px] bg-[#D7D6C2] rounded-full"
+              data-index="2"
+            ></button>
+          </div>
         </div>
       </section>
       <!-- Footer -->
-      <footer class="flex flex-col">
+      <footer id="footer" class="flex flex-col">
         <section class="w-full bg-[#1B2023] py-16">
           <div
             class="max-w-[1100px] mx-auto flex flex-col md:flex-row gap-6 lg:gap-0 justify-between flex-wrap px-6 lg:px-0"
           >
             <div class="flex flex-col gap-10">
               <img
-                src="./image/footer/logo.png"
+                src="/image/footer/logo.png"
                 alt="Logo"
                 class="w-[200px] h-auto object-cover"
               />
@@ -1334,7 +1712,20 @@
           </p>
         </section>
       </footer>
-    </main>
+    
+  </main>
 
 </body>
+
+  <script src="{{ asset('js/hero-carousel.js') }}"></script>
+  <script src="{{ asset('js/testimonial-carousel.js') }}"></script>
+  <script src="{{ asset('js/promo-carousel.js') }}"></script>
+  <script>
+    const dropdownButton = document.getElementById("dropdownButton");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+
+    dropdownButton.addEventListener("click", () => {
+      dropdownMenu.classList.toggle("hidden");
+    });
+  </script>
 </html>
