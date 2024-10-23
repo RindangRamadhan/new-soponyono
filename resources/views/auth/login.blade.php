@@ -21,8 +21,12 @@
           <div class="card disable-rounded-right mb-0 p-2 h-100 d-flex justify-content-center">
             <div class="card-header pb-1">
               <div class="card-title">
-                <h3 class="text-center">PRATUL ONLINE</h3>
-                <h6 class="text-center">Silahkan masukkan Username dan Password Anda</h6>
+                <div class="d-flex justify-content-center">
+                  <img class="img-fluid" src="{{asset('images/logo/favicon.png')}}" width="50%" alt="branding logo">
+                </div>
+
+                <h3 class="text-center">NEW SOPONYONO</h3>
+                <h6 class="text-center">Silahkan masukkan Email dan Password Anda</h6>
               </div>
             </div>
             <div class="card-content">
@@ -30,9 +34,9 @@
                 <form method="POST" action="">
                   @csrf
                   <div class="form-group mb-50">
-                    <label class="text-bold-600" for="user_name">User Name</label>
-                    <input id="user_name" type="user_name" class="form-control @error('user_name') is-invalid @enderror" name="user_name" value="{{ old('user_name') }}" autocomplete="user_name" autofocus placeholder="User Name">
-                    @error('user_name')
+                    <label class="text-bold-600" for="email">Email</label>
+                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" autofocus placeholder="Email">
+                    @error('email')
                     <span class="invalid-feedback" role="alert">
                       <strong>{{ $message }}</strong>
                     </span>
@@ -101,7 +105,7 @@
   $(document).on('click', '.__password', function (e) {
     const type = $("#password").attr('type') == 'password' ? 'text' : 'password'
     const icon = $("#password").attr('type') == 'password' ? 'eye-slash' : 'eye'
-    
+
     $("#password").attr('type', type)
     $(this).children('img').attr('src', `https://icongr.am/fontawesome/${icon}.svg?size=16&color=696969`)
   })

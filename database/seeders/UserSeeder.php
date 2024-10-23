@@ -16,14 +16,9 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'uid_id' => 17,
-            'up3_id' => 17171,
-            'ulp_id' => 17100,
-            'user_name' => 'sa',
-            'rbm_code' => '000',
+            'email' => 'super.admin@newsoponyono.com',
             'name' => 'Super Admin',
-            'type' => 'Admin',
-            'password' => Hash::make('Lampung2023'),
+            'password' => Hash::make('Bekasi2024'),
         ]);
     }
 }

@@ -14,31 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('uid_id')->nullable();
-            $table->unsignedBigInteger('up3_id')->nullable();
-            $table->unsignedBigInteger('ulp_id')->nullable();
-            $table->string('user_name')->unique();
-            $table->string('rbm_code', 3)->unique();
+            $table->uuid('id')->primary();
+            $table->string('email')->unique();
             $table->string('name');
-            $table->enum('type', ['ALL', 'UID', 'UP3', 'UP2D', 'UP2K', 'ULP']);
             $table->string('password');
+            $table->text('avatar')->nullable();
             $table->rememberToken();
             $table->auditable();
             $table->softDeletes();
             $table->timestamps();
-
-            $table->foreign('uid_id')
-                ->references('id')
-                ->on('uids');
-
-            $table->foreign('ulp_id')
-                ->references('id')
-                ->on('ulps');
-
-            $table->foreign('up3_id')
-                ->references('id')
-                ->on('up3s');
         });
     }
 
